@@ -22,9 +22,6 @@ V0.8.1
 V0.8
 * Fixed STRG+A only working after starting program and after STRG+D
 
-
-
-
 V0.7
 * Added Shortcut for select-all / de-select all
 	- STRG+A = Select All
