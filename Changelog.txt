@@ -1,5 +1,4 @@
 Feature Wish: 
-
 * rearange collumns via dragging
 
 Known Issues: 
