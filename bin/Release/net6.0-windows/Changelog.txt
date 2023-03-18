@@ -1,0 +1,73 @@
+Feature Wish: 
+
+* rearange collumns via dragging
+
+Known Issues: 
+* MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
+
+V0.8.3
+*Added sort collumns alphabetically
+
+V0.8.2
+* Fixed statusbar Config path not refreshed after successfully changing application settings default path
+
+V0.8.1
+* Added Installer
+
+V0.8
+* Fixed STRG+A only working after starting program and after STRG+D
+
+
+
+
+V0.7
+* Added Shortcut for select-all / de-select all
+	- STRG+A = Select All
+	- STRG+D = Deselect All
+* Added Changelog is now opened in notepad.exe
+* Fixed MS information retreival via CLOUD DNS (MS Gen1)
+* Fixed Handsfree Mode not working
+* Multiselect Issues with rightclick menus
+* Fixed Elevated Rights needed when saving Application Settings
+	- Settings and Configurations are now saved in %AppData%/WPF_MinserverUpdater
+
+V0.6
+* Added Settings Feature
+  - Default on Startup for Configuration & Config File implemented
+  - Settings can be saved
+* Added default MS SNR string for Edit Dialog "504F94"
+* Added Semicolons of SN are automatically remoded
+* Added additional "Local IP" field when adding a new MS
+* Added auto resize colummns after opening a configuration file.
+* Added Context Menu on the Config Path Status Bar (Start Config / Kill all Configs) 
+* Fixed "Connect Config" Button now uses local IP when it is specified. 
+* Fixed "Cancel Button does not work properly while updating MS"
+* Fixed Listview was enabled during MS Update process. Now disabled to prevent problems created by user interactions. 
+* Fixed Progressbar not 100% after canceling updates
+* Fixed Progressbar at 0% when updating first MS
+* Fixed Error misleading dialog when no MS was selected and "Connect Config" was pressed. 
+* Fixed Crash: when Update backgroundworker was still running and User started other config or update process. 
+* Fixed Crash: when opening other EXE than Config that needs higher system permissions. 
+* Adjusted Strings: added more symbols  
+
+
+
+V0.5:
+*Added Handsfree Mode
+   -no Dialog is opened while updating multiple Minserver installations. This ensures that all Miniserver are updated without the user having to confirm dialogs. 
+*Added check when multiple Miniservers are selectd and the user presses "Connect Config"
+*Added check to only "Connect Config" if there are no other instances running. 
+*changed naming for installations with 1 Miniserver to "standalone"
+
+
+V0.4:
+*Added Check before starting Update process - Show Dialog / prevent update. 
+*Added Disable all Buttons execpt "Cancel Update" during Update process. 
+*Added Auto Refresh in listview after Miniserver updated
+*Fixed Progress Bar not 100% when one Miniserver Info Retreival was not sucessful.
+
+
+V0.3: 
+*Fixed correct number of successful Miniserver information retreives.
+*Added new status texts during "Miniserver Information Fetching" aka. Refresh
+*Added automatic column resizing during retreival of Miniserver information. 

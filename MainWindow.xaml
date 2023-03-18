@@ -1,0 +1,189 @@
+﻿<Window x:Class="WPFConfigUpdater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFConfigUpdater"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Miniserver Updater (c) Musat V0.8.3" Height="500" Width="900">
+    <Window.Resources>
+        <local:UriConverter x:Key="UriConverter" />
+        <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>
+        
+        
+    </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding  x:Name="Application_Exit"  Command="local:CustomCommands.Exit" CanExecute="Application_Exit_CanExecute" Executed="Application_Exit_Executed" />
+        <CommandBinding  x:Name="Application_SelectAll" Command="ApplicationCommands.SelectAll" CanExecute="Application_SelectAll_CanExecute" Executed="Application_SelectAll_Executed" />
+        <CommandBinding  x:Name="Application_DeselectAll" Command="local:CustomCommands.DeselectAll" CanExecute="Application_DeselectAll_CanExecute" Executed="Application_DeselectAll_Executed" />
+        <CommandBinding  x:Name="Application_Save" Command="ApplicationCommands.Save" CanExecute="Application_Save_CanExecute" Executed="Application_Save_Executed" />
+        <CommandBinding  x:Name="Application_Open" Command="ApplicationCommands.Open" CanExecute="Application_Open_CanExecute" Executed="Application_Open_Executed" />
+        <CommandBinding  x:Name="Application_New" Command="ApplicationCommands.New" CanExecute="Application_New_CanExecute" Executed="Application_New_Executed" />
+    </Window.CommandBindings>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New"   Command="ApplicationCommands.New"/>
+                <MenuItem Header="_Open"  Command="ApplicationCommands.Open"/>
+                <MenuItem Header="_Save"  Command="ApplicationCommands.Save"/>
+                <Separator />
+                <MenuItem Header="_Exit" x:Name="menuItem_Exit" Command="local:CustomCommands.Exit" />
+            </MenuItem>
+            <MenuItem Header="_Settings" Click="menuItem_Settings">
+            </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem Header="_Refresh Miniserver Version Numbers" Click="MenuItem_MSVersionRefresh_Click" >
+                    <MenuItem.Icon>
+                        <Image Source="https://cdn-icons-png.flaticon.com/512/126/126502.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Refresh Config Installations">
+                    <MenuItem.Icon>
+                        <Image Source="https://cdn-icons-png.flaticon.com/512/189/189687.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Version" Click="MenuItem_Programm_Version_Click"/>
+                <MenuItem Header="_Help" />
+                <MenuItem Header="_Changelog" Click="MenuItem_Changelog_Click"/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Height="25">
+                <ContentControl MouseDoubleClick="ContentControl_textblock_statusbar_config_MouseDoubleClick">
+                    <ContentControl.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Start Config ✈" Click="ContentControl_textblock_statusbar_menuItem_Start_Config" />
+                            <MenuItem Header="Kill all Configs ⚠" Click="ContentControl_textblock_statusbar_menuItem_Kill_Configs" />
+                        </ContextMenu>
+                    </ContentControl.ContextMenu>
+                    <TextBlock Name="textblock_statusbar_config" Text="Current Config: not selected - double click to select" Height="25"/>
+                </ContentControl>
+            </StatusBarItem>
+            <Separator Grid.Column="1" />
+            <StatusBarItem Grid.Column="2">
+                <TextBlock Name="textblock_processStatus" Text="-"/>
+            </StatusBarItem>
+            <Separator Grid.Column="3" />
+            <StatusBarItem Grid.Column="4">
+                <ProgressBar Value="0" Width="250" Height="16" Name="progressbar_ProcessStatus" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid Cursor="Hand" Name="gridview_lv">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <ListView Margin="10" Name="listView_Miniserver" SelectionChanged="listView_Miniserver_SelectionChanged">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="PreviewMouseRightButtonDown" Handler="OnListViewItemPreviewMouseRightButtonDown" />
+                        <EventSetter Event="MouseEnter" Handler="ListViewItem_MouseEnter" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.InputBindings>
+                    <KeyBinding Command="ApplicationCommands.SelectAll"
+                    Modifiers="Ctrl"
+                    Key="A" />
+                </ListView.InputBindings>
+
+                <ListView.View>
+                    <GridView x:Name="listview_gridview">
+                        <GridViewColumn Width="120" DisplayMemberBinding="{Binding MSStatus}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader  Tag="MSStatus" Click="listview_Miniserver_ColumnHeader_Click">Status</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn  Width="Auto" >
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader  Tag="serialNumer" Click="listview_Miniserver_ColumnHeader_Click">Miniserver</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock >
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu  Name="ContextMenuWebInterfaceLink"  >
+                                                <MenuItem Header="Edit Miniserver" Click="Contextmenu_EditMiniserver_click" />
+                                                <MenuItem Header="Open DefLog in Browser" Click="Contextmenu_DefLog_click" />
+                                                <MenuItem Header="Copy SNR to Clipboard" Click="ContextMenu_CopySNR_Click" />
+                                                <MenuItem Header="Extern Webinterface" Click="ContextMenu_externWI_Click" />
+                                                <MenuItem Header="Local Webinterface" Click="ContextMenu_internWI_Click" />
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    <Hyperlink  NavigateUri="{Binding serialNumer,Converter={local:UriConverter}}" RequestNavigate="Hyperlink_RequestNavigate"> 
+                                        <Run Text="{Binding serialNumer}"/> 
+                                    </Hyperlink>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100" DisplayMemberBinding="{Binding MSVersion}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader  Tag="MSVersion" Click="listview_Miniserver_ColumnHeader_Click">Version</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn  Width="Auto"  DisplayMemberBinding="{Binding MSProject}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader  Tag="MSProject" Click="listview_Miniserver_ColumnHeader_Click">Project Name</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn  Width="Auto" DisplayMemberBinding="{Binding MSConfiguration}" >
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader  Tag="MSConfiguration" Click="listview_Miniserver_ColumnHeader_Click">Configuration</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Action" Width="Auto" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="listview_button_Open_Config" Content="Connect Config" Click="listview_button_OpenConfig_Click"></Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn  Width="Auto" >
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader  Tag="LocalIPAdress" Click="listview_Miniserver_ColumnHeader_Click">Local IP</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding LocalIPAdress}" Width="100"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <GridSplitter x:Name="gridsplitter"  Grid.Row="1" Height="5"  HorizontalAlignment="Stretch"/>
+            <StackPanel x:Name="StackPaneButtons" Orientation="Horizontal" Margin="10"  Grid.Row="2">
+                <Button x:Name="UpdateButton" Content="Update" Click="Button_Update_Click" Margin="10,0,0,0" Height="30"/>
+                <Button x:Name="RefreshButton" Content="Refresh" Margin="10,0,0,0" Click="Button_RefreshMS_Click" Height="30"/>
+                <Button x:Name="RemoveMSButton" Content="Remove Entry" Margin="10,0,0,0" Click="Button_RemoveMS_Click" Height="30" />
+                <Button x:Name="InsertMSButton" Content="Add MS" Margin="10,0,0,0" Click="Button_InsertMS_Click"  Height="30" />
+                <Button x:Name="CancelUpdateButton" Content="Cancel Update" Margin="10,0,0,0" Click="Button_CancelUpdate_Click"  Height="30" />
+                <CheckBox x:Name="CheckBoxDisableUpdateDialogs" Content="Handsfree Update Mode" Margin="10,0,0,0" Height="30" IsChecked="{Binding HandsfreeMode, Mode=TwoWay}"/>
+                <!-- <CheckBox x:Name="CheckBoxEnableMultiSelect" Content="Multiselect" Margin="10,0,0,0" Height="30" Click="CheckBoxEnableMultiSelect_Click"/>  -->
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>
+
+
