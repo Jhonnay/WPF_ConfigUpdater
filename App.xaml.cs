@@ -31,9 +31,9 @@ namespace WPFConfigUpdater
             //}
 
             ApplicationSettingsDialog dialog;
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.ApplicationSettingsPath))
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings))
             {
-                string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.ApplicationSettingsPath);
+                string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings);
                 ApplicationSettings settings = JsonSerializer.Deserialize<ApplicationSettings>(strJson);
                 string strJsonMiniservers = File.ReadAllText(settings.StrDefaultConfigurationPath);
                 ObservableCollection<CMiniserver> miniservers = JsonSerializer.Deserialize<ObservableCollection<CMiniserver>>(strJsonMiniservers);

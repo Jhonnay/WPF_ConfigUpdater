@@ -639,7 +639,7 @@ namespace WPFConfigUpdater
         private void Button_RefreshMS_Click(object sender, RoutedEventArgs e)
         {
             progressbar_ProcessStatus.Value = 0;
-            textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Text;
+            textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_inProgress_Text;
             StackPaneButtons.IsEnabled = false; //Disables all containing Buttons
             int_selectedItems_before_Refresh = listView_Miniserver.SelectedItems.Count;
 
@@ -663,8 +663,8 @@ namespace WPFConfigUpdater
 
         private void worker_RunWorkerCompleted_RefreshMSInformation(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessageBox.Show((int)e.Result  + "/" + int_selectedItems_before_Refresh + " Miniserver Information pulled!");
-            textblock_processStatus.Text = "Informations pulled.";
+            MessageBox.Show((int)e.Result  + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Refresh_Information_pulled);
+            textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Information_pulled_Text;
             StackPaneButtons.IsEnabled = true;
             listView_Miniserver.IsEnabled = true;
         }
@@ -677,7 +677,7 @@ namespace WPFConfigUpdater
             {
 
                 CMiniserver cMiniserver = (CMiniserver)e.UserState;
-                textblock_processStatus.Text = "retreiving data of " + cMiniserver.serialNumer;
+                textblock_processStatus.Text =  MyConstants.Strings.Statusbar_ProcessStatus_Refresh_inProgress_MS + cMiniserver.serialNumer;
                 int index = -1;
 
                 for (int i = 0; i <= miniserverList.Count; i++)
@@ -692,16 +692,16 @@ namespace WPFConfigUpdater
                 {
                     if (cMiniserver.MSVersion == "1.0.0.0")
                     {
-                        cMiniserver.MSStatus = "retreiving data ⏲";
+                        cMiniserver.MSStatus = MyConstants.Strings.Listview_MS_Status_retreiving_information;
                     }
                     else if (cMiniserver.MSVersion != "0.0.0.0")
                     {
-                        cMiniserver.MSStatus = "Info up to date ✅";
+                        cMiniserver.MSStatus = MyConstants.Strings.Listview_MS_Status_retreiving_information_successfull;
                         
                     }
                     else
                     {
-                        cMiniserver.MSStatus = "Error/Timeout ⚠";
+                        cMiniserver.MSStatus = MyConstants.Strings.Listview_MS_Status_retreiving_information_timeout;
                        
                     }
                     miniserverList[index] = cMiniserver;
@@ -752,16 +752,16 @@ namespace WPFConfigUpdater
                     if (ret_MsVersion == "0.0.0.0")
                     {
 
-                        cMiniserver.MSConfiguration = "error";
+                        cMiniserver.MSConfiguration = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
                     }
                     else if (ret_cLoxAppJson.gatewayType == 0)
                     {
-                        cMiniserver.MSConfiguration = "Standalone";
+                        cMiniserver.MSConfiguration = MyConstants.Strings.Listview_Refresh_MS_Configuration_Standalone;
                         result_MS_Refreshed++;
                     }
                     else
                     {
-                        cMiniserver.MSConfiguration = "Client/Gateway";
+                        cMiniserver.MSConfiguration = MyConstants.Strings.Listview_Refresh_MS_Configuration_ClientGateway;
                         result_MS_Refreshed++;
                     }
 
@@ -867,7 +867,7 @@ namespace WPFConfigUpdater
             }
             else
             {
-                MessageBox.Show("SNR could not be copied to Clipboard! \nPlease select a Miniserver.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(MyConstants.Strings.MessageBox_Refresh_Context_Copy_SNR_Error, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             
         }
@@ -908,7 +908,7 @@ namespace WPFConfigUpdater
             if (dialog.ShowDialog() == true)
             {
                 result = dialog.Answer;
-                result.MSStatus = "Miniserver modified ⚠";
+                result.MSStatus = MyConstants.Strings.Listview_MS_Status_Edited;
                 miniserverList[index] = result;
             }
 
@@ -923,14 +923,14 @@ namespace WPFConfigUpdater
         {
             //String stringChangelogContent = File.ReadAllText(@"Changelog.txt");
             //MessageBox.Show(stringChangelogContent);
-            if(File.Exists(Directory.GetCurrentDirectory() + $"\\Changelog.txt"))
+            if(File.Exists(Directory.GetCurrentDirectory() + MyConstants.Strings.Path_Changelog))
             {
-                System.Diagnostics.Process.Start("notepad.exe",@"Changelog.txt");
+                System.Diagnostics.Process.Start("notepad.exe", Directory.GetCurrentDirectory() + MyConstants.Strings.Path_Changelog);
 
             }
             else
             {
-                MessageBox.Show("Changelog cannot be opened! ", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(MyConstants.Strings.MessageBox_Changelog_Cannot_be_opened, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             
         }
@@ -945,7 +945,7 @@ namespace WPFConfigUpdater
         private void ContextMenu_externWI_Click(object sender, RoutedEventArgs e)
         {
             CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
-            string link = "https://dns.loxonecloud.com/" + currentlySelectedMiniserver.serialNumer;
+            string link =  MyConstants.Strings.Link_CloudDNS + currentlySelectedMiniserver.serialNumer;
 
             OpenLinkinDefaultBrowser(link);
 
@@ -977,9 +977,9 @@ namespace WPFConfigUpdater
         private void menuItem_Settings(object sender, RoutedEventArgs e)
         {
             ApplicationSettingsDialog dialog;
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater\\ApplicationSettings.json"))
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings))
             {
-                string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater\\ApplicationSettings.json");
+                string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings);
                 ApplicationSettings settings = JsonSerializer.Deserialize<ApplicationSettings>(strJson);
                 dialog= new ApplicationSettingsDialog(settings);
             }
@@ -991,33 +991,33 @@ namespace WPFConfigUpdater
 
             if (dialog.ShowDialog() == true)
             {
-                MessageBox.Show("Settings saved. ✅", "Settings Dialog", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_saved, "Settings Dialog", MessageBoxButton.OK, MessageBoxImage.Information);
                 textblock_statusbar_config.Text = dialog.Answer;
 
             }
             else
             {
-                MessageBox.Show("Settings were not saved! ⚠", "Settings Dialog", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_Not_saved, "Settings Dialog", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
         private void ContentControl_textblock_statusbar_menuItem_Start_Config(object sender, RoutedEventArgs e)
         {
-            if (textblock_statusbar_config.Text != "Current Config: not selected - double click to select")
+            if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
             {
                 Config config = new Config();
                 config.startConfig(textblock_statusbar_config.Text);
             }
             else
             {
-                MessageBox.Show("No Config selected! 🤷‍", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(MyConstants.Strings.MessageBox_OpenConfig_No_Config_selected, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
                 
         }
 
         private void ContentControl_textblock_statusbar_menuItem_Kill_Configs(object sender, RoutedEventArgs e)
         {
-            var processes = Process.GetProcessesByName("LoxoneConfig");
+            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone);
 
             foreach(var instance in processes)
             {
@@ -1054,14 +1054,14 @@ namespace WPFConfigUpdater
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "JSON file (*.json)|*.json";
 
-            if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MiniserverUpdater"))
+            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData))
             {
-                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MiniserverUpdater";
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData);
+                
             }
-            else
-            {
-                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            }
+           
+
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData;
 
 
             if (saveFileDialog.ShowDialog() == true)
@@ -1080,9 +1080,9 @@ namespace WPFConfigUpdater
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "JSON file (*.json)|*.json";
 
-            if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MiniserverUpdater"))
+            if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData)) 
             {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MiniserverUpdater";
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData;
             }
             else
             {
@@ -1101,8 +1101,8 @@ namespace WPFConfigUpdater
                     {
                         for (int i = 0; i < miniservers.Count; i++)
                         {
-                            miniservers[i].MSStatus = "outdated info 😐";
-                            miniservers[i].MSVersion = "TBD";
+                            miniservers[i].MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
+                            miniservers[i].MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
                         }
 
                         miniserverList = miniservers;
@@ -1260,7 +1260,7 @@ namespace WPFConfigUpdater
         {
             string address = string.Empty;
                
-            address = "https://dns.loxonecloud.com/" + value;
+            address = MyConstants.Strings.Link_CloudDNS + value;
 
             Uri path = new Uri(@address);
             return path;
@@ -1322,7 +1322,7 @@ namespace WPFConfigUpdater
             HttpWebRequest request;
             string ret = "-9999";
 
-            string testResult = @"https://dns.loxonecloud.com/" + ms_SNR + command;       //Request is created
+            string testResult = MyConstants.Strings.Link_CloudDNS + ms_SNR + command;       //Request is created
             System.Diagnostics.Debug.WriteLine(testResult);
             System.Diagnostics.Debug.WriteLine(user+ "&" + password);
 
@@ -1359,7 +1359,7 @@ namespace WPFConfigUpdater
         public static string sendCommandRest_Version_Remote_Cloud(string ms_SNR, string user, string password, string command, string interestedValue)
         {
             string receivedData = "-1213";
-            string url = @"https://dns.loxonecloud.com/" + ms_SNR + command;
+            string url = MyConstants.Strings.Link_CloudDNS + ms_SNR + command;
             RestClient client = new RestClient(url);
             client.UseXml();
             client.Options.FollowRedirects = true;
@@ -1456,7 +1456,7 @@ namespace WPFConfigUpdater
                     }
                     catch(Exception ex)
                     {
-                        cLoxAppJson.projectName = "Invalid JSON";
+                        cLoxAppJson.projectName = MyConstants.Strings.Listview_ProjectName_Invalid_JSON;
                     }
                     
                 }
@@ -1477,7 +1477,7 @@ namespace WPFConfigUpdater
                     }
                     catch (Exception ex)
                     {
-                        cLoxAppJson.projectName = "Invalid JSON";
+                        cLoxAppJson.projectName = MyConstants.Strings.Listview_ProjectName_Invalid_JSON;
                     }
 
                 }
@@ -1514,7 +1514,7 @@ namespace WPFConfigUpdater
                     }
                     catch (Exception ex)
                     {
-                        cLoxAppJson.projectName = "Invalid JSON";
+                        cLoxAppJson.projectName = MyConstants.Strings.Listview_ProjectName_Invalid_JSON;
                     }
                 }
             }
@@ -1531,7 +1531,7 @@ namespace WPFConfigUpdater
                     }
                     catch (Exception ex)
                     {
-                        cLoxAppJson.projectName = "Invalid JSON";
+                        cLoxAppJson.projectName = MyConstants.Strings.Listview_ProjectName_Invalid_JSON;
                     }
                 }
             }
