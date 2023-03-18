@@ -29,6 +29,7 @@ using System.Collections;
 using Microsoft.VisualBasic;
 using static WPFConfigUpdater.MainWindow;
 using System.Threading;
+using WPFConfigUpdater.Common;
 
 //CTRL + M plus CTRL + O  - Collapse All
 //TODO: Version number  13.2.11.11 is displayed in Version Collumn as 13.2.1111
@@ -276,15 +277,15 @@ namespace WPFConfigUpdater
                 if (ret_MsVersion == "0.0.0.0")
                 {
                     
-                    miniserverList.ElementAt(index).MSConfiguration = "error";
+                    miniserverList.ElementAt(index).MSConfiguration = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
                 }
                 else if(ret_cLoxAppJson.gatewayType == 0)
                 {
-                    miniserverList.ElementAt(index).MSConfiguration = "Client";
+                    miniserverList.ElementAt(index).MSConfiguration = MyConstants.Strings.Listview_Refresh_MS_Configuration_Client;
                 }
                 else
                 {
-                    miniserverList.ElementAt(index).MSConfiguration = "Client/Gateway";
+                    miniserverList.ElementAt(index).MSConfiguration = MyConstants.Strings.Listview_Refresh_MS_Configuration_ClientGateway;
                 }
 
                 miniserverList.ElementAt(index).MSProject = ret_cLoxAppJson.projectName;
@@ -348,9 +349,9 @@ namespace WPFConfigUpdater
         private void ContentControl_textblock_statusbar_config_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if(Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + $"\\Loxone"))
+            if(Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + MyConstants.Strings.Path_Loxone_Installation))
             {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + $"\\Loxone";
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + MyConstants.Strings.Path_Loxone_Installation;
             }
             else
             {
@@ -366,7 +367,7 @@ namespace WPFConfigUpdater
 
         private void listview_button_OpenConfig_Click(object sender, RoutedEventArgs e)
         {
-                var processes = Process.GetProcessesByName("LoxoneConfig");
+                var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone);
 
                 string serialnumber = miniserverList.ElementAt(mouseOverIndex).serialNumer;
                 string adminUser = miniserverList.ElementAt(mouseOverIndex).adminUser;
@@ -386,14 +387,13 @@ namespace WPFConfigUpdater
                 }
 
 
-                if (textblock_statusbar_config.Text == "Current Config: not selected - double click to select")
+            if (textblock_statusbar_config.Text == MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                 {
-                    MessageBox.Show("No Config Selected! 🤷‍");
+                    MessageBox.Show(MyConstants.Strings.MessageBox_OpenConfig_No_Config_selected);
                 }
                 else if (processes.Count() != 0)
                 {
-                    MessageBox.Show("Unable to perform Updates! There are " + processes.Count() + " Config Instances running. In order to perform Miniserver Updates no other Config has to be open! " +
-                        "\nPlease Save current Projects!");
+                    MessageBox.Show( MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part2);
                 }
                 else
                 {
@@ -414,7 +414,7 @@ namespace WPFConfigUpdater
 
         private void Button_Update_Click(object sender, RoutedEventArgs e)
         {
-            var processes = Process.GetProcessesByName("LoxoneConfig");
+            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone);
             if(processes.Count() == 0)
             {
                 UpdateButton.IsEnabled = false;
@@ -446,13 +446,12 @@ namespace WPFConfigUpdater
                 }
                 else
                 {
-                    MessageBox.Show("The Update Process is still running! Please Cancel the Update!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_ButtonUpdate_OtherUdpateRunning, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             else
             {
-                MessageBox.Show("Unable to perform Updates! There are " + processes.Count() + " Config Instances running. In order to perform Miniserver Updates no other Config has to be open! " +
-                    "\nPlease Save current Projects!");
+                MessageBox.Show(MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part2);
             }
 
         }
@@ -463,17 +462,17 @@ namespace WPFConfigUpdater
             {
                 try
                 {
-                    MessageBox.Show("Updates canceled by user! " + (int)e.Result + "/" + int_selectedItems_before_Refresh + " Miniserver(s) updated!");
+                    MessageBox.Show(MyConstants.Strings.MessageBox_Update_canceled + (int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Update_alreadyUpdatedMS);
                 }catch(InvalidOperationException ex)
                 {
-                    MessageBox.Show("Update canceled by user!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_Update_canceled, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
-                textblock_processStatus.Text = "Update canceled! ⚠";
+                textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Update_Canceled;
                 foreach (CMiniserver ms in listView_Miniserver.SelectedItems)
                 {
-                    if(miniserverList.ElementAt(miniserverList.IndexOf(ms)).MSStatus != "updated ✅")
-                    miniserverList.ElementAt(miniserverList.IndexOf(ms)).MSStatus = "Update canceled! ⚠";
+                    if(miniserverList.ElementAt(miniserverList.IndexOf(ms)).MSStatus != MyConstants.Strings.Listview_Updated_MS_Status)
+                    miniserverList.ElementAt(miniserverList.IndexOf(ms)).MSStatus = MyConstants.Strings.Statusbar_ProcessStatus_Update_Canceled;
                 }
 
                 //(sender as BackgroundWorker).ReportProgress(100);
@@ -485,10 +484,10 @@ namespace WPFConfigUpdater
             {
                 if(cApplicationUI.HandsfreeMode == false)
                 {
-                    MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + " Miniserver(s) updated!");
+                    MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Update_alreadyUpdatedMS);
                 }
                 
-                textblock_processStatus.Text = "Miniserver(s) updated.";
+                textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Update_Complete;
             }
             UpdateButton.IsEnabled = true;
             RefreshButton.IsEnabled = true;
@@ -520,13 +519,13 @@ namespace WPFConfigUpdater
                 }
                 if (index > -1)
                 {
-                    if(cMiniserver.MSStatus == "Updating")
+                    if(cMiniserver.MSStatus == MyConstants.Strings.Listview_MS_Status_Updating)
                     {
-                        miniserverList[index].MSStatus = "updating ... 🔄";
-                        textblock_processStatus.Text = "Updating ... 🔄" + cMiniserver.serialNumer;
+                        miniserverList[index].MSStatus = MyConstants.Strings.Listview_MS_Status_Updating_Emoji;
+                        textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Updating + cMiniserver.serialNumer;
                         //listView_Miniserver.IsEnabled = false;
                     }
-                    if(cMiniserver.MSStatus == "Update finished")
+                    if(cMiniserver.MSStatus == MyConstants.Strings.Listview_MS_Status_Update_finished)
                     {
                         RoutedEventArgs routedEventArgs = new RoutedEventArgs();
 
@@ -537,17 +536,17 @@ namespace WPFConfigUpdater
                        
                         if (ret_cLoxAppJson.gatewayType == 0)
                         {
-                            miniserverList[index].MSConfiguration = "Standalone";
+                            miniserverList[index].MSConfiguration = MyConstants.Strings.Listview_Refresh_MS_Configuration_Standalone;
                         }
                         else
                         {
-                            miniserverList[index].MSConfiguration = "Client/Gateway";
+                            miniserverList[index].MSConfiguration = MyConstants.Strings.Listview_Refresh_MS_Configuration_ClientGateway;
                         }
 
                         miniserverList[index].MSProject = ret_cLoxAppJson.projectName + "/" + ret_cLoxAppJson.localUrl;
                         miniserverList[index].MSVersion = ret_MsVersion;
-                        miniserverList[index].MSStatus = "updated ✅";
-                        textblock_processStatus.Text = "Updated - " + cMiniserver.serialNumer;
+                        miniserverList[index].MSStatus = MyConstants.Strings.Listview_Updated_MS_Status;
+                        textblock_processStatus.Text =  MyConstants.Strings.Statusbar_ProcessStatus_Update_Complete_show_MS + cMiniserver.serialNumer;
                         ListView_GridView_Autoresize();
                         
                     }
@@ -587,9 +586,9 @@ namespace WPFConfigUpdater
                
                 update.User = ms.adminUser;
                 update.Pw = ms.adminPassWord;
-                if (workerdata.ConfigPath == "Current Config: not selected - double click to select")
+                if (workerdata.ConfigPath == MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                 {
-                    MessageBox.Show("No Config Selected! No Update will be performed!");
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateButton_No_Config_selected);
                 }
                 else
                 {
@@ -598,7 +597,7 @@ namespace WPFConfigUpdater
                     {
                         progressPercentage += 1;
                     }
-                    string progressText = "Updating";
+                    string progressText = MyConstants.Strings.Listview_MS_Status_Updating;
                     ms.MSStatus = progressText;
                     (sender as BackgroundWorker).ReportProgress(progressPercentage, ms);
                     update.ConfigPath = workerdata.ConfigPath;
@@ -615,7 +614,7 @@ namespace WPFConfigUpdater
                     if (cApplicationUI.HandsfreeMode == false && worker_MSUpdate.CancellationPending == false)
                     {
                         string concat_strings = string.Join(" ", arrlist.Cast<string>().ToArray());
-                        MessageBox.Show("Miniserver Updated to - " + concat_strings);
+                        MessageBox.Show(MyConstants.Strings.MessageBox_Update_Show_all_updatedMS_Versions + concat_strings);
                         
                     }
 
@@ -627,7 +626,7 @@ namespace WPFConfigUpdater
 
                     progressPercentage = Convert.ToInt32((double)result_MS_Update / list.Count * 100);
 
-                    progressText = "Update finished";
+                    progressText = MyConstants.Strings.Listview_MS_Status_Update_finished;
                     ms.MSStatus = progressText;
                     (sender as BackgroundWorker).ReportProgress(progressPercentage, ms);
                 }
@@ -640,14 +639,14 @@ namespace WPFConfigUpdater
         private void Button_RefreshMS_Click(object sender, RoutedEventArgs e)
         {
             progressbar_ProcessStatus.Value = 0;
-            textblock_processStatus.Text = "Miniserver Information is retreived ... ";
+            textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Text;
             StackPaneButtons.IsEnabled = false; //Disables all containing Buttons
             int_selectedItems_before_Refresh = listView_Miniserver.SelectedItems.Count;
 
             List<CMiniserver> list = new List<CMiniserver> { };
             foreach(CMiniserver ms in listView_Miniserver.SelectedItems)
             {
-                ms.MSStatus = "TBD";
+                ms.MSStatus = MyConstants.Strings.StartUp_Listview_MS_Version;
                 list.Add(ms);
             }
             listView_Miniserver.IsEnabled = false;

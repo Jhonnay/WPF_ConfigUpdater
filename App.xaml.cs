@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
@@ -9,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WPFConfigUpdater.Common;
 using static WPFConfigUpdater.MainWindow;
 
 namespace WPFConfigUpdater
@@ -29,9 +31,9 @@ namespace WPFConfigUpdater
             //}
 
             ApplicationSettingsDialog dialog;
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater\\ApplicationSettings.json"))
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.ApplicationSettingsPath))
             {
-                string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater\\ApplicationSettings.json");
+                string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.ApplicationSettingsPath);
                 ApplicationSettings settings = JsonSerializer.Deserialize<ApplicationSettings>(strJson);
                 string strJsonMiniservers = File.ReadAllText(settings.StrDefaultConfigurationPath);
                 ObservableCollection<CMiniserver> miniservers = JsonSerializer.Deserialize<ObservableCollection<CMiniserver>>(strJsonMiniservers);
@@ -40,8 +42,8 @@ namespace WPFConfigUpdater
                 {
                     for (int i = 0; i < miniservers.Count; i++)
                     {
-                        miniservers[i].MSStatus = "outdated info 😐";
-                        miniservers[i].MSVersion = "TBD";
+                        miniservers[i].MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
+                        miniservers[i].MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
                     }
 
                     window.miniserverList = miniservers;
@@ -58,7 +60,7 @@ namespace WPFConfigUpdater
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\nCongrats! You found an Bug! You can now go home.", "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\nCongrats! You found an Bug! You can now go home.", "Exception Error", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
             System.Windows.Application.Current.Shutdown();
         }
