@@ -35,24 +35,33 @@ namespace WPFConfigUpdater
             {
                 string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings);
                 ApplicationSettings settings = JsonSerializer.Deserialize<ApplicationSettings>(strJson);
-                string strJsonMiniservers = File.ReadAllText(settings.StrDefaultConfigurationPath);
-                ObservableCollection<CMiniserver> miniservers = JsonSerializer.Deserialize<ObservableCollection<CMiniserver>>(strJsonMiniservers);
-
-                if (miniservers != null && miniservers.Count != 0)
+                
+                if(File.Exists(settings.StrDefaultConfigurationPath))
                 {
-                    for (int i = 0; i < miniservers.Count; i++)
+                    string strJsonMiniservers = File.ReadAllText(settings.StrDefaultConfigurationPath);
+
+                    ObservableCollection<CMiniserver> miniservers = JsonSerializer.Deserialize<ObservableCollection<CMiniserver>>(strJsonMiniservers);
+
+                    if (miniservers != null && miniservers.Count != 0)
                     {
-                        miniservers[i].MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
-                        miniservers[i].MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
+                        for (int i = 0; i < miniservers.Count; i++)
+                        {
+                            miniservers[i].MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
+                            miniservers[i].MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
+                        }
+
+                        window.miniserverList = miniservers;
+                        window.listView_Miniserver.ItemsSource = window.miniserverList;
+                        window.textblock_statusbar_config.Text = settings.StrDefaultConfigPath;
+                        //MenuItem_MSVersionRefresh_Click(sender, e);
+                        window.ListView_GridView_Autoresize();
                     }
-
-                    window.miniserverList = miniservers;
-                    window.listView_Miniserver.ItemsSource = window.miniserverList;
-                    window.textblock_statusbar_config.Text = settings.StrDefaultConfigPath;
-                    //MenuItem_MSVersionRefresh_Click(sender, e);
-                    window.ListView_GridView_Autoresize();
                 }
-
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_Configuration_not_found, "Exception Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                
             }
             window.listView_Miniserver.SelectionMode = SelectionMode.Multiple;
             window.Show();

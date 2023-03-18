@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using WPFConfigUpdater.Common;
 
 namespace WPFConfigUpdater
 {
@@ -25,7 +25,7 @@ namespace WPFConfigUpdater
             InitializeComponent();
             //MyDialogTextBoxMS_Password.Text = "temp";
             //MyDialogTextBoxMS_User.Text = "temp";
-            MyDialogTextBoxMS_SerialNumber.Text = "504F94";
+            MyDialogTextBoxMS_SerialNumber.Text = MyConstants.Strings.MS_Default_partial_SN;
         }
 
         public CreateMiniserverDialog(string serialNumber, string user, string password)
@@ -48,11 +48,11 @@ namespace WPFConfigUpdater
             }
             else
             {
-                MessageBox.Show("Sorry my dude 🤷‍.Please fill in all fields!");
+                MessageBox.Show(MyConstants.Strings.MessageBox_CraeteMSDialog_Fields_Not_Filled);
             }
 
-            if(MyDialogTextBoxMS_SerialNumber.Text.Length != "504F94A00000".Length) {
-                MessageBox.Show("Sorry my dude 🤷‍.Please check SN Lenght!");
+            if(MyDialogTextBoxMS_SerialNumber.Text.Length != MyConstants.Strings.MS_Default_dummy_SN.Length) {
+                MessageBox.Show(MyConstants.Strings.MessageBox_CraeteMSDialog_Fields_SerialNumber_Lenght);
             }
             
             

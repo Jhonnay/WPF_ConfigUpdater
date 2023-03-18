@@ -11,7 +11,7 @@ namespace WPFConfigUpdater.Common
         public static class Strings
         {
             /* Paths */
-            public static readonly string Path_ApplicationSettings = $"\\WPF_MinserverUpdater\\ApplicationSettings.json";
+            public static readonly string Path_ApplicationSettings = $"\\WPF_MiniserverUpdater\\ApplicationSettings.json";
             public static readonly string Path_Loxone_Installation = $"\\Loxone";
             public static readonly string Path_Changelog = $"\\Changelog.txt";
             public static readonly string Path_Folder_for_ApplicationData = $"\\WPF_MiniserverUpdater";
@@ -51,8 +51,10 @@ namespace WPFConfigUpdater.Common
             public static readonly string Statusbar_ProcessStatus_Update_Complete_show_MS = "Updated - ";
             public static readonly string Statusbar_TextBlockConfig_No_Config_selected = "Current Config: not selected - double click to select";
 
-            
 
+            /* Create MS Dialog */
+            public static readonly string MS_Default_partial_SN = "504F94";
+            public static readonly string MS_Default_dummy_SN = "504F94A00000";
 
             /* MessageBox */
             public static readonly string MessageBox_OpenConfig_No_Config_selected = "No Config Selected! 🤷‍";
@@ -70,7 +72,10 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_Changelog_Cannot_be_opened = "Changelog cannot be opened! ";
             public static readonly string MessageBox_Applicationsettings_saved = "Settings saved. ✅";
             public static readonly string MessageBox_Applicationsettings_Not_saved = "Settings were not saved! ⚠";
-
+            public static readonly string MessageBox_Applicationsettings_Configuration_not_found = "Configuration JSON not found! ⚠";
+            public static readonly string MessageBox_ApplicationSettings_No_Paths_Set = "If a CheckBox is checked, a Path has to be set! ";
+            public static readonly string MessageBox_CraeteMSDialog_Fields_Not_Filled = "Sorry my dude 🤷‍.Please fill in all fields!";
+            public static readonly string MessageBox_CraeteMSDialog_Fields_SerialNumber_Lenght = "Sorry my dude 🤷‍.Please check SN Lenght!";
         }
     }
 }

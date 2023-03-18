@@ -14,8 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
-
+using WPFConfigUpdater.Common;
 
 namespace WPFConfigUpdater
 {
@@ -66,12 +65,12 @@ namespace WPFConfigUpdater
                 string jsonString = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
                 this.DialogResult = true;
 
-                if(!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater" + $"\\ApplicationSettings.json"))
+                if(!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings))
                 {
-                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater");
+                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData);
                 }
 
-                File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater" + $"\\ApplicationSettings.json",jsonString);
+                File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings, jsonString);
                 
                 this.Close();
 
@@ -79,7 +78,7 @@ namespace WPFConfigUpdater
             }
             else
             {
-                MessageBox.Show("If a CheckBox is checked, a Path has to be set! ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(MyConstants.Strings.MessageBox_ApplicationSettings_No_Paths_Set, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             
         }
@@ -88,14 +87,14 @@ namespace WPFConfigUpdater
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "JSON file (*.json)|*.json";
 
-            if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater"))
+            if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData))
             {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater";
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData;
             }
             else
             {
-                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater");
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + $"\\WPF_MinserverUpdater";
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData);
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData;
             }
 
             if (openFileDialog.ShowDialog() == true)
@@ -110,9 +109,9 @@ namespace WPFConfigUpdater
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Exe file (*.exe)|*.exe";
 
-            if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + $"\\Loxone"))
+            if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + MyConstants.Strings.Path_Loxone_Installation))
             {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + $"\\Loxone";
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + MyConstants.Strings.Path_Loxone_Installation;
             }
             else
             {

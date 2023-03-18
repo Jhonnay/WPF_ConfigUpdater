@@ -6,7 +6,9 @@ Known Issues:
 
 
 V0.8.5
-TODO: Code refactoring
+* Added Dialog  - Check if Default Configuration File exists 
+* Fixed typo in %Appdata% Folder
+internal: Code refactoring for Strings
 
 V0.8.3
 *Added sort collumns alphabetically
