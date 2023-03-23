@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFConfigUpdater"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Miniserver Updater (c) Musat V0.8.5" Height="500" Width="900">
+        Title="Miniserver Updater (c) Musat V0.8.6" Height="500" Width="900">
     <Window.Resources>
         <local:UriConverter x:Key="UriConverter" />
         <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>

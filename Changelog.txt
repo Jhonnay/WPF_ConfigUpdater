@@ -4,6 +4,11 @@ Feature Wish:
 Known Issues: 
 * MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
 
+V0.8.6
+*Fixed verison number removed to manny trailing zeros. 
+	- e.g. 14.0.3.22 displayed as 14..3.22
+*Fixed dot not correctly appended if last to parts of version number was same. 
+	- e.g. 13.2.11.11 displayed as 13.2.1111
 
 V0.8.5
 * Added Dialog  - Check if Default Configuration File exists 

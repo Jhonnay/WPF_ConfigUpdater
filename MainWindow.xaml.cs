@@ -34,7 +34,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.8.5";
+        public string stringApplicationVersion = "V 0.8.6";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -159,14 +159,20 @@ namespace WPFConfigUpdater
                 sb = new StringBuilder();
                 foreach (string sub in subs_strings)
                 {
-                    string temp = sub.TrimStart('0');
-                    sb.Append(temp);
-                    if (sub != sub_last)
+                    if(sub == "00")
                     {
-                        sb.Append('.');
-
+                        sb.Append("0");
                     }
+                    else
+                    {
+                        string temp = sub.TrimStart('0');
+                        sb.Append(temp);
+                    }
+
+                    sb.Append('.');
+
                 }
+                sb.Remove(sb.Length-1,1);
                 formatedVersionString = sb.ToString();
             }
 
