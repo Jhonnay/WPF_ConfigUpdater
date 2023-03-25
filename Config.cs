@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Windows;
 
 namespace WPFConfigUpdater
@@ -102,14 +103,15 @@ namespace WPFConfigUpdater
 
         public void sendCommand(string ip, int port, string msg)
         {
+            UdpClient:
             UdpClient udpClient = new UdpClient();
 
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ip), port);
 
-            UdpClient:
+
             try
             {
-                
+
                 udpClient.Connect(ep);
                 Byte[] sendBytes = Encoding.ASCII.GetBytes(msg);
 
@@ -126,9 +128,12 @@ namespace WPFConfigUpdater
             }
             catch (System.Net.Sockets.SocketException ex)
             {
-                udpClient.Connect(ep);
+                Thread.Sleep(1000);
+                Debug.WriteLine(ex.Message);
+                MessageBox.Show("Debug: \n " + ex.Message + "\nTrying again. ");
+
                 goto UdpClient;
-            }
+            }    
             
         }
 

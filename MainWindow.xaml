@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFConfigUpdater"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Miniserver Updater (c) Musat V0.8.6" Height="500" Width="900">
+        Title="Miniserver Updater (c) Musat V0.8.7" Height="500" Width="900">
     <Window.Resources>
         <local:UriConverter x:Key="UriConverter" />
         <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>
@@ -152,6 +152,27 @@
                                 <GridViewColumnHeader  Tag="MSConfiguration" Click="listview_Miniserver_ColumnHeader_Click">Configuration</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
+                        <GridViewColumn Width="120" >
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader  Tag="UpdateLevel" Click="listview_Miniserver_ColumnHeader_Click">Updatelevel</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding UpdateLevel}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu Name="ContextUpdateLevel" >
+                                                <MenuItem Header="Set Release" Click="ContextUpdateLevelRelease"/>
+                                                <MenuItem Header="Set Alpha" Click="ContextUpdateLevelSetAlpha"/>
+                                                <MenuItem Header="Set Beta" Click="ContextUpdateLevelBeta"/>
+                                                <MenuItem Header="Update" Click="ContextUpdteLevelUpdateToLevel" />
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                            
+                        </GridViewColumn>
+                        
                         <GridViewColumn Header="Action" Width="Auto" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>

@@ -16,6 +16,22 @@ namespace WPFConfigUpdater
 
             private string msVersion;
             private string msStatus;
+
+            private string updatelevel;
+
+            public string UpdateLevel
+            {
+                get { return this.updatelevel; }
+                set
+                {
+                    if (this.updatelevel != value)
+                    {
+                        this.updatelevel = value;
+                        this.NotifyPropertychanged("UpdateLevel");
+                    }
+                }
+            }
+
             public string MSStatus
             {
                 get { return this.msStatus; }

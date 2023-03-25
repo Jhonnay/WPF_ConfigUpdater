@@ -56,7 +56,7 @@ namespace WPFConfigUpdater
 
         public static string sendCommandRest_Version_Remote_Cloud(string ms_SNR, string user, string password, string command, string interestedValue)
         {
-            string receivedData = "-1213";
+            string receivedData = "error";
             string url = MyConstants.Strings.Link_CloudDNS + ms_SNR + command;
             RestClient client = new RestClient(url);
             client.UseXml();

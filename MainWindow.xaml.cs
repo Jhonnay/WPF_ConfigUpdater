@@ -34,7 +34,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.8.6";
+        public string stringApplicationVersion = "V 0.8.7";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -219,6 +219,8 @@ namespace WPFConfigUpdater
 
         private void listview_button_OpenConfig_Click(object sender, RoutedEventArgs e)
         {
+            if (miniserverList[mouseOverIndex].MSStatus != MyConstants.Strings.Listview_MS_Status_AutoUpdate)
+            {
                 var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone);
 
                 string serialnumber = miniserverList.ElementAt(mouseOverIndex).serialNumer;
@@ -239,19 +241,24 @@ namespace WPFConfigUpdater
                 }
 
 
-            if (textblock_statusbar_config.Text == MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
+                if (textblock_statusbar_config.Text == MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                 {
                     MessageBox.Show(MyConstants.Strings.MessageBox_OpenConfig_No_Config_selected);
                 }
                 else if (processes.Count() != 0)
                 {
-                    MessageBox.Show( MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part2);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part2);
                 }
                 else
                 {
                     config.ConfigPath = textblock_statusbar_config.Text;
                     config.OpenConfigLoadProject();
-                }         
+                }
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_ConnectConfigButton_AutoUpdate_Block, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }      
         }
 
         private void SelectCurrentItem(object sender, MouseButtonEventArgs e)
@@ -267,43 +274,62 @@ namespace WPFConfigUpdater
         private void Button_Update_Click(object sender, RoutedEventArgs e)
         {
             var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone);
-            if(processes.Count() == 0)
+            int index = previousMouseOverIndex;
+            bool skipUpdate_AutoUpdate = false; 
+
+            foreach (CMiniserver ms in listView_Miniserver.SelectedItems) //skip Updates if only 1 MS  is AutoUpdating
             {
-                UpdateButton.IsEnabled = false;
-                RefreshButton.IsEnabled = false;
-                RemoveMSButton.IsEnabled = false;
-                InsertMSButton.IsEnabled = false;
-
-
-
-                int_selectedItems_before_Refresh = listView_Miniserver.SelectedItems.Count;
-                List<CMiniserver> list = new List<CMiniserver> { };
-                foreach (CMiniserver ms in listView_Miniserver.SelectedItems)
+                if(ms.MSStatus == MyConstants.Strings.Listview_MS_Status_AutoUpdate)
                 {
-                    list.Add(ms);
+                    skipUpdate_AutoUpdate = true;
                 }
-                CMiniserverListConfigPath workerdata = new CMiniserverListConfigPath();
-                workerdata.ListMiniservers = list;
-                workerdata.ConfigPath = textblock_statusbar_config.Text;
+            }
 
-                //BackgroundWorker worker = new BackgroundWorker();
-                //worker.WorkerReportsProgress = true;
-                //worker.DoWork += worker_DoWork_UpdateMSButton;
-                //worker.ProgressChanged += worker_ProgressChanged_UpdateMSButton;
-                //worker.RunWorkerCompleted += worker_RunWorkerCompleted_UpdateMSButton;
-                if (!worker_MSUpdate.IsBusy)
+
+            if (!skipUpdate_AutoUpdate)
+            {
+                if (processes.Count() == 0)
                 {
-                    listView_Miniserver.IsEnabled = false;
-                    worker_MSUpdate.RunWorkerAsync(workerdata);
+                    UpdateButton.IsEnabled = false;
+                    RefreshButton.IsEnabled = false;
+                    RemoveMSButton.IsEnabled = false;
+                    InsertMSButton.IsEnabled = false;
+
+
+
+                    int_selectedItems_before_Refresh = listView_Miniserver.SelectedItems.Count;
+                    List<CMiniserver> list = new List<CMiniserver> { };
+                    foreach (CMiniserver ms in listView_Miniserver.SelectedItems)
+                    {
+                        list.Add(ms);
+                    }
+                    CMiniserverListConfigPath workerdata = new CMiniserverListConfigPath();
+                    workerdata.ListMiniservers = list;
+                    workerdata.ConfigPath = textblock_statusbar_config.Text;
+
+                    //BackgroundWorker worker = new BackgroundWorker();
+                    //worker.WorkerReportsProgress = true;
+                    //worker.DoWork += worker_DoWork_UpdateMSButton;
+                    //worker.ProgressChanged += worker_ProgressChanged_UpdateMSButton;
+                    //worker.RunWorkerCompleted += worker_RunWorkerCompleted_UpdateMSButton;
+                    if (!worker_MSUpdate.IsBusy)
+                    {
+                        listView_Miniserver.IsEnabled = false;
+                        worker_MSUpdate.RunWorkerAsync(workerdata);
+                    }
+                    else
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_ButtonUpdate_OtherUdpateRunning, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_ButtonUpdate_OtherUdpateRunning, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part2);
                 }
             }
             else
             {
-                MessageBox.Show(MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part2);
+                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateButton_AutoUpdate_Block, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
         }
@@ -324,7 +350,11 @@ namespace WPFConfigUpdater
                 foreach (CMiniserver ms in listView_Miniserver.SelectedItems)
                 {
                     if(miniserverList.ElementAt(miniserverList.IndexOf(ms)).MSStatus != MyConstants.Strings.Listview_Updated_MS_Status)
-                    miniserverList.ElementAt(miniserverList.IndexOf(ms)).MSStatus = MyConstants.Strings.Statusbar_ProcessStatus_Update_Canceled;
+                    {
+                        miniserverList.ElementAt(miniserverList.IndexOf(ms)).MSStatus = MyConstants.Strings.Statusbar_ProcessStatus_Update_Canceled;
+                    }
+                       
+                   
                 }
 
                 //(sender as BackgroundWorker).ReportProgress(100);
@@ -382,8 +412,9 @@ namespace WPFConfigUpdater
                         RoutedEventArgs routedEventArgs = new RoutedEventArgs();
 
                         CLoxAppJson ret_cLoxAppJson;
-                        string ret_MsVersion; 
-                        getMiniserverInformationsWebServices(cMiniserver, out  ret_MsVersion, out var index1, out ret_cLoxAppJson);
+                        string ret_MsVersion;
+                        string updatelevel;
+                        getMiniserverInformationsWebServices(cMiniserver, out  ret_MsVersion, out var index1, out ret_cLoxAppJson, out updatelevel);
 
                        
                         if (ret_cLoxAppJson.gatewayType == 0)
@@ -398,6 +429,7 @@ namespace WPFConfigUpdater
                         miniserverList[index].MSProject = ret_cLoxAppJson.projectName + "/" + ret_cLoxAppJson.localUrl;
                         miniserverList[index].MSVersion = ret_MsVersion;
                         miniserverList[index].MSStatus = MyConstants.Strings.Listview_Updated_MS_Status;
+                        miniserverList[index].UpdateLevel = updatelevel;
                         textblock_processStatus.Text =  MyConstants.Strings.Statusbar_ProcessStatus_Update_Complete_show_MS + cMiniserver.serialNumer;
                         ListView_GridView_Autoresize();
                         
@@ -593,12 +625,15 @@ namespace WPFConfigUpdater
                     ms.MSVersion = "1.0.0.0"; //special condition --> during fetching data to show "retreiving..."
                     (sender as BackgroundWorker).ReportProgress(progressPercentage + 1, ms);
                     string ret_MsVersion = "0.0.0.0";
+                    string updatelevel; 
                     int index = -1;
                     CLoxAppJson ret_cLoxAppJson;
-                    getMiniserverInformationsWebServices(ms, out ret_MsVersion, out index, out ret_cLoxAppJson);
+
+                    getMiniserverInformationsWebServices(ms, out ret_MsVersion, out index, out ret_cLoxAppJson, out updatelevel);   
 
                     CMiniserver cMiniserver = ms;
                     cMiniserver.MSVersion = ret_MsVersion;
+                    cMiniserver.UpdateLevel = updatelevel;
 
 
                     if (ret_MsVersion == "0.0.0.0")
@@ -630,7 +665,7 @@ namespace WPFConfigUpdater
            
         }
 
-        private void getMiniserverInformationsWebServices(CMiniserver ms, out string ret_MsVersion, out int index, out CLoxAppJson ret_cLoxAppJson)
+        private void getMiniserverInformationsWebServices(CMiniserver ms, out string ret_MsVersion, out int index, out CLoxAppJson ret_cLoxAppJson, out string Updatelevel)
         {
             if (ms.LocalIPAdress != "" && ms.LocalIPAdress != null)
             {
@@ -640,6 +675,8 @@ namespace WPFConfigUpdater
                 ret_MsVersion = Format_Miniserver_String(ret_MsVersion);
                 miniserverList.ElementAt(index).MSVersion = ret_MsVersion;
                 ret_cLoxAppJson = WebService.sendCommandRest_LoxAppJson_Local_Gen1(ms.LocalIPAdress, ms.adminUser, ms.adminPassWord, @"/data/LoxAPP3.json");
+                Updatelevel = WebService.sendCommandRest_Version_Local_Gen1(ms.LocalIPAdress, ms.adminUser, ms.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                
             }
             else
             {
@@ -649,7 +686,14 @@ namespace WPFConfigUpdater
                 ret_MsVersion = Format_Miniserver_String(ret_MsVersion);
                 miniserverList.ElementAt(index).MSVersion = ret_MsVersion;
                 ret_cLoxAppJson = WebService.sendCommandRest_LoxAppJson_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/data/LoxAPP3.json");
+                Updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/dev/cfg/updatelevel", "value");
             }
+            
+            if( Updatelevel.IndexOf("\"") > 0)
+            {
+                Updatelevel = Updatelevel.Remove(Updatelevel.IndexOf("\""));
+            }
+            
         }
 
         private void listView_Miniserver_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -738,7 +782,7 @@ namespace WPFConfigUpdater
             }
             else
             {
-                link = "https://dns.loxonecloud.com/" + snr + "/dev/fsget/log/def.log";
+                link = MyConstants.Strings.Link_CloudDNS + snr + "/dev/fsget/log/def.log";
             }
 
             Process cmd = new Process();
@@ -1063,6 +1107,162 @@ namespace WPFConfigUpdater
             AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
             listView_Miniserver.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
         }
+
+        private void ContextUpdateLevelSetAlpha(object sender, RoutedEventArgs e)
+        {
+            int index = previousMouseOverIndex;
+            string link,updatelevel; 
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+
+            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            {
+                
+                WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/alpha", "value");
+                updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+            }
+            else
+            {
+                WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/alpha", "value");
+                updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+            }
+
+            if (updatelevel.IndexOf("\"") > 0)
+            {
+                updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
+            }
+
+
+
+            if (updatelevel == "Alpha")
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            miniserverList[index].UpdateLevel = updatelevel;
+            
+        }
+
+        private void ContextUpdateLevelRelease(object sender, RoutedEventArgs e)
+        {
+            int index = previousMouseOverIndex;
+            string link, updatelevel;
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+
+            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            {
+
+                WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/default", "value");
+                updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+            }
+            else
+            {
+                WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/default", "value");
+                updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+            }
+
+            if (updatelevel.IndexOf("\"") > 0)
+            {
+                updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
+            }
+
+
+
+            if (updatelevel == "Release")
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            miniserverList[index].UpdateLevel = updatelevel;
+
+        }
+        private void ContextUpdateLevelBeta(object sender, RoutedEventArgs e)
+        {
+            int index = previousMouseOverIndex;
+            string link, updatelevel;
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+
+            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            {
+
+                WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/beta", "value");
+                updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+            }
+            else
+            {
+                WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/beta", "value");
+                updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+            }
+
+            if (updatelevel.IndexOf("\"") > 0)
+            {
+                updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
+            }
+
+
+
+            if (updatelevel == "Beta")
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            miniserverList[index].UpdateLevel = updatelevel;
+        }
+        private void ContextUpdteLevelUpdateToLevel(object sender, RoutedEventArgs e)
+        {
+            int index = previousMouseOverIndex;
+            string link, returnCode;
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+
+            if(currentlySelectedMiniserver.MSConfiguration == MyConstants.Strings.Listview_Refresh_MS_Configuration_Standalone)
+            {
+                if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                {
+
+                    returnCode = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
+                    //updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
+                else
+                {
+                    returnCode = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
+                    //updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
+
+                if (returnCode.IndexOf("\"") > 0)
+                {
+                    returnCode = returnCode.Remove(returnCode.IndexOf("\""));
+                }
+
+                if (returnCode == MyConstants.Strings.WebService_Success_Code) //WebService Successful
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    miniserverList[index].MSStatus = MyConstants.Strings.Listview_MS_Status_AutoUpdate;
+                }
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Possible, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+        }
+
+
     }
 
 }

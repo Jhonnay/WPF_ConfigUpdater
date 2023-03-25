@@ -1,8 +1,17 @@
 Feature Wish: 
 * rearange collumns via dragging
+* Use Version of Config Exe to visualize which MS needs an update. 
+
 
 Known Issues: 
 * MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
+* UDP Listener not startet successfully. Probably fixed already.
+
+V0.8.7
+* Added Update Level Column 
+	- Update ContextMenu for standalone MS with just a rightclick via Autoupdate. (depending on Updatelevel)
+* Added Context Menu to change Update Level (Release/Alpha/Beta
+* Added Autoupdate check for Connect and Update Buttons. 
 
 V0.8.6
 *Fixed verison number removed to manny trailing zeros. 

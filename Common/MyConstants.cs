@@ -38,7 +38,8 @@ namespace WPFConfigUpdater.Common
             public static readonly string Listview_MS_Status_retreiving_information_successfull = "Info up to date ✅";
             public static readonly string Listview_MS_Status_retreiving_information_timeout = "Error/Timeout ⚠";
             public static readonly string Listview_MS_Status_Edited = "Miniserver modified ⚠";
-            public static readonly string Listview_ProjectName_Invalid_JSON = "Invalid JSON"; 
+            public static readonly string Listview_ProjectName_Invalid_JSON = "Invalid JSON";
+            public static readonly string Listview_MS_Status_AutoUpdate = "Auto Update...";
 
 
             /* Bottom Status Bar */
@@ -76,6 +77,17 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_ApplicationSettings_No_Paths_Set = "If a CheckBox is checked, a Path has to be set! ";
             public static readonly string MessageBox_CraeteMSDialog_Fields_Not_Filled = "Sorry my dude 🤷‍.Please fill in all fields!";
             public static readonly string MessageBox_CraeteMSDialog_Fields_SerialNumber_Lenght = "Sorry my dude 🤷‍.Please check SN Lenght!";
+            public static readonly string MessageBox_UpdateLevelSet_Successfully = "Updatelevel was successfully set to: ";
+            public static readonly string MessageBox_UpdateLevelSet_Error = "Updatelevel is still: ";
+            public static readonly string MessageBox_AutoUpdate_Not_Possible = "AutoUpdate not possible for " + Listview_Refresh_MS_Configuration_ClientGateway;
+            public static readonly string MessageBox_AutoUpdate_Startet = "Autoupdate started! \nPlease be patient. \nUI will not be updated on finish!";
+            public static readonly string MessageBox_AutoUpdate_Not_Startet = "Autoupdate not started! WebService Error!";
+            public static readonly string MessageBox_UpdateButton_AutoUpdate_Block = "Updates aborted! Please Select Miniserver that do not auto update.";
+            public static readonly string MessageBox_ConnectConfigButton_AutoUpdate_Block = "Autoupdate! Connecting aborted!";
+
+            /* WebServices */
+            public static readonly string WebService_Success_Code = "200";
+
         }
     }
 }
