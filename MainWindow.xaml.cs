@@ -141,6 +141,12 @@ namespace WPFConfigUpdater
         private string Format_Miniserver_String (string unformatedVersionString)
         {
             string formatedVersionString = "0.0.0.0";
+
+            if(unformatedVersionString == "error")
+            {
+                return formatedVersionString; //e.g. Gen1 not reachable
+            }
+
             if(Int32.Parse(unformatedVersionString) > 10101010)
             {
                 StringBuilder sb = new StringBuilder();
