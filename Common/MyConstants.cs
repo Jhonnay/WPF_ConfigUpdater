@@ -15,12 +15,14 @@ namespace WPFConfigUpdater.Common
             public static readonly string Path_Loxone_Installation = $"\\Loxone";
             public static readonly string Path_Changelog = $"\\Changelog.txt";
             public static readonly string Path_Folder_for_ApplicationData = $"\\WPF_MiniserverUpdater";
+            public static readonly string Path_Folder_for_Loxone_App = $"\\Programs\\kerberos\\Loxone.exe";
 
             /* Links */
             public static readonly string Link_CloudDNS = "https://dns.loxonecloud.com/";
 
             /* Processes */
-            public static readonly string Process_Loxone = "LoxoneConfig";
+            public static readonly string Process_Loxone_Config = "LoxoneConfig";
+            public static readonly string Process_Loxone_App = "Loxone";
 
             /* ListView */
 
@@ -84,6 +86,8 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_AutoUpdate_Not_Startet = "Autoupdate not started! WebService Error!";
             public static readonly string MessageBox_UpdateButton_AutoUpdate_Block = "Updates aborted! Please Select Miniserver that do not auto update.";
             public static readonly string MessageBox_ConnectConfigButton_AutoUpdate_Block = "Autoupdate! Connecting aborted!";
+            public static readonly string MessageBox_App_already_open = "Loxone App already open!";
+            public static readonly string MessageBox_App_not_installed = "Loxone App not installed! Could not find: %localappdata%\\Programs\\kerberos\\Loxone.exe";
 
             /* WebServices */
             public static readonly string WebService_Success_Code = "200";

@@ -9,6 +9,10 @@ Known Issues:
 
 V0.8.8
 * Added inner Exception Message for crashes.
+* Added Loxone App in Toolbar. 
+	- Open App
+	- Open App in Debug
+	- Kill all App instances
 * Fixed crash when trying to refresh information without external access. 
 
 

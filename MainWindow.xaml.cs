@@ -227,7 +227,7 @@ namespace WPFConfigUpdater
         {
             if (miniserverList[mouseOverIndex].MSStatus != MyConstants.Strings.Listview_MS_Status_AutoUpdate)
             {
-                var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone);
+                var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_Config);
 
                 string serialnumber = miniserverList.ElementAt(mouseOverIndex).serialNumer;
                 string adminUser = miniserverList.ElementAt(mouseOverIndex).adminUser;
@@ -279,7 +279,7 @@ namespace WPFConfigUpdater
 
         private void Button_Update_Click(object sender, RoutedEventArgs e)
         {
-            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone);
+            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_Config);
             int index = previousMouseOverIndex;
             bool skipUpdate_AutoUpdate = false; 
 
@@ -792,7 +792,7 @@ namespace WPFConfigUpdater
             }
 
             Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
+            cmd.StartInfo.FileName = "process.exe";
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             cmd.StartInfo.Arguments = "/c start " + link;
             cmd.StartInfo.CreateNoWindow = true;
@@ -856,7 +856,7 @@ namespace WPFConfigUpdater
         private static void OpenLinkinDefaultBrowser(string link)
         {
             Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
+            cmd.StartInfo.FileName = "process.exe";
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             cmd.StartInfo.Arguments = "/c start " + link;
             cmd.StartInfo.CreateNoWindow = true;
@@ -868,7 +868,7 @@ namespace WPFConfigUpdater
         {
             //Starts default Browser
             Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
+            cmd.StartInfo.FileName = "process.exe";
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             cmd.StartInfo.Arguments = "/c start " + e.Uri.AbsoluteUri;
             cmd.StartInfo.CreateNoWindow = true;
@@ -919,7 +919,7 @@ namespace WPFConfigUpdater
 
         private void ContentControl_textblock_statusbar_menuItem_Kill_Configs(object sender, RoutedEventArgs e)
         {
-            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone);
+            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_Config);
 
             foreach(var instance in processes)
             {
@@ -1268,7 +1268,66 @@ namespace WPFConfigUpdater
 
         }
 
+        private void MenuItem_Open_Loxone_App(object sender, RoutedEventArgs e)
+        {
+            //% localappdata %\Programs\kerberos
 
+            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_App);
+
+            if(processes.Count() != 0)
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_App_already_open, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                if(File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)+ MyConstants.Strings.Path_Folder_for_Loxone_App))
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + MyConstants.Strings.Path_Folder_for_Loxone_App;
+                    process.Start();
+                }
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_App_not_installed, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+                
+        }
+
+        private void MenuItem_Loxone_App_Kill_Instances(object sender, RoutedEventArgs e)
+        {
+            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_App);
+
+            foreach(var process in processes)
+            {
+                process.Kill();
+            }
+        }
+
+        private void MenuItem_Click_Loxone_App_Debug(object sender, RoutedEventArgs e)
+        {
+            var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_App);
+
+            if (processes.Count() != 0)
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_App_already_open, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + MyConstants.Strings.Path_Folder_for_Loxone_App))
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + MyConstants.Strings.Path_Folder_for_Loxone_App;
+                    process.StartInfo.Arguments = " --debug";
+                    process.Start();
+                }
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_App_not_installed, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
     }
-
 }
+
+

@@ -46,6 +46,11 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
+            <MenuItem Header="_Loxone App" >
+                <MenuItem Header="Open App ✈" Click="MenuItem_Open_Loxone_App" />
+                <MenuItem Header="Debug 🖥" Click="MenuItem_Click_Loxone_App_Debug" />
+                <MenuItem Header="Kill App 💥" Click="MenuItem_Loxone_App_Kill_Instances" />
+            </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_Version" Click="MenuItem_Programm_Version_Click"/>
                 <MenuItem Header="_Help" />
@@ -124,8 +129,8 @@
                                         <TextBlock.ContextMenu>
                                             <ContextMenu  Name="ContextMenuWebInterfaceLink"  >
                                                 <MenuItem Header="Edit Miniserver" Click="Contextmenu_EditMiniserver_click" />
-                                                <MenuItem Header="Open DefLog in Browser" Click="Contextmenu_DefLog_click" />
-                                                <MenuItem Header="Copy SNR to Clipboard" Click="ContextMenu_CopySNR_Click" />
+                                                <MenuItem Header="DefLog" Click="Contextmenu_DefLog_click" />
+                                                <MenuItem Header="Copy SNR" Click="ContextMenu_CopySNR_Click" />
                                                 <MenuItem Header="Extern Webinterface" Click="ContextMenu_externWI_Click" />
                                                 <MenuItem Header="Local Webinterface" Click="ContextMenu_internWI_Click" />
                                             </ContextMenu>
