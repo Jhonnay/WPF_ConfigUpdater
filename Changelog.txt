@@ -8,7 +8,9 @@ Known Issues:
 * UDP Listener not startet successfully. Probably fixed already.
 
 V0.8.8
+* Added inner Exception Message for crashes.
 * Fixed crash when trying to refresh information without external access. 
+
 
 V0.8.7
 * Added Update Level Column 
