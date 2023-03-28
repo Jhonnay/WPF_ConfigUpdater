@@ -16,12 +16,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0EDA587F299153ECB65C342496A174A4"
-        "OwnerKey" = "8:_A9D8409EE44C49DE81E22E3ECA075439"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_152A6EB03A7243ECA5C8AF3B4144CFA2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -60,6 +54,12 @@
         {
         "MsmKey" = "8:_81367CD6510C412AACC93C2AC76A30C0"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9A70438EA12914EA2AD50B28DA0DFD1C"
+        "OwnerKey" = "8:_A9D8409EE44C49DE81E22E3ECA075439"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -191,37 +191,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0EDA587F299153ECB65C342496A174A4"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RestSharp, Version=108.0.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_0EDA587F299153ECB65C342496A174A4"
-                    {
-                    "Name" = "8:RestSharp.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:RestSharp.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_0A8F99193E6A4E1F8D31DFAC6DBD33BC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_152A6EB03A7243ECA5C8AF3B4144CFA2"
             {
             "SourcePath" = "8:..\\..\\resources\\Icon.ico"
@@ -373,6 +342,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9A70438EA12914EA2AD50B28DA0DFD1C"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:RestSharp, Version=108.0.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_9A70438EA12914EA2AD50B28DA0DFD1C"
+                    {
+                    "Name" = "8:RestSharp.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:RestSharp.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_0A8F99193E6A4E1F8D31DFAC6DBD33BC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A9D8409EE44C49DE81E22E3ECA075439"
             {
             "AssemblyRegister" = "3:1"
@@ -511,19 +511,19 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MiniserverUpdater"
-        "ProductCode" = "8:{C742BAFE-0BBC-413E-BAD0-48E4BCA946F8}"
-        "PackageCode" = "8:{58E397B9-6512-4146-BAED-FCB3B5B2CA66}"
+        "ProductCode" = "8:{05207873-8532-4281-9777-7545D73FAEBC}"
+        "PackageCode" = "8:{DD71CF1C-4B9A-40CF-9C41-D118002E9F3B}"
         "UpgradeCode" = "8:{23C04396-AC73-4B3D-9247-14A44141235A}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.8.7"
+        "ProductVersion" = "8:0.8.9"
         "Manufacturer" = "8:Musat"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Miniserver Updater Setup V0.8.6"
+        "Title" = "8:Miniserver Updater Setup V0.8.9"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Benjamin Musat"
         "Keywords" = "8:"

@@ -7,12 +7,20 @@ Known Issues:
 * MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
 * UDP Listener not startet successfully. Probably fixed already.
 
+
+V0.8.9
+* Changed Icons for Buttons
+* Added Tooltips to various Buttons. 
+* Fixed Browser functionality does not work (deflog,WI,...) 
+
+
 V0.8.8
 * Added inner Exception Message for crashes.
 * Added Loxone App in Toolbar. 
 	- Open App
 	- Open App in Debug
 	- Kill all App instances
+* Adjusted Texts in Context Menus
 * Fixed crash when trying to refresh information without external access. 
 
 

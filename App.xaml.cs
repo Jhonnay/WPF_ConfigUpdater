@@ -69,7 +69,16 @@ namespace WPFConfigUpdater
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\nInner Exception: " + e.Exception.InnerException.Message  + "\nCongrats! You found an Bug! You can now go home.", "Exception Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            if(e.Exception.InnerException != null)
+            {
+                MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\nInner Exception: " + e.Exception.InnerException.Message + "\nCongrats! You found an Bug! You can now go home.", "Exception Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message +  "\nCongrats! You found an Bug! You can now go home.", "Exception Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+           
             e.Handled = true;
             System.Windows.Application.Current.Shutdown();
         }

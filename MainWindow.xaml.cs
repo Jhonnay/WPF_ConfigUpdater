@@ -34,7 +34,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.8.7";
+        public string stringApplicationVersion = "V 0.8.9";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -792,7 +792,7 @@ namespace WPFConfigUpdater
             }
 
             Process cmd = new Process();
-            cmd.StartInfo.FileName = "process.exe";
+            cmd.StartInfo.FileName = "cmd.exe";
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             cmd.StartInfo.Arguments = "/c start " + link;
             cmd.StartInfo.CreateNoWindow = true;
@@ -856,7 +856,7 @@ namespace WPFConfigUpdater
         private static void OpenLinkinDefaultBrowser(string link)
         {
             Process cmd = new Process();
-            cmd.StartInfo.FileName = "process.exe";
+            cmd.StartInfo.FileName = "cmd.exe";
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             cmd.StartInfo.Arguments = "/c start " + link;
             cmd.StartInfo.CreateNoWindow = true;
@@ -868,7 +868,7 @@ namespace WPFConfigUpdater
         {
             //Starts default Browser
             Process cmd = new Process();
-            cmd.StartInfo.FileName = "process.exe";
+            cmd.StartInfo.FileName = "cmd.exe";
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             cmd.StartInfo.Arguments = "/c start " + e.Uri.AbsoluteUri;
             cmd.StartInfo.CreateNoWindow = true;
