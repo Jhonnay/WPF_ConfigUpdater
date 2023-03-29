@@ -6,7 +6,11 @@ Feature Wish:
 Known Issues: 
 * MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
 * UDP Listener not startet successfully. Probably fixed already.
+* Refresh Icon does not download
+* WebInterface does not use Local IP
 
+V0.9.0
+* Added FTP to context Menu of MS Serial Number
 
 V0.8.9
 * Changed Icons for Buttons

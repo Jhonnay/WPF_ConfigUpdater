@@ -22,6 +22,8 @@ using Microsoft.VisualBasic;
 using static WPFConfigUpdater.MainWindow;
 using System.Threading;
 using WPFConfigUpdater.Common;
+using System.Reflection;
+using System.Net.NetworkInformation;
 
 //CTRL + M plus CTRL + O  - Collapse All
 //TODO: Version number  13.2.11.11 is displayed in Version Collumn as 13.2.1111
@@ -43,6 +45,7 @@ namespace WPFConfigUpdater
         public int mouseOverIndex;
         private GridViewColumnHeader listViewSortCol = null;
         private SortAdorner listViewSortAdorner = null;
+        private List<CMiniserver> selected_Miniserver_befor_refresh;
 
         public MainWindow()
         {
@@ -543,6 +546,8 @@ namespace WPFConfigUpdater
 
             Thread.Sleep(200);
 
+            selected_Miniserver_befor_refresh = list;
+
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
             worker.DoWork += worker_DoWork_RefreshMSInformation;
@@ -553,10 +558,19 @@ namespace WPFConfigUpdater
 
         private void worker_RunWorkerCompleted_RefreshMSInformation(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessageBox.Show((int)e.Result  + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Refresh_Information_pulled);
+            MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Refresh_Information_pulled);
             textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Information_pulled_Text;
             StackPaneButtons.IsEnabled = true;
             listView_Miniserver.IsEnabled = true;
+
+            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+            Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+
+            foreach(CMiniserver ms in selected_Miniserver_befor_refresh)
+            {
+                miniserverList.ElementAt(miniserverList.IndexOf(ms));
+
+            }
         }
 
         private void worker_ProgressChanged_RefreshMSInformation(object sender, ProgressChangedEventArgs e)
@@ -1326,6 +1340,50 @@ namespace WPFConfigUpdater
                     MessageBox.Show(MyConstants.Strings.MessageBox_App_not_installed, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
+        }
+
+        private void ContextMenu_FTP(object sender, RoutedEventArgs e)
+        {
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+
+            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            {
+                string link = @"explorer ftp://" + currentlySelectedMiniserver.adminUser + ":" + currentlySelectedMiniserver.adminPassWord + "@" + currentlySelectedMiniserver.LocalIPAdress ;
+
+                Ping myPing = new Ping();
+                PingReply reply = myPing.Send(currentlySelectedMiniserver.LocalIPAdress, 1000);
+                if (reply != null && reply.Status.ToString() != "TimedOut")
+                {
+                    string ret_MsVersion = "0.0.0.0";
+                    ret_MsVersion = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/version", "value");
+
+                    if (ret_MsVersion != "-1213")
+                    {
+                        Process cmd = new Process();
+                        cmd.StartInfo.FileName = "cmd.exe";
+                        cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        cmd.StartInfo.Arguments = "/c " + link;
+                        cmd.StartInfo.CreateNoWindow = true;
+
+                        cmd.Start();
+                    }
+                    else
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_FTP_Local_authentification_failed, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_FTP_Local_Ping_failed, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_FTP_Local_IP_not_defined, "Information", MessageBoxButton.OK, MessageBoxImage.Information);       
+            }
+
+
         }
     }
 }
