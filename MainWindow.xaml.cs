@@ -1190,9 +1190,11 @@ namespace WPFConfigUpdater
 
         private void OnListViewItemPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine("Tunnel! Selected Index = " + mouseOverIndex);
+            previousMouseOverIndex = mouseOverIndex;
+            Debug.WriteLine("Tunnel! Selected Index = " + mouseOverIndex + " previous = " + previousMouseOverIndex);
             //listView_Miniserver.UnselectAll();
             //listView_Miniserver.focus
+
 
             e.Handled = true;
         }
@@ -1201,6 +1203,7 @@ namespace WPFConfigUpdater
         {
             Debug.WriteLine(listView_Miniserver.SelectedIndex.ToString());
             e.Handled = true;
+            
         }
 
         private void ListViewItem_MouseEnter(object sender, MouseEventArgs e)
@@ -1209,7 +1212,7 @@ namespace WPFConfigUpdater
             ListViewItem item = (ListViewItem) sender;
             CMiniserver cMiniserver = (CMiniserver)item.Content;
             //listView_Miniserver.items
-            previousMouseOverIndex = mouseOverIndex;
+            //previousMouseOverIndex = mouseOverIndex;
             mouseOverIndex = miniserverList.IndexOf(cMiniserver);
             Debug.WriteLine(item + " | selected index:  " + mouseOverIndex);
         }

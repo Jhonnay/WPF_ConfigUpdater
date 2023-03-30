@@ -1,13 +1,42 @@
 Feature Wish: 
 * rearange collumns via dragging
-* Cancel Button should work for refreshing MS Informations. 
+* Cancel Button should work for refreshing MS Informations too. 
+* Adding "Language" collumn and open Config with this Setting - Christian Worlitchck 
+* Application Settings Dialog --> make beautiful
+* Make UI more colorful 
+* Light Mode / Darkmode
+* Tooltip for Verison columns (explination for colors)
+* Add color for when Version is higher than selected Config EXE
+* Check if Alpha Update is available via Autoupdate Server
+* Make Textbox of local IP and its collumn autoresize and dragable. 
+* Context Menu for "Project Name" Column
+	- copy local IP to Clipboard. 
+	- use local IP in column. 
+* Write Help Documentation
+* Use Password hashing --> ask ralph
+* Open Debug Log on Context Menu
+* Autostart Setting
+* Minimize to taskbar
+* Create Backup 
+* Update Multiple MS at once
 
 Known Issues: 
 * MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
 * UDP Listener not startet successfully. Probably fixed already.
-* Context Menu righclick does not work always with previous mouseoverindex, 
-  especially if the context menu is over the last entry in the list. 
+* Changing Updatelevel of MS that is not reachacble in network takes long with result = "-1231";
+* Updatlevel Context Menu freezes UI --> implement in seperate Thread
+* Tooltip is not shown if the Button is disabled
+* Toolbar "Tools" can be removed --> broken
+* Connect Config Button freezes UI until function is done
+* Adorner overlaps with Text --> make collumn wider as workaround
+* Text is not centered in columns
+* Local IP does not change variable on each Text change --> you have to click outside the field for change to reflect
+* Informations pulled --> gramatically wrong --> Statusbar text.
+* Update process can get stuck 
 
+
+V0.9.1
+* Fixed Context Menu righclick does not work always select right Miniserver, especially if the context menu is over the last entry in the list. 
 
 V0.9.0
 * Added FTP to context Menu of MS Serial Number
