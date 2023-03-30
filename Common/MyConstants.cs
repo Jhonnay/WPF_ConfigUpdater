@@ -19,6 +19,7 @@ namespace WPFConfigUpdater.Common
 
             /* Links */
             public static readonly string Link_CloudDNS = "https://dns.loxonecloud.com/";
+            public static readonly string Link_LPH = "https://lph.loxone.com/main.php?snr=";
 
             /* Processes */
             public static readonly string Process_Loxone_Config = "LoxoneConfig";
@@ -90,7 +91,8 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_App_not_installed = "Loxone App not installed! Could not find: %localappdata%\\Programs\\kerberos\\Loxone.exe";
             public static readonly string MessageBox_FTP_Local_IP_not_defined = "FTP without Local IP does not work!";
             public static readonly string MessageBox_FTP_Local_Ping_failed = "Ping to MS failed! Check local IP and if you are connected to the right network!";
-            public static readonly string MessageBox_FTP_Local_authentification_failed = "Check MS Credentials!"; 
+            public static readonly string MessageBox_FTP_Local_authentification_failed = "Check MS Credentials!";
+            public static readonly string MessageBox_UpdateButton_MS_updated_OR_higher_Version = "Selected Miniserver(s) already updated or on higher version.";
 
             /* WebServices */
             public static readonly string WebService_Success_Code = "200";

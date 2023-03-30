@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFConfigUpdater"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Miniserver Updater (c) Musat V0.8.9" Height="500" Width="900">
+        Title="Miniserver Updater (c) Musat V0.9.0" Height="500" Width="900">
     <Window.Resources>
         <local:UriConverter x:Key="UriConverter" />
         <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>
@@ -131,22 +131,29 @@
                                                 <MenuItem Header="Edit Miniserver" Click="Contextmenu_EditMiniserver_click" />
                                                 <MenuItem Header="DefLog" Click="Contextmenu_DefLog_click" />
                                                 <MenuItem Header="Copy SNR" Click="ContextMenu_CopySNR_Click" />
+                                                <MenuItem Header="Copy Password" Click="ContextMenu_Copy_Password" />
                                                 <MenuItem Header="Extern Webinterface" Click="ContextMenu_externWI_Click" />
                                                 <MenuItem Header="Local Webinterface" Click="ContextMenu_internWI_Click" />
                                                 <MenuItem Header="FTP" Click="ContextMenu_FTP" />
+                                                <MenuItem Header="LPH" Click="ContextMenu_LPH" />
                                             </ContextMenu>
                                         </TextBlock.ContextMenu>
-                                    <Hyperlink  NavigateUri="{Binding serialNumer,Converter={local:UriConverter}}" RequestNavigate="Hyperlink_RequestNavigate"> 
-                                        <Run Text="{Binding serialNumer}"/> 
-                                    </Hyperlink>
+                                        <Hyperlink  NavigateUri="{Binding serialNumer,Converter={local:UriConverter}}" RequestNavigate="Hyperlink_RequestNavigate"> 
+                                            <Run Text="{Binding serialNumer}"/> 
+                                        </Hyperlink>
                                     </TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Width="100" DisplayMemberBinding="{Binding MSVersion}">
+                        <GridViewColumn Width="100">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader  Tag="MSVersion" Click="listview_Miniserver_ColumnHeader_Click">Version</GridViewColumnHeader>
                             </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding MSVersion}" Foreground="{Binding VersionColor}" FontFamily="Yu Gothic UI Semibold" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn  Width="Auto"  DisplayMemberBinding="{Binding MSProject}">
                             <GridViewColumn.Header>
@@ -200,17 +207,17 @@
                 </ListView.View>
             </ListView>
             <GridSplitter x:Name="gridsplitter"  Grid.Row="1" Height="5"  HorizontalAlignment="Stretch"/>
-            <StackPanel x:Name="StackPaneButtons" Orientation="Horizontal" Margin="10"  Grid.Row="2">
+            <StackPanel x:Name="StackPaneButtons" Orientation="Horizontal" Margin="10"  Grid.Row="2" VerticalAlignment="Center">
                 <Button x:Name="UpdateButton" Content="Update" Click="Button_Update_Click" Margin="10,0,0,0" Height="30" ToolTip="Update all selected Miniservers with selected Config" Padding="5">
                     
                 </Button>
                 <Button x:Name="RefreshButton"  Margin="10,0,0,0" Click="Button_RefreshMS_Click" Height="30" ToolTip="Refresh information of all selected Miniservers">
-                    <Image Source="https://cdn-icons-png.flaticon.com/512/126/126502.png" Margin="5"/>
+                    <Image  Margin="5" Source="/refresh_symbol.png"/>
                 </Button>
                 <Button x:Name="RemoveMSButton" Content="➖" Margin="10,0,0,0" Click="Button_RemoveMS_Click" Height="30" ToolTip="Removes all selected Miniservers"/>
                 <Button x:Name="InsertMSButton" Content="➕" Margin="10,0,0,0" Click="Button_InsertMS_Click"  Height="30" ToolTip="Inserts a new Miniserver into the list"/>
                 <Button x:Name="CancelUpdateButton" Content="Cancel Update" Margin="10,0,0,0" Click="Button_CancelUpdate_Click"  Height="30" Padding="5"/>
-                <CheckBox x:Name="CheckBoxDisableUpdateDialogs" Content="Handsfree Update Mode" Margin="10,0,0,0" Height="30" IsChecked="{Binding HandsfreeMode, Mode=TwoWay}" ToolTip="Blocking Dialog after each Miniserver Update will be disabled allowing the user to update multiple Miniservers automatically without being present."/>
+                <CheckBox x:Name="CheckBoxDisableUpdateDialogs" Content="Handsfree Update Mode" Margin="10,0,0,0" Height="Auto" IsChecked="{Binding HandsfreeMode, Mode=TwoWay}" ToolTip="Blocking Dialog after each Miniserver Update will be disabled allowing the user to update multiple Miniservers automatically without being present." VerticalAlignment="Center" FontSize="14"/>
                 <!-- <CheckBox x:Name="CheckBoxEnableMultiSelect" Content="Multiselect" Margin="10,0,0,0" Height="30" Click="CheckBoxEnableMultiSelect_Click"/>  -->
             </StackPanel>
         </Grid>

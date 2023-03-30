@@ -19,6 +19,21 @@ namespace WPFConfigUpdater
 
             private string updatelevel;
 
+            private string versionColor;
+
+            public string VersionColor
+            {
+                get { return this.versionColor; }
+                set
+                {
+                    if (this.versionColor != value)
+                    {
+                        this.versionColor = value;
+                        this.NotifyPropertychanged("VersionColor");
+                    }
+                }
+            }
+
             public string UpdateLevel
             {
                 get { return this.updatelevel; }

@@ -1,16 +1,23 @@
 Feature Wish: 
 * rearange collumns via dragging
-* Use Version of Config Exe to visualize which MS needs an update. 
-
+* Cancel Button should work for refreshing MS Informations. 
 
 Known Issues: 
 * MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
 * UDP Listener not startet successfully. Probably fixed already.
-* Refresh Icon does not download
-* WebInterface does not use Local IP
+* Context Menu righclick does not work always with previous mouseoverindex, 
+  especially if the context menu is over the last entry in the list. 
+
 
 V0.9.0
 * Added FTP to context Menu of MS Serial Number
+* Added LPH to context Menu of MS Serial Number
+* Added Password to context Menu of MS Serial Number
+* Added Version collumn visualization which MS needs an update depeinding on the selected config exe
+* Fixed clicking on SNR did not use WI with local IP
+* Fixed Refresh Icon does not download (made static resource)
+* Fixed "-1212" shown in Updatelevel collumn 
+
 
 V0.8.9
 * Changed Icons for Buttons

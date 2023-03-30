@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using WPFConfigUpdater.Common;
 using static WPFConfigUpdater.MainWindow;
 
@@ -48,6 +49,7 @@ namespace WPFConfigUpdater
                         {
                             miniservers[i].MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
                             miniservers[i].MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
+                            miniservers[i].VersionColor = "black";
                         }
 
                         window.miniserverList = miniservers;

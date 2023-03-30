@@ -36,7 +36,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.8.9";
+        public string stringApplicationVersion = "V 0.9.0";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -223,6 +223,38 @@ namespace WPFConfigUpdater
             if(openFileDialog.ShowDialog() == true)
             {
                 textblock_statusbar_config.Text = openFileDialog.FileName;
+
+                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+                Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+
+
+                for (int i = 0; i < miniserverList.Count; i++)
+                {
+                    if(miniserverList[i].MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                    {
+                        if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(miniserverList[i].MSVersion.Replace(".", "")))
+                        {
+                            miniserverList[i].VersionColor = "orange";
+                        }
+                        else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(miniserverList[i].MSVersion.Replace(".", "")))
+                        {
+                            miniserverList[i].VersionColor = "green";
+                        }
+                        else
+                        {
+                            miniserverList[i].VersionColor = "black";
+                        }
+                    }
+                    else
+                    {
+                        miniserverList[i].VersionColor = "black";
+                    }
+
+                    
+                }
+
+                
+
             }
         }
 
@@ -284,18 +316,30 @@ namespace WPFConfigUpdater
         {
             var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_Config);
             int index = previousMouseOverIndex;
-            bool skipUpdate_AutoUpdate = false; 
+            bool skipUpdate_AutoUpdate = false;
+            bool skipUpdate_MS_updated_or_higher_Version = false;
+
+            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+            Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
 
             foreach (CMiniserver ms in listView_Miniserver.SelectedItems) //skip Updates if only 1 MS  is AutoUpdating
             {
-                if(ms.MSStatus == MyConstants.Strings.Listview_MS_Status_AutoUpdate)
+                if (ms.MSStatus == MyConstants.Strings.Listview_MS_Status_AutoUpdate)
                 {
                     skipUpdate_AutoUpdate = true;
                 }
+                if(ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                {
+                    if (int.Parse(ms.MSVersion.Replace(".", "")) >= int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")))
+                    {
+                        skipUpdate_MS_updated_or_higher_Version = true;
+                    }
+                }
+                
             }
 
 
-            if (!skipUpdate_AutoUpdate)
+            if (!skipUpdate_AutoUpdate && !skipUpdate_MS_updated_or_higher_Version)
             {
                 if (processes.Count() == 0)
                 {
@@ -338,9 +382,19 @@ namespace WPFConfigUpdater
             }
             else
             {
-                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateButton_AutoUpdate_Block, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                if (skipUpdate_AutoUpdate)
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateButton_AutoUpdate_Block, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                if (skipUpdate_MS_updated_or_higher_Version)
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateButton_MS_updated_OR_higher_Version, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                
             }
 
+
+           
         }
 
         private void worker_RunWorkerCompleted_UpdateMSButton(object? sender, RunWorkerCompletedEventArgs e)
@@ -440,6 +494,31 @@ namespace WPFConfigUpdater
                         miniserverList[index].MSStatus = MyConstants.Strings.Listview_Updated_MS_Status;
                         miniserverList[index].UpdateLevel = updatelevel;
                         textblock_processStatus.Text =  MyConstants.Strings.Statusbar_ProcessStatus_Update_Complete_show_MS + cMiniserver.serialNumer;
+
+
+                        FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+                        Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+
+                        if(miniserverList[index].MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                        {
+                            if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(miniserverList[index].MSVersion.Replace(".", "")))
+                            {
+                                miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "orange";
+                            }
+                            else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(miniserverList[index].MSVersion.Replace(".", "")))
+                            {
+                                miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "green";
+                            }
+                            else
+                            {
+                                miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "black";
+                            }
+                        }
+                        else
+                        {
+                            miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "black";
+                        }
+
                         ListView_GridView_Autoresize();
                         
                     }
@@ -568,8 +647,25 @@ namespace WPFConfigUpdater
 
             foreach(CMiniserver ms in selected_Miniserver_befor_refresh)
             {
-                miniserverList.ElementAt(miniserverList.IndexOf(ms));
-
+                if(ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                {
+                    if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(ms.MSVersion.Replace(".", "")))
+                    {
+                        miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "orange";
+                    }
+                    else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(ms.MSVersion.Replace(".", "")))
+                    {
+                        miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "green";
+                    }
+                    else
+                    {
+                        miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "black";
+                    }
+                }
+                else
+                {
+                    miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "black";
+                }                
             }
         }
 
@@ -713,6 +809,11 @@ namespace WPFConfigUpdater
             {
                 Updatelevel = Updatelevel.Remove(Updatelevel.IndexOf("\""));
             }
+
+            if( Updatelevel == "-1213")
+            {
+                Updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
+            }
             
         }
 
@@ -805,13 +906,7 @@ namespace WPFConfigUpdater
                 link = MyConstants.Strings.Link_CloudDNS + snr + "/dev/fsget/log/def.log";
             }
 
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            cmd.StartInfo.Arguments = "/c start " + link;
-            cmd.StartInfo.CreateNoWindow = true;
-
-            cmd.Start();
+            OpenLinkinDefaultBrowser(link);
         }
 
         private void Contextmenu_EditMiniserver_click(object sender, RoutedEventArgs e)
@@ -881,13 +976,23 @@ namespace WPFConfigUpdater
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             //Starts default Browser
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            cmd.StartInfo.Arguments = "/c start " + e.Uri.AbsoluteUri;
-            cmd.StartInfo.CreateNoWindow = true;
+            int index = mouseOverIndex;
 
-            cmd.Start();
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(mouseOverIndex);
+            string link = "www.loxone.com";
+
+            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            {
+                link = @"http://" + currentlySelectedMiniserver.LocalIPAdress;
+            }
+            else
+            {
+                link = MyConstants.Strings.Link_CloudDNS + currentlySelectedMiniserver.serialNumer;
+            }
+
+
+
+            OpenLinkinDefaultBrowser(link);
         }
 
         private void menuItem_Settings(object sender, RoutedEventArgs e)
@@ -1019,6 +1124,7 @@ namespace WPFConfigUpdater
                         {
                             miniservers[i].MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
                             miniservers[i].MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
+                            miniservers[i].VersionColor = "black";
                         }
 
                         miniserverList = miniservers;
@@ -1359,13 +1465,7 @@ namespace WPFConfigUpdater
 
                     if (ret_MsVersion != "-1213")
                     {
-                        Process cmd = new Process();
-                        cmd.StartInfo.FileName = "cmd.exe";
-                        cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        cmd.StartInfo.Arguments = "/c " + link;
-                        cmd.StartInfo.CreateNoWindow = true;
-
-                        cmd.Start();
+                        OpenLinkinDefaultBrowser(link);
                     }
                     else
                     {
@@ -1384,6 +1484,28 @@ namespace WPFConfigUpdater
             }
 
 
+        }
+
+        private void ContextMenu_LPH(object sender, RoutedEventArgs e)
+        {
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+            string link = MyConstants.Strings.Link_LPH + currentlySelectedMiniserver.serialNumer;
+
+            OpenLinkinDefaultBrowser(link);
+        }
+
+        private void ContextMenu_Copy_Password(object sender, RoutedEventArgs e)
+        {
+            int index = previousMouseOverIndex;
+            if (index != -1)
+            {
+                string password = miniserverList.ElementAt(previousMouseOverIndex).adminPassWord;
+                Clipboard.SetText(password);
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_Refresh_Context_Copy_SNR_Error, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }
