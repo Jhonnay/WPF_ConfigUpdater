@@ -14,7 +14,7 @@ Feature Wish:
 	- use local IP in column. 
 * Write Help Documentation
 * Use Password hashing --> ask ralph
-* Open Debug Log on Context Menu
+* Open Debug Monitor on Context Menu
 * Autostart Setting
 * Minimize to taskbar
 * Create Backup 
@@ -26,17 +26,23 @@ Known Issues:
 * Changing Updatelevel of MS that is not reachacble in network takes long with result = "-1231";
 * Updatlevel Context Menu freezes UI --> implement in seperate Thread
 * Tooltip is not shown if the Button is disabled
-* Toolbar "Tools" can be removed --> broken
 * Connect Config Button freezes UI until function is done
-* Adorner overlaps with Text --> make collumn wider as workaround
-* Text is not centered in columns
-* Local IP does not change variable on each Text change --> you have to click outside the field for change to reflect
-* Informations pulled --> gramatically wrong --> Statusbar text.
 * Update process can get stuck 
+* Updating and Sorting after Version Number does break List
 
 
 V0.9.1
+* Fixed Crash: Refresh MS without MS Path speicifed (David W.)
 * Fixed Context Menu righclick does not work always select right Miniserver, especially if the context menu is over the last entry in the list. 
+* Fixed Config cannot be selected, if Default Configuration Path is empty. (double click not possible because no Text to click on. )
+* Fixed Progressbar not 100% after Update not started because no Config Path specified. 
+* Fixed Use default Configuration Paths Settings not working. If path is pecified, it will be used. 
+* Fixed Grammar: "Informations pulled" to "Information pulled"
+* Fixed Local IP does not change variable on each Text change --> you have to click outside the field for change to reflect
+* Fixed Adorner overlaps with Text --> make collumn wider as workaround
+* Fixed Text is not centered in columns - Updatelevel
+* removed "Tools" in top Toolbar (no fuction)
+
 
 V0.9.0
 * Added FTP to context Menu of MS Serial Number

@@ -48,11 +48,12 @@ namespace WPFConfigUpdater.Common
             /* Bottom Status Bar */
             public static readonly string Statusbar_ProcessStatus_Refresh_inProgress_Text = "Miniserver Information is retreived ... ";
             public static readonly string Statusbar_ProcessStatus_Refresh_inProgress_MS = "retreiving data of ";
-            public static readonly string Statusbar_ProcessStatus_Refresh_Information_pulled_Text = "Informations pulled.";
+            public static readonly string Statusbar_ProcessStatus_Refresh_Information_pulled_Text = "Information pulled.";
             public static readonly string Statusbar_ProcessStatus_Update_Canceled = "Update canceled! ⚠";
             public static readonly string Statusbar_ProcessStatus_Updating = "Updating ... 🔄";
             public static readonly string Statusbar_ProcessStatus_Update_Complete = "Miniserver(s) updated";
             public static readonly string Statusbar_ProcessStatus_Update_Complete_show_MS = "Updated - ";
+            public static readonly string Statusbar_ProcessStatus_Update_failed = "Update failed!";
             public static readonly string Statusbar_TextBlockConfig_No_Config_selected = "Current Config: not selected - double click to select";
 
 

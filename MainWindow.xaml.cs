@@ -224,36 +224,38 @@ namespace WPFConfigUpdater
             {
                 textblock_statusbar_config.Text = openFileDialog.FileName;
 
-                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
-                Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
 
-
-                for (int i = 0; i < miniserverList.Count; i++)
+                if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                 {
-                    if(miniserverList[i].MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                    FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+                    Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+
+
+                    for (int i = 0; i < miniserverList.Count; i++)
                     {
-                        if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(miniserverList[i].MSVersion.Replace(".", "")))
+                        if (miniserverList[i].MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
                         {
-                            miniserverList[i].VersionColor = "orange";
-                        }
-                        else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(miniserverList[i].MSVersion.Replace(".", "")))
-                        {
-                            miniserverList[i].VersionColor = "green";
+                            if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(miniserverList[i].MSVersion.Replace(".", "")))
+                            {
+                                miniserverList[i].VersionColor = "orange";
+                            }
+                            else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(miniserverList[i].MSVersion.Replace(".", "")))
+                            {
+                                miniserverList[i].VersionColor = "green";
+                            }
+                            else
+                            {
+                                miniserverList[i].VersionColor = "black";
+                            }
                         }
                         else
                         {
                             miniserverList[i].VersionColor = "black";
                         }
-                    }
-                    else
-                    {
-                        miniserverList[i].VersionColor = "black";
-                    }
 
-                    
+
+                    }
                 }
-
-                
 
             }
         }
@@ -319,24 +321,30 @@ namespace WPFConfigUpdater
             bool skipUpdate_AutoUpdate = false;
             bool skipUpdate_MS_updated_or_higher_Version = false;
 
-            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
-            Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
-
-            foreach (CMiniserver ms in listView_Miniserver.SelectedItems) //skip Updates if only 1 MS  is AutoUpdating
+            if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
             {
-                if (ms.MSStatus == MyConstants.Strings.Listview_MS_Status_AutoUpdate)
+                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+                Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+
+                foreach (CMiniserver ms in listView_Miniserver.SelectedItems) //skip Updates if only 1 MS  is AutoUpdating
                 {
-                    skipUpdate_AutoUpdate = true;
-                }
-                if(ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
-                {
-                    if (int.Parse(ms.MSVersion.Replace(".", "")) >= int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")))
+                    if (ms.MSStatus == MyConstants.Strings.Listview_MS_Status_AutoUpdate)
                     {
-                        skipUpdate_MS_updated_or_higher_Version = true;
+                        skipUpdate_AutoUpdate = true;
                     }
+                    if (ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                    {
+                        if (int.Parse(ms.MSVersion.Replace(".", "")) >= int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")))
+                        {
+                            skipUpdate_MS_updated_or_higher_Version = true;
+                        }
+                    }
+
                 }
-                
+
             }
+
+            
 
 
             if (!skipUpdate_AutoUpdate && !skipUpdate_MS_updated_or_higher_Version)
@@ -432,8 +440,15 @@ namespace WPFConfigUpdater
                     MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Update_alreadyUpdatedMS);
                 }
                 
-                textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Update_Complete;
+                if((int)e.Result == 0){
+                    textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Update_failed;
+                }else {
+                    textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Update_Complete;
+                }
+
+                
             }
+            progressbar_ProcessStatus.Value = 100;
             UpdateButton.IsEnabled = true;
             RefreshButton.IsEnabled = true;
             RemoveMSButton.IsEnabled = true;
@@ -495,29 +510,32 @@ namespace WPFConfigUpdater
                         miniserverList[index].UpdateLevel = updatelevel;
                         textblock_processStatus.Text =  MyConstants.Strings.Statusbar_ProcessStatus_Update_Complete_show_MS + cMiniserver.serialNumer;
 
-
-                        FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
-                        Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
-
-                        if(miniserverList[index].MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                        if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                         {
-                            if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(miniserverList[index].MSVersion.Replace(".", "")))
+                            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+                            Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+
+                            if (miniserverList[index].MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
                             {
-                                miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "orange";
-                            }
-                            else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(miniserverList[index].MSVersion.Replace(".", "")))
-                            {
-                                miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "green";
+                                if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(miniserverList[index].MSVersion.Replace(".", "")))
+                                {
+                                    miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "orange";
+                                }
+                                else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(miniserverList[index].MSVersion.Replace(".", "")))
+                                {
+                                    miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "green";
+                                }
+                                else
+                                {
+                                    miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "black";
+                                }
                             }
                             else
                             {
                                 miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "black";
                             }
                         }
-                        else
-                        {
-                            miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "black";
-                        }
+                        
 
                         ListView_GridView_Autoresize();
                         
@@ -561,6 +579,7 @@ namespace WPFConfigUpdater
                 if (workerdata.ConfigPath == MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                 {
                     MessageBox.Show(MyConstants.Strings.MessageBox_UpdateButton_No_Config_selected);
+                    
                 }
                 else
                 {
@@ -642,31 +661,36 @@ namespace WPFConfigUpdater
             StackPaneButtons.IsEnabled = true;
             listView_Miniserver.IsEnabled = true;
 
-            FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
-            Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
-
-            foreach(CMiniserver ms in selected_Miniserver_befor_refresh)
+            if(textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
             {
-                if(ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+                Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+
+                foreach (CMiniserver ms in selected_Miniserver_befor_refresh)
                 {
-                    if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(ms.MSVersion.Replace(".", "")))
+                    if (ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
                     {
-                        miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "orange";
-                    }
-                    else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(ms.MSVersion.Replace(".", "")))
-                    {
-                        miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "green";
+                        if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(ms.MSVersion.Replace(".", "")))
+                        {
+                            miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "orange";
+                        }
+                        else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(ms.MSVersion.Replace(".", "")))
+                        {
+                            miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "green";
+                        }
+                        else
+                        {
+                            miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "black";
+                        }
                     }
                     else
                     {
                         miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "black";
                     }
                 }
-                else
-                {
-                    miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "black";
-                }                
             }
+
+            
         }
 
         private void worker_ProgressChanged_RefreshMSInformation(object sender, ProgressChangedEventArgs e)

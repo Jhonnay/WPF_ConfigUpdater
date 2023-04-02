@@ -37,7 +37,7 @@ namespace WPFConfigUpdater
                 string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings);
                 ApplicationSettings settings = JsonSerializer.Deserialize<ApplicationSettings>(strJson);
                 
-                if(File.Exists(settings.StrDefaultConfigurationPath))
+                if(File.Exists(settings.StrDefaultConfigurationPath) && settings.BUseDefaultConfiguration)
                 {
                     string strJsonMiniservers = File.ReadAllText(settings.StrDefaultConfigurationPath);
 
@@ -54,16 +54,37 @@ namespace WPFConfigUpdater
 
                         window.miniserverList = miniservers;
                         window.listView_Miniserver.ItemsSource = window.miniserverList;
-                        window.textblock_statusbar_config.Text = settings.StrDefaultConfigPath;
-                        //MenuItem_MSVersionRefresh_Click(sender, e);
                         window.ListView_GridView_Autoresize();
+
+                        
+                        
+                        //MenuItem_MSVersionRefresh_Click(sender, e); //automatically refesh not wanted. 
+                        
                     }
+
+
                 }
                 else
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_Configuration_not_found, "Exception Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (settings.BUseDefaultConfiguration)
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_Configuration_not_found, "Exception Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                   
                 }
-                
+
+
+                if (File.Exists(settings.StrDefaultConfigPath) && settings.BUseDefaultConfig)
+                {
+                    window.textblock_statusbar_config.Text = settings.StrDefaultConfigPath;
+                }
+                else
+                {
+                    window.textblock_statusbar_config.Text = MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected;
+                }
+
+
+
             }
             window.listView_Miniserver.SelectionMode = SelectionMode.Multiple;
             window.Show();
