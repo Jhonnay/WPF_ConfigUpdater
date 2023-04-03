@@ -5,17 +5,13 @@ Feature Wish:
 * Application Settings Dialog --> make beautiful
 * Make UI more colorful 
 * Light Mode / Darkmode
-* Tooltip for Verison columns (explination for colors)
 * Add color for when Version is higher than selected Config EXE
 * Check if Alpha Update is available via Autoupdate Server
 * Make Textbox of local IP and its collumn autoresize and dragable. 
-* Context Menu for "Project Name" Column
-	- copy local IP to Clipboard. 
-	- use local IP in column. 
 * Write Help Documentation
 * Use Password hashing --> ask ralph
 * Open Debug Monitor on Context Menu
-* Autostart Setting
+* Windows Autostart Setting
 * Minimize to taskbar
 * Create Backup 
 * Update Multiple MS at once
@@ -23,13 +19,20 @@ Feature Wish:
 Known Issues: 
 * MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
 * UDP Listener not startet successfully. Probably fixed already.
-* Changing Updatelevel of MS that is not reachacble in network takes long with result = "-1231";
+* Changing Updatelevel of MS that is not reachable in network takes long with result = "-1231";
 * Updatlevel Context Menu freezes UI --> implement in seperate Thread
-* Tooltip is not shown if the Button is disabled
 * Connect Config Button freezes UI until function is done
 * Update process can get stuck 
-* Updating and Sorting after Version Number does break List
+* Updating and Sorting Version column Number does break List
 
+
+V0.9.2
+* Added Context Menu for CrashLog Server
+* Added Tooltip for Version columns entries (explination for colors)
+* Added Context Menu for "Project Name" Column
+	- copy local IP to Clipboard. 
+	- use local IP in column. 
+* Fixed Tooltip is not shown if the Button is disabled
 
 V0.9.1
 * Fixed Crash: Refresh MS without MS Path speicifed (David W.)

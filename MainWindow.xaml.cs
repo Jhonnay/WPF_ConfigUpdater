@@ -36,7 +36,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.9.0";
+        public string stringApplicationVersion = "V 0.9.1";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -344,9 +344,6 @@ namespace WPFConfigUpdater
 
             }
 
-            
-
-
             if (!skipUpdate_AutoUpdate && !skipUpdate_MS_updated_or_higher_Version)
             {
                 if (processes.Count() == 0)
@@ -355,8 +352,6 @@ namespace WPFConfigUpdater
                     RefreshButton.IsEnabled = false;
                     RemoveMSButton.IsEnabled = false;
                     InsertMSButton.IsEnabled = false;
-
-
 
                     int_selectedItems_before_Refresh = listView_Miniserver.SelectedItems.Count;
                     List<CMiniserver> list = new List<CMiniserver> { };
@@ -400,9 +395,6 @@ namespace WPFConfigUpdater
                 }
                 
             }
-
-
-           
         }
 
         private void worker_RunWorkerCompleted_UpdateMSButton(object? sender, RunWorkerCompletedEventArgs e)
@@ -1417,8 +1409,6 @@ namespace WPFConfigUpdater
 
         private void MenuItem_Open_Loxone_App(object sender, RoutedEventArgs e)
         {
-            //% localappdata %\Programs\kerberos
-
             var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_App);
 
             if(processes.Count() != 0)
@@ -1509,8 +1499,6 @@ namespace WPFConfigUpdater
             {
                 MessageBox.Show(MyConstants.Strings.MessageBox_FTP_Local_IP_not_defined, "Information", MessageBoxButton.OK, MessageBoxImage.Information);       
             }
-
-
         }
 
         private void ContextMenu_LPH(object sender, RoutedEventArgs e)
@@ -1533,6 +1521,34 @@ namespace WPFConfigUpdater
             {
                 MessageBox.Show(MyConstants.Strings.MessageBox_Refresh_Context_Copy_SNR_Error, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+
+        private void ContextMenu_CrashLogServer(object sender, RoutedEventArgs e)
+        {
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+            string link = MyConstants.Strings.Link_CrashLog_Server + currentlySelectedMiniserver.serialNumer;
+
+            OpenLinkinDefaultBrowser(link);
+        }
+
+        private void ContextMenu_Project_Copy_Local_IP(object sender, RoutedEventArgs e)
+        {
+            int index = previousMouseOverIndex;
+
+            string localIP_from_project = miniserverList.ElementAt(index).MSProject;
+            localIP_from_project = localIP_from_project.Remove(0, localIP_from_project.IndexOf("/")+1);
+
+            Clipboard.SetText(localIP_from_project);
+
+        }
+
+        private void ContextMenu_Project_Copy_Local_IP_to_Collumn(object sender, RoutedEventArgs e)
+        {
+            int index = previousMouseOverIndex;
+
+            string localIP_from_project = miniserverList.ElementAt(index).MSProject;
+            localIP_from_project = localIP_from_project.Remove(0, localIP_from_project.IndexOf("/") + 1);
+            miniserverList[index].LocalIPAdress = localIP_from_project;
         }
     }
 }

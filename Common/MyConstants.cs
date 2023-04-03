@@ -20,6 +20,7 @@ namespace WPFConfigUpdater.Common
             /* Links */
             public static readonly string Link_CloudDNS = "https://dns.loxonecloud.com/";
             public static readonly string Link_LPH = "https://lph.loxone.com/main.php?snr=";
+            public static readonly string Link_CrashLog_Server = "https://gitlab.loxone.com:8443/crashstats/miniservercrashes.php?mac=";
 
             /* Processes */
             public static readonly string Process_Loxone_Config = "LoxoneConfig";
