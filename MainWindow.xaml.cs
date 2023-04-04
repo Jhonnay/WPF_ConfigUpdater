@@ -1276,39 +1276,53 @@ namespace WPFConfigUpdater
             string link,updatelevel; 
             CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
 
-            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
-            {
-                
-                WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/alpha", "value");
-                updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
-            }
-            else
-            {
-                WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/alpha", "value");
-                updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
-            }
 
-            if (updatelevel.IndexOf("\"") > 0)
+            Task.Run(() =>
             {
-                updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
-            }
-            else if (updatelevel == "-1213")
-            {
-                updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
-            }
+                if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                {
+
+                    WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/alpha", "value");
+                    updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
+                else
+                {
+                    WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/alpha", "value");
+                    updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
+
+                if (updatelevel.IndexOf("\"") > 0)
+                {
+                    updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
+                }
+                else if (updatelevel == "-1213")
+                {
+                    updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
+                }
 
 
 
-            if (updatelevel == "Alpha")
-            {
-                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+                if (updatelevel == "Alpha")
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
 
-            miniserverList[index].UpdateLevel = updatelevel;
+                miniserverList[index].UpdateLevel = updatelevel;
+                // ...
+
+                // Update UI elements on main UI thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    // Update UI elements
+                    // ...
+                });
+            });
+
+            
             
         }
 
@@ -1318,38 +1332,53 @@ namespace WPFConfigUpdater
             string link, updatelevel;
             CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
 
-            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
-            {
 
-                WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/default", "value");
-                updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
-            }
-            else
+            Task.Run(() =>
             {
-                WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/default", "value");
-                updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
-            }
+                // WPF commands to be executed in separate thread
+                if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                {
 
-            if (updatelevel.IndexOf("\"") > 0)
-            {
-                updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
-            }
-            else if (updatelevel == "-1213")
-            {
-                updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
-            }
+                    WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/default", "value");
+                    updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
+                else
+                {
+                    WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/default", "value");
+                    updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
+
+                if (updatelevel.IndexOf("\"") > 0)
+                {
+                    updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
+                }
+                else if (updatelevel == "-1213")
+                {
+                    updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
+                }
 
 
-            if (updatelevel == "Release")
-            {
-                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+                if (updatelevel == "Release")
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
 
-            miniserverList[index].UpdateLevel = updatelevel;
+                miniserverList[index].UpdateLevel = updatelevel;
+
+                // Update UI elements on main UI thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    // Update UI elements
+                    // ...
+                });
+            });
+
+
+            
 
         }
         private void ContextUpdateLevelBeta(object sender, RoutedEventArgs e)
@@ -1358,39 +1387,53 @@ namespace WPFConfigUpdater
             string link, updatelevel;
             CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
 
-            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            Task.Run(() =>
             {
+                // WPF commands to be executed in separate thread
+                if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                {
 
-                WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/beta", "value");
-                updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
-            }
-            else
-            {
-                WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/beta", "value");
-                updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
-            }
+                    WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/beta", "value");
+                    updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
+                else
+                {
+                    WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel/beta", "value");
+                    updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
 
-            if (updatelevel.IndexOf("\"") > 0)
-            {
-                updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
-            }
-            else if (updatelevel == "-1213")
-            {
-                updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
-            }
+                if (updatelevel.IndexOf("\"") > 0)
+                {
+                    updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
+                }
+                else if (updatelevel == "-1213")
+                {
+                    updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
+                }
 
 
 
-            if (updatelevel == "Beta")
-            {
-                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+                if (updatelevel == "Beta")
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Successfully + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateLevelSet_Error + updatelevel, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
 
-            miniserverList[index].UpdateLevel = updatelevel;
+                miniserverList[index].UpdateLevel = updatelevel;
+
+                // Update UI elements on main UI thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    // Update UI elements
+                    // ...
+                });
+            });
+
+
+            
         }
         private void ContextUpdteLevelUpdateToLevel(object sender, RoutedEventArgs e)
         {
@@ -1398,40 +1441,53 @@ namespace WPFConfigUpdater
             string link, returnCode;
             CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
 
-            if(currentlySelectedMiniserver.MSConfiguration == MyConstants.Strings.Listview_Refresh_MS_Configuration_Standalone)
+            Task.Run(() =>
             {
-                if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                // WPF commands to be executed in separate thread
+                if (currentlySelectedMiniserver.MSConfiguration == MyConstants.Strings.Listview_Refresh_MS_Configuration_Standalone)
                 {
+                    if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                    {
 
-                    returnCode = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
-                    //updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                        returnCode = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
+                        //updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                    }
+                    else
+                    {
+                        returnCode = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
+                        //updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                    }
+
+                    if (returnCode.IndexOf("\"") > 0)
+                    {
+                        returnCode = returnCode.Remove(returnCode.IndexOf("\""));
+                    }
+
+                    if (returnCode == MyConstants.Strings.WebService_Success_Code) //WebService Successful
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        miniserverList[index].MSStatus = MyConstants.Strings.Listview_MS_Status_AutoUpdate;
+                    }
+                    else
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+
                 }
                 else
                 {
-                    returnCode = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
-                    //updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                    MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Possible, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
-                if (returnCode.IndexOf("\"") > 0)
+                // Update UI elements on main UI thread
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    returnCode = returnCode.Remove(returnCode.IndexOf("\""));
-                }
+                    // Update UI elements
+                    // ...
+                });
+            });
 
-                if (returnCode == MyConstants.Strings.WebService_Success_Code) //WebService Successful
-                {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                    miniserverList[index].MSStatus = MyConstants.Strings.Listview_MS_Status_AutoUpdate;
-                }
-                else
-                {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                
-            }
-            else
-            {
-                MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Possible, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            
 
         }
 

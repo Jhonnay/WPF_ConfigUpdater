@@ -19,8 +19,7 @@ Feature Wish:
 Known Issues: 
 * MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
 * UDP Listener not startet successfully. Probably fixed already.
-* Updatlevel Context Menu freezes UI --> implement in seperate Thread
-* Connect Config Button freezes UI until function is done
+* Connect Config Button freezes UI until function is done --> implement in seperate Thread
 * Update process / Loading out of MS can get stuck --> add aditional wait condition
 * Add Generic Function for coloring MS version text
 	- Version 14.0.4.4 is smaller than 14.0.3.30 --> orange
@@ -36,6 +35,8 @@ V0.9.2
 * Fixed Updating/Refreshing and Sorting Version column Number does break List --> disabled sorting before refreshing/updating
 * Fixed Adding MS --> Status & Version Row empty. (Add generic function for starting application/adding MS)
 * Fixed Crash: Copying Local IP/Copy to Collumn of freshly newly created Miniserver entry 
+* Fixed Unresponsive UI: Updatlevel Context --> implement in seperate Task
+
 
 V0.9.1
 * Fixed Crash: Refresh MS without MS Path speicifed (David W.)
