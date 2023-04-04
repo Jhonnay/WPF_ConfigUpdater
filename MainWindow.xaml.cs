@@ -120,9 +120,9 @@ namespace WPFConfigUpdater
                     miniserverList.ElementAt(index).MSVersion = ret_MsVersion;
                     ret_cLoxAppJson = WebService.sendCommandRest_LoxAppJson_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/data/LoxAPP3.json");
                 }
+
                 
-                
-                
+
                 if (ret_MsVersion == "0.0.0.0")
                 {
                     
@@ -320,6 +320,14 @@ namespace WPFConfigUpdater
             int index = previousMouseOverIndex;
             bool skipUpdate_AutoUpdate = false;
             bool skipUpdate_MS_updated_or_higher_Version = false;
+            
+            if (listViewSortCol != null)
+            {
+                AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
+                listView_Miniserver.Items.SortDescriptions.Clear();
+
+            }
+
 
             if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
             {
@@ -621,6 +629,13 @@ namespace WPFConfigUpdater
 
         private void Button_RefreshMS_Click(object sender, RoutedEventArgs e)
         {
+            if (listViewSortCol != null)
+            {
+                AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
+                listView_Miniserver.Items.SortDescriptions.Clear();
+
+            }
+
             progressbar_ProcessStatus.Value = 0;
             textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_inProgress_Text;
             StackPaneButtons.IsEnabled = false; //Disables all containing Buttons
@@ -879,10 +894,11 @@ namespace WPFConfigUpdater
             if (dialog.ShowDialog() == true)
             {
                 result = dialog.Answer;
+                result.MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
+                result.MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
+                result.VersionColor = "Black"; 
                 miniserverList.Add(result);
-
             }
-               
         }
 
         private void Button_CancelUpdate_Click(object sender, RoutedEventArgs e)
@@ -1241,6 +1257,7 @@ namespace WPFConfigUpdater
             {
                 AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
                 listView_Miniserver.Items.SortDescriptions.Clear();
+                
             }
 
             ListSortDirection newDir = ListSortDirection.Ascending;
@@ -1274,6 +1291,10 @@ namespace WPFConfigUpdater
             if (updatelevel.IndexOf("\"") > 0)
             {
                 updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
+            }
+            else if (updatelevel == "-1213")
+            {
+                updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
             }
 
 
@@ -1313,7 +1334,10 @@ namespace WPFConfigUpdater
             {
                 updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
             }
-
+            else if (updatelevel == "-1213")
+            {
+                updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
+            }
 
 
             if (updatelevel == "Release")
@@ -1349,6 +1373,10 @@ namespace WPFConfigUpdater
             if (updatelevel.IndexOf("\"") > 0)
             {
                 updatelevel = updatelevel.Remove(updatelevel.IndexOf("\""));
+            }
+            else if (updatelevel == "-1213")
+            {
+                updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
             }
 
 
@@ -1536,10 +1564,12 @@ namespace WPFConfigUpdater
             int index = previousMouseOverIndex;
 
             string localIP_from_project = miniserverList.ElementAt(index).MSProject;
-            localIP_from_project = localIP_from_project.Remove(0, localIP_from_project.IndexOf("/")+1);
+            if(localIP_from_project != null)
+            {
+                localIP_from_project = localIP_from_project.Remove(0, localIP_from_project.IndexOf("/") + 1);
 
-            Clipboard.SetText(localIP_from_project);
-
+                Clipboard.SetText(localIP_from_project);
+            }
         }
 
         private void ContextMenu_Project_Copy_Local_IP_to_Collumn(object sender, RoutedEventArgs e)
@@ -1547,8 +1577,11 @@ namespace WPFConfigUpdater
             int index = previousMouseOverIndex;
 
             string localIP_from_project = miniserverList.ElementAt(index).MSProject;
-            localIP_from_project = localIP_from_project.Remove(0, localIP_from_project.IndexOf("/") + 1);
-            miniserverList[index].LocalIPAdress = localIP_from_project;
+            if( localIP_from_project != null )
+            {
+                localIP_from_project = localIP_from_project.Remove(0, localIP_from_project.IndexOf("/") + 1);
+                miniserverList[index].LocalIPAdress = localIP_from_project;
+            }
         }
     }
 }
