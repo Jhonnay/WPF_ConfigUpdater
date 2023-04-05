@@ -24,6 +24,7 @@ using System.Threading;
 using WPFConfigUpdater.Common;
 using System.Reflection;
 using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 
 //CTRL + M plus CTRL + O  - Collapse All
 //TODO: Version number  13.2.11.11 is displayed in Version Collumn as 13.2.1111
@@ -48,11 +49,12 @@ namespace WPFConfigUpdater
         private GridViewColumnHeader listViewSortCol = null;
         private SortAdorner listViewSortAdorner = null;
         private List<CMiniserver> selected_Miniserver_befor_refresh;
-        
+        private List<string> languageList = null;
+
+        public List<string> LanguageList { get => languageList; set => languageList = value; }
 
         public MainWindow()
         {
-
             InitializeComponent();
             worker_MSUpdate = new BackgroundWorker();
             worker_MSUpdate.WorkerReportsProgress = true;
@@ -76,6 +78,8 @@ namespace WPFConfigUpdater
 
 
             listView_Miniserver.ItemsSource = miniserverList;
+            LanguageList = Config.LanguageList;
+
             CheckBoxDisableUpdateDialogs.DataContext = cApplicationUI;
             RefreshButton.IsEnabled = false;
             UpdateButton.IsEnabled = false;
@@ -316,7 +320,7 @@ namespace WPFConfigUpdater
         private void worker_DoWork_OpenConfig(object sender, DoWorkEventArgs e)
         {
             CConfigMSUpdate config = (CConfigMSUpdate)e.Argument; //workerdata
-            config.OpenConfigLoadProject_Cancelable(worker_Connect_Config);
+            config.OpenConfigLoadProject_Cancelable(worker_Connect_Config, miniserverList.ElementAt(mouseOverIndex).ConfigLanguage);
             if(worker_Connect_Config.CancellationPending)
             {
                 e.Cancel = true;
@@ -622,7 +626,7 @@ namespace WPFConfigUpdater
                         return;
                     }
 
-                    ArrayList arrlist = update.UpdateMS(worker_MSUpdate);
+                    ArrayList arrlist = update.UpdateMS(worker_MSUpdate, ms.ConfigLanguage);
                     result_MS_Update++;
                     
 
@@ -743,7 +747,7 @@ namespace WPFConfigUpdater
             string correctedConfigVersion = addLeadingZeoresToVersionNumber(myFileVersionInfo.FileVersion).Replace(".", "");
 
 
-            if (int.Parse(correctedMiniserverVersion) >= int.Parse(correctedConfigVersion))
+            if (int.Parse(correctedMiniserverVersion) > int.Parse(correctedConfigVersion))
             {
                 return true;
             }
@@ -1067,7 +1071,8 @@ namespace WPFConfigUpdater
                 result = dialog.Answer;
                 result.MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
                 result.MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
-                result.VersionColor = "Black"; 
+                result.VersionColor = "Black";
+                result.ConfigLanguage = "5";
                 miniserverList.Add(result);
             }
         }
@@ -1232,7 +1237,7 @@ namespace WPFConfigUpdater
             if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
             {
                 Config config = new Config();
-                config.startConfig(textblock_statusbar_config.Text);
+                config.startConfig_Language(textblock_statusbar_config.Text,Config.LanguageList.IndexOf("ENU").ToString()); //english
             }
             else
             {
@@ -1812,7 +1817,10 @@ namespace WPFConfigUpdater
                 miniserverList[index].LocalIPAdress = localIP_from_project;
             }
         }
+
+        
     }
+    
 }
 
 

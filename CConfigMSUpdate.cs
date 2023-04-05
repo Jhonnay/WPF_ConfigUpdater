@@ -82,12 +82,12 @@ namespace WPFConfigUpdater
 
         }
 
-        public void OpenConfigLoadProject_Cancelable(BackgroundWorker worker_Connect_Config)
+        public void OpenConfigLoadProject_Cancelable(BackgroundWorker worker_Connect_Config, string configLanguage)
         {
             if(worker_Connect_Config.CancellationPending != true)
             {
                 this.config = new Config();
-                config.startConfig(this.configPath, this.projectPath);
+                config.startConfig_Language(this.configPath, this.projectPath, configLanguage);
                 Thread.Sleep(9000); //Wait for Config to start
             }
 
@@ -137,7 +137,11 @@ namespace WPFConfigUpdater
             return udpL.VersionsMiniservers; 
         }
 
-        public ArrayList UpdateMS(BackgroundWorker worker_MSUpdate)
+        
+
+
+
+        public ArrayList UpdateMS(BackgroundWorker worker_MSUpdate, string configLanuage)
         {
             int ret = -1;
             UDPListener udpL = new UDPListener(projectPath, configPath);
@@ -145,7 +149,7 @@ namespace WPFConfigUpdater
             if (worker_MSUpdate.CancellationPending == false)
             {
                 this.config = new Config();
-                config.startConfig(this.configPath, this.projectPath);
+                config.startConfig_Language(this.configPath, this.projectPath,configLanuage);
                 Thread.Sleep(9000); //Wait for Config to start
                 String msg = "C," + msIP + "," + user + "," + pw;
                 msg = msg.Replace(":", ".");
@@ -238,6 +242,7 @@ namespace WPFConfigUpdater
                             System.Diagnostics.Debug.WriteLine("Project successfully loaded from the MS. Next Step update Firmware on all MS.");
                             config.Update();
                             updateCycleState++;
+                            Thread.Sleep(10000); //extra time until the update flag is set 
                         }
                         break;
 

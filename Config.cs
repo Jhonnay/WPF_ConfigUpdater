@@ -1,12 +1,15 @@
 ﻿
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using static WPFConfigUpdater.MainWindow;
 
 namespace WPFConfigUpdater
 {
@@ -17,8 +20,11 @@ namespace WPFConfigUpdater
         static string pw;
         static int port_receive;
         static int port_send;
+        public static  List<string> LanguageList  = new () {
+            "CAT", "CHS", "CSY", "DEU", "ENG", "ENU", "ESN", "FRA", "ITA", "HUN", "NLD", "NOR", "PLK", "ROM", "RUS", "SKY", "TRK"
+            }; //Credit @Jan Posedel
 
-        public Process p;
+    public Process p;
 
         public Config()
         {
@@ -60,6 +66,32 @@ namespace WPFConfigUpdater
             
         }
 
+        public void startConfig_Language(string configPath, string Language)
+        {
+
+            try
+            {
+                if (Language != null)
+                {
+                    p = new Process();
+                    p.StartInfo.FileName = configPath;
+                    p.StartInfo.Arguments = @"/Language=" + LanguageList.ElementAt(int.Parse(Language));
+                    //p.StartInfo.Arguments = @"/auto";
+                    p.Start();
+                }
+                else
+                {
+                    startConfig(configPath);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
 
         public void startConfig(string configPath, string projectPath)
         {
@@ -77,6 +109,35 @@ namespace WPFConfigUpdater
             }
             
         }
+
+        public void startConfig_Language(string configPath, string projectPath, string Language)
+        {
+            try
+            {
+                if(Language != null)
+                {
+                    p = new Process();
+                    p.StartInfo.FileName = configPath;
+                    p.StartInfo.Arguments = @"/auto " + projectPath + " /Language=" + Config.LanguageList.ElementAt(int.Parse(Language));
+                    p.Start() ;
+                }
+                else
+                {
+                    Language = "ENU";
+                    p = new Process();
+                    p.StartInfo.FileName = configPath;
+                    p.StartInfo.Arguments = @"/auto " + projectPath + " /Language=" + Language;
+                    p.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+
         public void installNewConfig(string configInstallerPath)
         {
             try

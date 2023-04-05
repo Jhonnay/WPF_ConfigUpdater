@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFConfigUpdater"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Miniserver Updater (c) Musat V0.9.3" Height="500" Width="930">
+        Title="Miniserver Updater (c) Musat V0.9.3" Height="500" Width="1000">
     <Window.Resources>
         <local:UriConverter x:Key="UriConverter" />
         <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>
@@ -224,6 +224,16 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox  Text="{Binding LocalIPAdress, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100"  />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn>
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader  Tag="ConfigLanguage" Click="listview_Miniserver_ColumnHeader_Click" Content="   Language  "/>
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox x:Name="comboBox_Language"   SelectedIndex="{Binding ConfigLanguage}" ItemsSource="{Binding LanguageList, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

@@ -21,6 +21,22 @@ namespace WPFConfigUpdater
 
             private string versionColor;
 
+            private string configLanguage;
+
+
+            public string ConfigLanguage
+            {
+                get { return this.configLanguage; }
+                set
+                {
+                    if (this.configLanguage != value)
+                    {
+                        this.configLanguage = value;
+                        this.NotifyPropertychanged("ConfigLanguage");
+                    }
+                }
+            }
+
             public string VersionColor
             {
                 get { return this.versionColor; }

@@ -17,18 +17,24 @@ Feature Wish:
 * Update Multiple MS at once
 
 Known Issues: 
-* MS Update not working if MS is already on Version. Update Flags not set --> Lukas Aiglesberger fix pending. 
+ 
 * UDP Listener not startet successfully. Probably fixed already.
 * Update process / Loading out of MS can get stuck --> add aditional wait condition (cause can be not reachable MS/ username/Password wrong)
-* Make Dialogs Uniform. 
+* No check if Backgroundworker is already running for "connect Config" Button;
 
 
 
 V0.9.3
+* Added Language column. 
+	- ENU (Englisch) will be used if no Language is selected
+	- used for Connecting to the MS
+	- used for updating the MS
 * Fixed Refresh Button does not properly disable/enable the buttons. 
 * Fixed (+) Button was disabled after refreshing Miniserver Information (Christian)
 * Fixed "Refresh Canceled" Dialog after refreshing with no Config selected. (Christian)
 * Crash: choosing a EXE without versionfile information --> not an Config Exe (Christian)
+* Make most of the Dialogs Uniform. 
+* Fixed: Miniserver on same Version cannot be updated (Update Flags were not set --> Lukas Aiglesberger)
 
 
 V0.9.2
