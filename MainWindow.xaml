@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFConfigUpdater"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Miniserver Updater (c) Musat V0.9.1" Height="500" Width="930">
+        Title="Miniserver Updater (c) Musat V0.9.3" Height="500" Width="930">
     <Window.Resources>
         <local:UriConverter x:Key="UriConverter" />
         <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>
@@ -239,7 +239,7 @@
                 </Button>
                 <Button x:Name="RemoveMSButton" Content="➖" Margin="10,0,0,0" Click="Button_RemoveMS_Click" Height="30" ToolTip="Removes all selected Miniservers" ToolTipService.ShowOnDisabled="True"/>
                 <Button x:Name="InsertMSButton" Content="➕" Margin="10,0,0,0" Click="Button_InsertMS_Click"  Height="30" ToolTip="Inserts a new Miniserver into the list" ToolTipService.ShowOnDisabled="True"/>
-                <Button x:Name="CancelUpdateButton" Content="Cancel Update" Margin="10,0,0,0" Click="Button_CancelUpdate_Click"  Height="30" Padding="5" ToolTipService.ShowOnDisabled="True"/>
+                <Button x:Name="CancelUpdateButton" Content="Cancel" Margin="10,0,0,0" Click="Button_CancelUpdate_Click"  Height="30" Padding="5" ToolTipService.ShowOnDisabled="True" ToolTip="Cancels the following processes:&#x0a;- Update Miniserver&#x0a;- Connect Config&#x0a;- Refresh Miniserver Information "/>
                 <CheckBox x:Name="CheckBoxDisableUpdateDialogs" Content="Handsfree Update Mode" Margin="10,0,0,0" Height="Auto" IsChecked="{Binding HandsfreeMode, Mode=TwoWay}"  ToolTipService.ShowOnDisabled="True" ToolTip="Blocking Dialog after each Miniserver Update will be disabled allowing the user to update multiple Miniservers automatically without being present." VerticalAlignment="Center" FontSize="14"/>
                 <!-- <CheckBox x:Name="CheckBoxEnableMultiSelect" Content="Multiselect" Margin="10,0,0,0" Height="30" Click="CheckBoxEnableMultiSelect_Click"/>  -->
             </StackPanel>

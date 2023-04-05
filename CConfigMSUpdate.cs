@@ -81,7 +81,36 @@ namespace WPFConfigUpdater
             config.LoadFromMiniserver();
 
         }
-        
+
+        public void OpenConfigLoadProject_Cancelable(BackgroundWorker worker_Connect_Config)
+        {
+            if(worker_Connect_Config.CancellationPending != true)
+            {
+                this.config = new Config();
+                config.startConfig(this.configPath, this.projectPath);
+                Thread.Sleep(9000); //Wait for Config to start
+            }
+
+            
+
+            if (worker_Connect_Config.CancellationPending != true)
+            {
+                String msg = "C," + msIP + "," + user + "," + pw;
+                msg = msg.Replace(":", ".");
+                System.Diagnostics.Debug.WriteLine("Connecting to MS with: " + msIP + "," + user + "," + pw);
+                config.sendCommand(localhost, 7770, msg); //Connect with MS
+                Thread.Sleep(7000);
+            }
+
+            if (worker_Connect_Config.CancellationPending != true)
+            {
+                config.LoadFromMiniserver();
+            }
+               
+        }
+
+
+
         public ArrayList InstallConfigandUpdateMS( )
         {
             int ret = -1;

@@ -36,16 +36,19 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.9.1";
+        public string stringApplicationVersion = "V 0.9.3";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
+        private BackgroundWorker worker_Connect_Config = null;
+        BackgroundWorker worker_Refresh_MS_Information = null;
         public CApplicationUI cApplicationUI = new CApplicationUI();
         public int previousMouseOverIndex;
         public int mouseOverIndex;
         private GridViewColumnHeader listViewSortCol = null;
         private SortAdorner listViewSortAdorner = null;
         private List<CMiniserver> selected_Miniserver_befor_refresh;
+        
 
         public MainWindow()
         {
@@ -57,6 +60,20 @@ namespace WPFConfigUpdater
             worker_MSUpdate.DoWork += worker_DoWork_UpdateMSButton;
             worker_MSUpdate.ProgressChanged += worker_ProgressChanged_UpdateMSButton;
             worker_MSUpdate.RunWorkerCompleted += worker_RunWorkerCompleted_UpdateMSButton;
+
+            worker_Connect_Config = new BackgroundWorker();
+            worker_Connect_Config.WorkerSupportsCancellation = true;
+            worker_Connect_Config.DoWork += worker_DoWork_OpenConfig;
+            worker_Connect_Config.RunWorkerCompleted += worker_RunWorkerCompleted_OpenConfig;
+
+
+            worker_Refresh_MS_Information = new BackgroundWorker();
+            worker_Refresh_MS_Information.WorkerReportsProgress = true;
+            worker_Refresh_MS_Information.WorkerSupportsCancellation = true;
+            worker_Refresh_MS_Information.DoWork += worker_DoWork_RefreshMSInformation;
+            worker_Refresh_MS_Information.ProgressChanged += worker_ProgressChanged_RefreshMSInformation;
+            worker_Refresh_MS_Information.RunWorkerCompleted += worker_RunWorkerCompleted_RefreshMSInformation;
+
 
             listView_Miniserver.ItemsSource = miniserverList;
             CheckBoxDisableUpdateDialogs.DataContext = cApplicationUI;
@@ -227,36 +244,17 @@ namespace WPFConfigUpdater
 
                 if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                 {
+                    List<CMiniserver> list = new List<CMiniserver>();
+                    for (int i = 0; i < miniserverList.Count; i++)
+                    {
+                        list.Add(miniserverList[i]);
+                    }
+
                     FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
                     Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
 
-
-                    for (int i = 0; i < miniserverList.Count; i++)
-                    {
-                        if (miniserverList[i].MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
-                        {
-                            if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(miniserverList[i].MSVersion.Replace(".", "")))
-                            {
-                                miniserverList[i].VersionColor = "orange";
-                            }
-                            else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(miniserverList[i].MSVersion.Replace(".", "")))
-                            {
-                                miniserverList[i].VersionColor = "green";
-                            }
-                            else
-                            {
-                                miniserverList[i].VersionColor = "black";
-                            }
-                        }
-                        else
-                        {
-                            miniserverList[i].VersionColor = "black";
-                        }
-
-
-                    }
+                    colorMiniserverVersions(list, myFileVersionInfo);
                 }
-
             }
         }
 
@@ -295,7 +293,9 @@ namespace WPFConfigUpdater
                 else
                 {
                     config.ConfigPath = textblock_statusbar_config.Text;
-                    config.OpenConfigLoadProject();
+                    //config.OpenConfigLoadProject();
+
+                    worker_Connect_Config.RunWorkerAsync(config);
                 }
             }
             else
@@ -303,6 +303,34 @@ namespace WPFConfigUpdater
                 MessageBox.Show(MyConstants.Strings.MessageBox_ConnectConfigButton_AutoUpdate_Block, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }      
         }
+
+        private void worker_DoWork_OpenConfig(object sender, DoWorkEventArgs e)
+        {
+            CConfigMSUpdate config = (CConfigMSUpdate)e.Argument; //workerdata
+            config.OpenConfigLoadProject_Cancelable(worker_Connect_Config);
+            if(worker_Connect_Config.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void worker_RunWorkerCompleted_OpenConfig (object sender, RunWorkerCompletedEventArgs e)
+        {
+            if(e.Cancelled)
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_ConnecConfig_Button_Canceled, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                
+                //Kill open configs
+                var processes = Process.GetProcessesByName(MyConstants.Strings.Process_Loxone_Config);
+
+                foreach (var instance in processes)
+                {
+                    instance.Kill();
+                }
+
+            }
+        }
+
 
         private void SelectCurrentItem(object sender, MouseButtonEventArgs e)
         {
@@ -334,15 +362,15 @@ namespace WPFConfigUpdater
                 FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
                 Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
 
-                foreach (CMiniserver ms in listView_Miniserver.SelectedItems) //skip Updates if only 1 MS  is AutoUpdating
+                foreach (CMiniserver ms in listView_Miniserver.SelectedItems) 
                 {
-                    if (ms.MSStatus == MyConstants.Strings.Listview_MS_Status_AutoUpdate)
+                    if (ms.MSStatus == MyConstants.Strings.Listview_MS_Status_AutoUpdate)//skip Updates if only 1 MS  is AutoUpdating
                     {
                         skipUpdate_AutoUpdate = true;
                     }
                     if (ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
                     {
-                        if (int.Parse(ms.MSVersion.Replace(".", "")) >= int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")))
+                        if (checkIfUpdateNecessary( ms,  myFileVersionInfo))
                         {
                             skipUpdate_MS_updated_or_higher_Version = true;
                         }
@@ -371,11 +399,11 @@ namespace WPFConfigUpdater
                     workerdata.ListMiniservers = list;
                     workerdata.ConfigPath = textblock_statusbar_config.Text;
 
-                    //BackgroundWorker worker = new BackgroundWorker();
-                    //worker.WorkerReportsProgress = true;
-                    //worker.DoWork += worker_DoWork_UpdateMSButton;
-                    //worker.ProgressChanged += worker_ProgressChanged_UpdateMSButton;
-                    //worker.RunWorkerCompleted += worker_RunWorkerCompleted_UpdateMSButton;
+                    //BackgroundWorker worker_Refresh_MS_Information = new BackgroundWorker();
+                    //worker_Refresh_MS_Information.WorkerReportsProgress = true;
+                    //worker_Refresh_MS_Information.DoWork += worker_DoWork_UpdateMSButton;
+                    //worker_Refresh_MS_Information.ProgressChanged += worker_ProgressChanged_UpdateMSButton;
+                    //worker_Refresh_MS_Information.RunWorkerCompleted += worker_RunWorkerCompleted_UpdateMSButton;
                     if (!worker_MSUpdate.IsBusy)
                     {
                         listView_Miniserver.IsEnabled = false;
@@ -492,7 +520,7 @@ namespace WPFConfigUpdater
                         CLoxAppJson ret_cLoxAppJson;
                         string ret_MsVersion;
                         string updatelevel;
-                        getMiniserverInformationsWebServices(cMiniserver, out  ret_MsVersion, out var index1, out ret_cLoxAppJson, out updatelevel);
+                        getMiniserverInformationsWebServices(cMiniserver,  worker_Refresh_MS_Information, out  ret_MsVersion, out var index1, out ret_cLoxAppJson, out updatelevel);
 
                        
                         if (ret_cLoxAppJson.gatewayType == 0)
@@ -515,27 +543,10 @@ namespace WPFConfigUpdater
                             FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
                             Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
 
-                            if (miniserverList[index].MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
-                            {
-                                if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(miniserverList[index].MSVersion.Replace(".", "")))
-                                {
-                                    miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "orange";
-                                }
-                                else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(miniserverList[index].MSVersion.Replace(".", "")))
-                                {
-                                    miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "green";
-                                }
-                                else
-                                {
-                                    miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "black";
-                                }
-                            }
-                            else
-                            {
-                                miniserverList.ElementAt(miniserverList.IndexOf(miniserverList[index])).VersionColor = "black";
-                            }
+                            List<CMiniserver> list = new List<CMiniserver>();
+                            list.Add(miniserverList[index]);
+                            colorMiniserverVersions(list, myFileVersionInfo);
                         }
-                        
 
                         ListView_GridView_Autoresize();
                         
@@ -627,6 +638,9 @@ namespace WPFConfigUpdater
             e.Result = result_MS_Update;
         }
 
+        
+
+
         private void Button_RefreshMS_Click(object sender, RoutedEventArgs e)
         {
             if (listViewSortCol != null)
@@ -638,7 +652,25 @@ namespace WPFConfigUpdater
 
             progressbar_ProcessStatus.Value = 0;
             textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_inProgress_Text;
-            StackPaneButtons.IsEnabled = false; //Disables all containing Buttons
+            //StackPaneButtons.IsEnabled = false; //Disables all containing Buttons
+            
+
+            Task.Run(() =>
+            {
+
+                // Update UI elements on main UI thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    UpdateButton.IsEnabled = false;
+                    RefreshButton.IsEnabled = false;
+                    RemoveMSButton.IsEnabled = false;
+                    InsertMSButton.IsEnabled = false;
+                    CancelUpdateButton.IsEnabled = true;
+                });
+            });
+
+
+
             int_selectedItems_before_Refresh = listView_Miniserver.SelectedItems.Count;
 
             List<CMiniserver> list = new List<CMiniserver> { };
@@ -653,51 +685,111 @@ namespace WPFConfigUpdater
 
             selected_Miniserver_befor_refresh = list;
 
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.WorkerReportsProgress = true;
-            worker.DoWork += worker_DoWork_RefreshMSInformation;
-            worker.ProgressChanged += worker_ProgressChanged_RefreshMSInformation;
-            worker.RunWorkerCompleted += worker_RunWorkerCompleted_RefreshMSInformation;
-            worker.RunWorkerAsync(list);
+            
+            worker_Refresh_MS_Information.RunWorkerAsync(list);
         }
 
-        private void worker_RunWorkerCompleted_RefreshMSInformation(object sender, RunWorkerCompletedEventArgs e)
+        public void colorMiniserverVersions(List<CMiniserver> selected_miniservers, FileVersionInfo myFileVersionInfo)
         {
-            MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Refresh_Information_pulled);
-            textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Information_pulled_Text;
-            StackPaneButtons.IsEnabled = true;
-            listView_Miniserver.IsEnabled = true;
+            Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+            string correctedConfigVersion = addLeadingZeoresToVersionNumber(myFileVersionInfo.FileVersion).Replace(".", "");
+            
 
-            if(textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
+            foreach (CMiniserver ms in selected_miniservers)
             {
-                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
-                Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
-
-                foreach (CMiniserver ms in selected_Miniserver_befor_refresh)
+                if (ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
                 {
-                    if (ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                    string correctedMiniserverVersion = addLeadingZeoresToVersionNumber(ms.MSVersion).Replace(".", "");
+                    if (int.Parse(correctedConfigVersion) > int.Parse(correctedMiniserverVersion))
                     {
-                        if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) > int.Parse(ms.MSVersion.Replace(".", "")))
-                        {
-                            miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "orange";
-                        }
-                        else if (int.Parse(myFileVersionInfo.FileVersion.Replace(".", "")) == int.Parse(ms.MSVersion.Replace(".", "")))
-                        {
-                            miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "green";
-                        }
-                        else
-                        {
-                            miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "black";
-                        }
+                        miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "orange";
+                    }
+                    else if (int.Parse(correctedConfigVersion) == int.Parse(correctedMiniserverVersion))
+                    {
+                        miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "green";
                     }
                     else
                     {
                         miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "black";
                     }
                 }
+                else
+                {
+                    miniserverList.ElementAt(miniserverList.IndexOf(ms)).VersionColor = "black";
+                }
             }
 
+        }
+        
+
+        public bool checkIfUpdateNecessary(CMiniserver ms, FileVersionInfo myFileVersionInfo)
+        {
+            string msVersionString = ms.MSVersion;
+            string correctedMiniserverVersion = addLeadingZeoresToVersionNumber(msVersionString).Replace(".", "");
+            string correctedConfigVersion = addLeadingZeoresToVersionNumber(myFileVersionInfo.FileVersion).Replace(".", "");
+
+
+            if (int.Parse(correctedMiniserverVersion) >= int.Parse(correctedConfigVersion))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        private static string addLeadingZeoresToVersionNumber(string msVersionString)
+        {
+            string[] segments = msVersionString.Split('.');
+
+            for (int i = 0; i < segments.Length; i++)
+            {
+                if (segments[i].Length == 1)
+                {
+                    segments[i] = "0" + segments[i];
+                }
+            }
+            string correctedVresion = string.Join(".", segments);
+            return correctedVresion;
+        }
+
+        private void worker_RunWorkerCompleted_RefreshMSInformation(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled)
+            {
+                MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Refresh_Information_pulled);
+                textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Information_pulled_Text;
+            }
+            else
+            {
+                textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Canceled;
+            }
+
+            Task.Run(() =>
+            {
+
+                // Update UI elements on main UI thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    StackPaneButtons.IsEnabled = true;
+                    InsertMSButton.IsEnabled = true;
+                    listView_Miniserver.IsEnabled = true;
+                });
+            });
+
             
+
+            if(textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected && !e.Cancelled)
+            {
+                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+                colorMiniserverVersions(selected_Miniserver_befor_refresh, myFileVersionInfo);
+            }
+            else if(e.Cancelled)
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_Button_Refresh_canceled, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }            
         }
 
         private void worker_ProgressChanged_RefreshMSInformation(object sender, ProgressChangedEventArgs e)
@@ -775,13 +867,17 @@ namespace WPFConfigUpdater
                     string updatelevel; 
                     int index = -1;
                     CLoxAppJson ret_cLoxAppJson;
+                    if (worker_Refresh_MS_Information.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        return; 
+                    }
 
-                    getMiniserverInformationsWebServices(ms, out ret_MsVersion, out index, out ret_cLoxAppJson, out updatelevel);   
+                    getMiniserverInformationsWebServices(ms, worker_Refresh_MS_Information, out ret_MsVersion, out index, out ret_cLoxAppJson, out updatelevel);
 
                     CMiniserver cMiniserver = ms;
                     cMiniserver.MSVersion = ret_MsVersion;
                     cMiniserver.UpdateLevel = updatelevel;
-
 
                     if (ret_MsVersion == "0.0.0.0")
                     {
@@ -801,6 +897,13 @@ namespace WPFConfigUpdater
 
                     cMiniserver.MSProject = ret_cLoxAppJson.projectName + "/" + ret_cLoxAppJson.localUrl;
 
+                    if (worker_Refresh_MS_Information.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        miniserverList[index].MSStatus = "canceled";
+                        (sender as BackgroundWorker).ReportProgress(100); 
+                        return;
+                    }
 
                     progressPercentage = Convert.ToInt32((double)result_MS_Refreshed / list.Count * 100);
                     (sender as BackgroundWorker).ReportProgress(progressPercentage, cMiniserver);
@@ -812,40 +915,71 @@ namespace WPFConfigUpdater
            
         }
 
-        private void getMiniserverInformationsWebServices(CMiniserver ms, out string ret_MsVersion, out int index, out CLoxAppJson ret_cLoxAppJson, out string Updatelevel)
+        private void getMiniserverInformationsWebServices(CMiniserver ms, BackgroundWorker worker_Refresh_MS_Information,  out string ret_MsVersion, out int index, out CLoxAppJson ret_cLoxAppJson, out string Updatelevel)
         {
+            ret_cLoxAppJson = new CLoxAppJson();
+            ret_cLoxAppJson.projectName = "";
+            Updatelevel = "canceled";
+            ret_MsVersion = "0.0.0.0";
+            index = miniserverList.IndexOf(ms);
+
             if (ms.LocalIPAdress != "" && ms.LocalIPAdress != null)
             {
-                ret_MsVersion = WebService.sendCommandRest_Version_Local_Gen1(ms.LocalIPAdress, ms.adminUser, ms.adminPassWord, @"/dev/sys/version", "value");
-                System.Diagnostics.Debug.WriteLine(ret_MsVersion + "- " + ms.serialNumer);
-                index = miniserverList.IndexOf(ms);
-                ret_MsVersion = Format_Miniserver_String(ret_MsVersion);
-                miniserverList.ElementAt(index).MSVersion = ret_MsVersion;
-                ret_cLoxAppJson = WebService.sendCommandRest_LoxAppJson_Local_Gen1(ms.LocalIPAdress, ms.adminUser, ms.adminPassWord, @"/data/LoxAPP3.json");
-                Updatelevel = WebService.sendCommandRest_Version_Local_Gen1(ms.LocalIPAdress, ms.adminUser, ms.adminPassWord, @"/dev/cfg/updatelevel", "value");
                 
+                if (!worker_Refresh_MS_Information.CancellationPending)
+                {
+                    ret_MsVersion = WebService.sendCommandRest_Version_Local_Gen1(ms.LocalIPAdress, ms.adminUser, ms.adminPassWord, @"/dev/sys/version", "value");
+                    System.Diagnostics.Debug.WriteLine(ret_MsVersion + "- " + ms.serialNumer);
+                    index = miniserverList.IndexOf(ms);
+                    ret_MsVersion = Format_Miniserver_String(ret_MsVersion);
+                    miniserverList.ElementAt(index).MSVersion = ret_MsVersion;
+                }
+
+                if (!worker_Refresh_MS_Information.CancellationPending)
+                {
+                    ret_cLoxAppJson = WebService.sendCommandRest_LoxAppJson_Local_Gen1(ms.LocalIPAdress, ms.adminUser, ms.adminPassWord, @"/data/LoxAPP3.json");
+                }
+
+                if (!worker_Refresh_MS_Information.CancellationPending)
+                {
+                    Updatelevel = WebService.sendCommandRest_Version_Local_Gen1(ms.LocalIPAdress, ms.adminUser, ms.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }                
             }
             else
             {
-                ret_MsVersion = WebService.sendCommandRest_Version_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/dev/sys/version", "value");
-                System.Diagnostics.Debug.WriteLine(ret_MsVersion + "- " + ms.serialNumer);
-                index = miniserverList.IndexOf(ms);
-                ret_MsVersion = Format_Miniserver_String(ret_MsVersion);
-                miniserverList.ElementAt(index).MSVersion = ret_MsVersion;
-                ret_cLoxAppJson = WebService.sendCommandRest_LoxAppJson_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/data/LoxAPP3.json");
-                Updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/dev/cfg/updatelevel", "value");
-            }
-            
-            if( Updatelevel.IndexOf("\"") > 0)
-            {
-                Updatelevel = Updatelevel.Remove(Updatelevel.IndexOf("\""));
+                if (!worker_Refresh_MS_Information.CancellationPending)
+                {
+                    ret_MsVersion = WebService.sendCommandRest_Version_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/dev/sys/version", "value");
+                    System.Diagnostics.Debug.WriteLine(ret_MsVersion + "- " + ms.serialNumer);
+                    index = miniserverList.IndexOf(ms);
+                    ret_MsVersion = Format_Miniserver_String(ret_MsVersion);
+                    miniserverList.ElementAt(index).MSVersion = ret_MsVersion;
+                }
+
+                if (!worker_Refresh_MS_Information.CancellationPending)
+                {
+                    ret_cLoxAppJson = WebService.sendCommandRest_LoxAppJson_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/data/LoxAPP3.json");
+                }
+
+                if (!worker_Refresh_MS_Information.CancellationPending)
+                {
+                    Updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(ms.serialNumer, ms.adminUser, ms.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                }
+                   
             }
 
-            if( Updatelevel == "-1213")
+            if (!worker_Refresh_MS_Information.CancellationPending)
             {
-                Updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
+                if (Updatelevel.IndexOf("\"") > 0)
+                {
+                    Updatelevel = Updatelevel.Remove(Updatelevel.IndexOf("\""));
+                }
+
+                if (Updatelevel == "-1213")
+                {
+                    Updatelevel = MyConstants.Strings.Listview_Refresh_MS_Configuration_Error;
+                }
             }
-            
         }
 
         private void listView_Miniserver_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -853,15 +987,33 @@ namespace WPFConfigUpdater
             ListView listView = sender as ListView;
             if(listView.SelectedIndex == -1)
             {
-                RefreshButton.IsEnabled = false;
-                UpdateButton.IsEnabled = false;
-                RemoveMSButton.IsEnabled = false;
+                Task.Run(() =>
+                {
+
+                    // Update UI elements on main UI thread
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        RefreshButton.IsEnabled = false;
+                        UpdateButton.IsEnabled = false;
+                        RemoveMSButton.IsEnabled = false;
+                    });
+                });
+                
             }
             else
             {
-                RefreshButton.IsEnabled = true;
-                UpdateButton.IsEnabled = true;
-                RemoveMSButton.IsEnabled = true;
+                Task.Run(() =>
+                {
+
+                    // Update UI elements on main UI thread
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        RefreshButton.IsEnabled = true;
+                        UpdateButton.IsEnabled = true;
+                        RemoveMSButton.IsEnabled = true;
+                        InsertMSButton.IsEnabled = true;
+                    });
+                });
             }
             
 
@@ -904,6 +1056,8 @@ namespace WPFConfigUpdater
         private void Button_CancelUpdate_Click(object sender, RoutedEventArgs e)
         {
             worker_MSUpdate.CancelAsync();
+            worker_Connect_Config.CancelAsync();
+            worker_Refresh_MS_Information.CancelAsync();
         }
 
         private void ContextMenu_CopySNR_Click(object sender, RoutedEventArgs e)

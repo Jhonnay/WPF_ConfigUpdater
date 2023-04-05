@@ -56,6 +56,7 @@ namespace WPFConfigUpdater.Common
             public static readonly string Statusbar_ProcessStatus_Update_Complete_show_MS = "Updated - ";
             public static readonly string Statusbar_ProcessStatus_Update_failed = "Update failed!";
             public static readonly string Statusbar_TextBlockConfig_No_Config_selected = "Current Config: not selected - double click to select";
+            public static readonly string Statusbar_ProcessStatus_Refresh_Canceled = "Refresh Canceled!";
 
 
             /* Create MS Dialog */
@@ -95,6 +96,9 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_FTP_Local_Ping_failed = "Ping to MS failed! Check local IP and if you are connected to the right network!";
             public static readonly string MessageBox_FTP_Local_authentification_failed = "Check MS Credentials!";
             public static readonly string MessageBox_UpdateButton_MS_updated_OR_higher_Version = "Selected Miniserver(s) already updated or on higher version.";
+            public static readonly string MessageBox_ConnecConfig_Button_Canceled = "Connecting to Config canceled and Config terminated";
+            public static readonly string MessageBox_Button_Refresh_canceled = "Refresh canceled!";
+            
 
             /* WebServices */
             public static readonly string WebService_Success_Code = "200";
