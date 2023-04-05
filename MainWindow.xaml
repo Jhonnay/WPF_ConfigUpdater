@@ -75,7 +75,7 @@
                 <ContentControl MouseDoubleClick="ContentControl_textblock_statusbar_config_MouseDoubleClick">
                     <ContentControl.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Start Config ✈" Click="ContentControl_textblock_statusbar_menuItem_Start_Config" />
+                            <MenuItem x:Name="menuItem_context_StartConfig" Header="Start Config ✈" Click="ContentControl_textblock_statusbar_menuItem_Start_Config" />
                             <MenuItem Header="Kill all Configs 💣" Click="ContentControl_textblock_statusbar_menuItem_Kill_Configs" />
                         </ContextMenu>
                     </ContentControl.ContextMenu>
