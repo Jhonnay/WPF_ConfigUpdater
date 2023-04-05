@@ -98,6 +98,7 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_UpdateButton_MS_updated_OR_higher_Version = "Selected Miniserver(s) already updated or on higher version.";
             public static readonly string MessageBox_ConnecConfig_Button_Canceled = "Connecting to Config canceled and Config terminated";
             public static readonly string MessageBox_Button_Refresh_canceled = "Refresh canceled!";
+            public static readonly string MessageBox_Select_Config_VersionNumber_not_found = "Please check your selected Config! No file version found with the provided path!\nPath will not be used!";
             
 
             /* WebServices */

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -100,6 +101,7 @@ namespace WPFConfigUpdater
             if (openFileDialog.ShowDialog() == true)
             {
                 textbox_configuration_path.Text = openFileDialog.FileName;
+
             }
 
         }
@@ -120,7 +122,16 @@ namespace WPFConfigUpdater
 
             if (openFileDialog.ShowDialog() == true)
             {
-                textbox_config_path.Text = openFileDialog.FileName;
+                if (FileVersionInfo.GetVersionInfo(openFileDialog.FileName).FileVersion != null)
+                {
+                    textbox_config_path.Text = openFileDialog.FileName;
+                }else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_Select_Config_VersionNumber_not_found
+                        , "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+
             }
 
         }

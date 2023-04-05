@@ -239,22 +239,30 @@ namespace WPFConfigUpdater
             openFileDialog.Filter = "Executeable (*.exe)|*.exe";
             if(openFileDialog.ShowDialog() == true)
             {
-                textblock_statusbar_config.Text = openFileDialog.FileName;
-
-
-                if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
-                {
-                    List<CMiniserver> list = new List<CMiniserver>();
-                    for (int i = 0; i < miniserverList.Count; i++)
+                
+                if (FileVersionInfo.GetVersionInfo(openFileDialog.FileName).FileVersion != null){
+                    textblock_statusbar_config.Text = openFileDialog.FileName;
+                    if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                     {
-                        list.Add(miniserverList[i]);
+                        List<CMiniserver> list = new List<CMiniserver>();
+                        for (int i = 0; i < miniserverList.Count; i++)
+                        {
+                            list.Add(miniserverList[i]);
+                        }
+
+                        FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
+                        Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
+
+                        colorMiniserverVersions(list, myFileVersionInfo);
                     }
-
-                    FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(textblock_statusbar_config.Text);
-                    Debug.WriteLine("Config Version: " + myFileVersionInfo.FileVersion);
-
-                    colorMiniserverVersions(list, myFileVersionInfo);
                 }
+                else
+                {
+                    MessageBox.Show(MyConstants.Strings.MessageBox_Select_Config_VersionNumber_not_found
+                        , "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                
             }
         }
 
@@ -284,11 +292,12 @@ namespace WPFConfigUpdater
 
                 if (textblock_statusbar_config.Text == MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_OpenConfig_No_Config_selected);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_OpenConfig_No_Config_selected, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 else if (processes.Count() != 0)
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part2);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ConnectConfigButton_ConfigsOpen_Error_Part2
+                        , "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 else
                 {
@@ -416,7 +425,8 @@ namespace WPFConfigUpdater
                 }
                 else
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part2);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part1 + processes.Count() + MyConstants.Strings.MessageBox_ButtonUpdate_ConfigsOpen_Error_Part2
+                        , "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else
@@ -439,7 +449,8 @@ namespace WPFConfigUpdater
             {
                 try
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_Update_canceled + (int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Update_alreadyUpdatedMS);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_Update_canceled + (int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Update_alreadyUpdatedMS
+                        , "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }catch(InvalidOperationException ex)
                 {
                     MessageBox.Show(MyConstants.Strings.MessageBox_Update_canceled, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -465,7 +476,8 @@ namespace WPFConfigUpdater
             {
                 if(cApplicationUI.HandsfreeMode == false)
                 {
-                    MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Update_alreadyUpdatedMS);
+                    MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Update_alreadyUpdatedMS
+                        , "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 
                 if((int)e.Result == 0){
@@ -589,7 +601,8 @@ namespace WPFConfigUpdater
                 update.Pw = ms.adminPassWord;
                 if (workerdata.ConfigPath == MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateButton_No_Config_selected);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_UpdateButton_No_Config_selected
+                        , "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     
                 }
                 else
@@ -616,7 +629,8 @@ namespace WPFConfigUpdater
                     if (cApplicationUI.HandsfreeMode == false && worker_MSUpdate.CancellationPending == false)
                     {
                         string concat_strings = string.Join(" ", arrlist.Cast<string>().ToArray());
-                        MessageBox.Show(MyConstants.Strings.MessageBox_Update_Show_all_updatedMS_Versions + concat_strings);
+                        MessageBox.Show(MyConstants.Strings.MessageBox_Update_Show_all_updatedMS_Versions + concat_strings
+                            , "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                         
                     }
 
@@ -742,24 +756,29 @@ namespace WPFConfigUpdater
 
         private static string addLeadingZeoresToVersionNumber(string msVersionString)
         {
-            string[] segments = msVersionString.Split('.');
-
-            for (int i = 0; i < segments.Length; i++)
+            if(msVersionString != null)
             {
-                if (segments[i].Length == 1)
+                string[] segments = msVersionString.Split('.');
+
+                for (int i = 0; i < segments.Length; i++)
                 {
-                    segments[i] = "0" + segments[i];
+                    if (segments[i].Length == 1)
+                    {
+                        segments[i] = "0" + segments[i];
+                    }
                 }
+                string correctedVresion = string.Join(".", segments);
+                return correctedVresion;
             }
-            string correctedVresion = string.Join(".", segments);
-            return correctedVresion;
+            return msVersionString;
         }
 
         private void worker_RunWorkerCompleted_RefreshMSInformation(object sender, RunWorkerCompletedEventArgs e)
         {
             if (!e.Cancelled)
             {
-                MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Refresh_Information_pulled);
+                MessageBox.Show((int)e.Result + "/" + int_selectedItems_before_Refresh + MyConstants.Strings.MessageBox_Refresh_Information_pulled
+                    , "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Information_pulled_Text;
             }
             else
@@ -1322,7 +1341,7 @@ namespace WPFConfigUpdater
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
