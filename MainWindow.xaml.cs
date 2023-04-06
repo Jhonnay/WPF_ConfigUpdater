@@ -85,6 +85,7 @@ namespace WPFConfigUpdater
             UpdateButton.IsEnabled = false;
             RemoveMSButton.IsEnabled = false;
 
+            
             //btn_klick_me.AddHandler(FrameworkElement.MouseDownEvent, new MouseButtonEventHandler(Button_MouseUp), true);
             //btn_klick_me.Click += test;
         }
@@ -1329,6 +1330,7 @@ namespace WPFConfigUpdater
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "JSON file (*.json)|*.json";
+            openFileDialog.Title = "Select a Configuration File with Minservers";
 
             if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_Folder_for_ApplicationData)) 
             {
@@ -1365,7 +1367,7 @@ namespace WPFConfigUpdater
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(MyConstants.Strings.MessageBox_Miniserver_Json_not_valid, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
         }

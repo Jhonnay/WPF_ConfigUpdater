@@ -40,22 +40,24 @@ namespace WPFConfigUpdater
         {
              MyDialogTextBoxMS_SerialNumber.Text =  MyDialogTextBoxMS_SerialNumber.Text.Replace(":", ""); //remove semicolons because it produces errors. 
 
-            if (MyDialogPasswordBoxMS_Password.Password != "" && 
+            if (MyDialogPasswordBoxMS_Password.Password != "" &&
                 MyDialogTextBoxMS_User.Text != "" &&
                 MyDialogTextBoxMS_SerialNumber.Text != "")
             {
-                this.DialogResult = true;
+                if (MyDialogTextBoxMS_SerialNumber.Text.Length == MyConstants.Strings.MS_Default_dummy_SN.Length)
+                {
+                    this.DialogResult = true;
+                }
+                else{
+                    MessageBox.Show(MyConstants.Strings.MessageBox_CraeteMSDialog_Fields_SerialNumber_Length);
+                    this.DialogResult = false;
+                }
             }
             else
             {
                 MessageBox.Show(MyConstants.Strings.MessageBox_CraeteMSDialog_Fields_Not_Filled);
+                this.DialogResult = false;
             }
-
-            if(MyDialogTextBoxMS_SerialNumber.Text.Length != MyConstants.Strings.MS_Default_dummy_SN.Length) {
-                MessageBox.Show(MyConstants.Strings.MessageBox_CraeteMSDialog_Fields_SerialNumber_Lenght);
-            }
-            
-            
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

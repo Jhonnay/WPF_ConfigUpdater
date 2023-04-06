@@ -13,13 +13,19 @@ Feature Wish:
 * Minimize to taskbar
 * Create Backup 
 * Update Multiple MS at once
+* Fallback to Remote if Local IP is not possible. 
+* CheckBox "Use Local IP"
+* Connect with Loxone App to specific Miniserver
 
 Known Issues: 
 * UDP Listener not startet successfully. Probably fixed already.
-* Gridsplitter dragged to top will make all buttons dissapear. (Jan Posedel)
-* STRG+O Opening another Json file - i.e Application Settings (Jan Posedel)
-	- implement try/catch --> with dialog  (Jan Posedel)
-* Double Clicking on Icon top left will close the program (Jan Posedel)
+* Gridsplitter dragged to top will make all buttons dissapear.				(Jan Posedel)
+* STRG+O Opening another Json file - i.e Application Settings				(Jan Posedel)
+	- check if a validity SNR / Password / admin (Jan Posedel)
+	- check for "\u0000"
+* Double Clicking on Icon top left will close the program					(Jan Posedel)
+* Program can be opened rapidly when ENTER is kept pressed			(Jan Posedel)
+
 
 V0.9.4
 * Improved Update Handling: Update not retried command was not successful
@@ -28,7 +34,9 @@ V0.9.4
 * Fixed: Update process / Loading out of MS can get stuck --> add aditional wait condition (cause can be not reachable MS/ username/Password wrong)
 * Fixed:  UDP Listener could not be started if the previous UDP Listener was not closed. 
 * Fixed: No check if Backgroundworker is already running for "connect Config" Button --> added Dialog
-
+* Fixed: Check on Startup for Default Applicaiton Settings / Default Config EXE		(Jan Posedel)
+* Fixed: MS could still be created even if SN length not valid.				(Jan Posedel)
+* Adjusted: Error Message when a invalid Miniserver JSON configuration is opened with STRG+O	(Jan Posedel)
 
 V0.9.3
 * Added Language column. 

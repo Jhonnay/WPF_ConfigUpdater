@@ -41,26 +41,34 @@ namespace WPFConfigUpdater
                 {
                     string strJsonMiniservers = File.ReadAllText(settings.StrDefaultConfigurationPath);
 
-                    ObservableCollection<CMiniserver> miniservers = JsonSerializer.Deserialize<ObservableCollection<CMiniserver>>(strJsonMiniservers);
 
-                    if (miniservers != null && miniservers.Count != 0)
+                    try
                     {
-                        for (int i = 0; i < miniservers.Count; i++)
+                        ObservableCollection<CMiniserver> miniservers = JsonSerializer.Deserialize<ObservableCollection<CMiniserver>>(strJsonMiniservers);
+
+                        if (miniservers != null && miniservers.Count != 0)
                         {
-                            miniservers[i].MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
-                            miniservers[i].MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
-                            miniservers[i].VersionColor = "black";
+                            for (int i = 0; i < miniservers.Count; i++)
+                            {
+                                miniservers[i].MSStatus = MyConstants.Strings.StartUp_Listview_MS_Status;
+                                miniservers[i].MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
+                                miniservers[i].VersionColor = "black";
+                            }
+
+                            window.miniserverList = miniservers;
+                            window.listView_Miniserver.ItemsSource = window.miniserverList;
+                            window.ListView_GridView_Autoresize();
+
+
+
+                            //MenuItem_MSVersionRefresh_Click(sender, e); //automatically refesh not wanted. 
+
                         }
-
-                        window.miniserverList = miniservers;
-                        window.listView_Miniserver.ItemsSource = window.miniserverList;
-                        window.ListView_GridView_Autoresize();
-
-                        
-                        
-                        //MenuItem_MSVersionRefresh_Click(sender, e); //automatically refesh not wanted. 
-                        
+                    }catch (Exception ex)
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_Miniserver_Json_not_valid, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
+
 
 
                 }
@@ -68,7 +76,7 @@ namespace WPFConfigUpdater
                 {
                     if (settings.BUseDefaultConfiguration)
                     {
-                        MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_Configuration_not_found, "Exception Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_Configuration_not_found, "Exception Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                    
                 }
@@ -76,7 +84,16 @@ namespace WPFConfigUpdater
 
                 if (File.Exists(settings.StrDefaultConfigPath) && settings.BUseDefaultConfig)
                 {
-                    window.textblock_statusbar_config.Text = settings.StrDefaultConfigPath;
+                    if (WPFConfigUpdater.MainWindow.checkConfigEXE(settings.StrDefaultConfigPath))
+                    {
+                        window.textblock_statusbar_config.Text = settings.StrDefaultConfigPath;
+                    }
+                    else
+                    {
+                        window.textblock_statusbar_config.Text = MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected;
+                        MessageBox.Show(MyConstants.Strings.MessageBox_ConfigExe_Not_Valid, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    
                 }
                 else
                 {
@@ -87,6 +104,7 @@ namespace WPFConfigUpdater
 
             }
             window.listView_Miniserver.SelectionMode = SelectionMode.Multiple;
+           
             window.Show();
         }
 

@@ -82,7 +82,7 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_Applicationsettings_Configuration_not_found = "Configuration JSON not found! ⚠";
             public static readonly string MessageBox_ApplicationSettings_No_Paths_Set = "If a CheckBox is checked, a Path has to be set! ";
             public static readonly string MessageBox_CraeteMSDialog_Fields_Not_Filled = "Sorry my dude 🤷‍.Please fill in all fields!";
-            public static readonly string MessageBox_CraeteMSDialog_Fields_SerialNumber_Lenght = "Sorry my dude 🤷‍.Please check SN Lenght!";
+            public static readonly string MessageBox_CraeteMSDialog_Fields_SerialNumber_Length = "Sorry my dude 🤷‍.Please check SN length!";
             public static readonly string MessageBox_UpdateLevelSet_Successfully = "Updatelevel was successfully set to: ";
             public static readonly string MessageBox_UpdateLevelSet_Error = "Updatelevel is still: ";
             public static readonly string MessageBox_AutoUpdate_Not_Possible = "AutoUpdate not possible for " + Listview_Refresh_MS_Configuration_ClientGateway;
@@ -99,7 +99,8 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_ConnecConfig_Button_Canceled = "Connecting to Config canceled and Config terminated";
             public static readonly string MessageBox_Button_Refresh_canceled = "Refresh canceled!";
             public static readonly string MessageBox_ConfigExe_Not_Valid = "Please select a real Config EXE! \nPath will not be used!";
-            public static readonly string MessageBox_Backgroundworker_Connect_Config_already_running = "There is already a Connect Config Task running! \nPlease try again later. "; 
+            public static readonly string MessageBox_Backgroundworker_Connect_Config_already_running = "There is already a Connect Config Task running! \nPlease try again later. ";
+            public static readonly string MessageBox_Miniserver_Json_not_valid = "Please select a valid Miniserver Json Configuration!"; 
 
             /* WebServices */
             public static readonly string WebService_Success_Code = "200";
