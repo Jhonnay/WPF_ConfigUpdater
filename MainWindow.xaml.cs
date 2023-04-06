@@ -244,7 +244,7 @@ namespace WPFConfigUpdater
             if(openFileDialog.ShowDialog() == true)
             {
                 
-                if (FileVersionInfo.GetVersionInfo(openFileDialog.FileName).FileVersion != null){
+                if (checkConfigEXE(openFileDialog.FileName)){
                     textblock_statusbar_config.Text = openFileDialog.FileName;
                     if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
                     {
@@ -262,7 +262,7 @@ namespace WPFConfigUpdater
                 }
                 else
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_Select_Config_VersionNumber_not_found
+                    MessageBox.Show(MyConstants.Strings.MessageBox_ConfigExe_Not_Valid
                         , "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
 
@@ -746,7 +746,19 @@ namespace WPFConfigUpdater
 
         }
         
-
+        public static bool checkConfigEXE(string configFilePath)
+        {
+            if(FileVersionInfo.GetVersionInfo(configFilePath).FileVersion != null 
+                && FileVersionInfo.GetVersionInfo(configFilePath).ProductName == "LoxoneConfig" )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+           
+        }
         public bool checkIfUpdateNecessary(CMiniserver ms, FileVersionInfo myFileVersionInfo)
         {
             string msVersionString = ms.MSVersion;

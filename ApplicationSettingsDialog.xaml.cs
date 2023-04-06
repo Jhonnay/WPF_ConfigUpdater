@@ -122,12 +122,12 @@ namespace WPFConfigUpdater
 
             if (openFileDialog.ShowDialog() == true)
             {
-                if (FileVersionInfo.GetVersionInfo(openFileDialog.FileName).FileVersion != null)
+                if (MainWindow.checkConfigEXE(openFileDialog.FileName))
                 {
                     textbox_config_path.Text = openFileDialog.FileName;
                 }else
                 {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_Select_Config_VersionNumber_not_found
+                    MessageBox.Show(MyConstants.Strings.MessageBox_ConfigExe_Not_Valid
                         , "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
 
