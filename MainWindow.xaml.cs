@@ -37,7 +37,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.9.3";
+        public string stringApplicationVersion = "V 0.9.4";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -307,8 +307,15 @@ namespace WPFConfigUpdater
                 {
                     config.ConfigPath = textblock_statusbar_config.Text;
                     //config.OpenConfigLoadProject();
-
-                    worker_Connect_Config.RunWorkerAsync(config);
+                    if (!worker_Connect_Config.IsBusy)
+                    {
+                        worker_Connect_Config.RunWorkerAsync(config);
+                    }
+                    else
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_Backgroundworker_Connect_Config_already_running , "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    
                 }
             }
             else

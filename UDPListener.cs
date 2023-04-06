@@ -115,13 +115,22 @@ namespace WPFConfigUpdater
         {
             UdpClient listener = null;
 
+            StartUdpListener: 
             try
             {
                 listener = new UdpClient(m_portToListen);
+                System.Diagnostics.Debug.WriteLine("No UDP Listener Exception! Nice!");
             }
-            catch (SocketException)
+            catch (SocketException ex)
             {
-                //do nothing
+                System.Diagnostics.Debug.WriteLine("Caught not started UDP Listener. Trying again!");
+                System.Diagnostics.Debug.WriteLine($"SocketException: {ex.Message}");
+                if(listener  != null)
+                {
+                    listener.Close();
+                }
+                
+                goto StartUdpListener;
             }
 
             if (listener != null)
@@ -206,12 +215,14 @@ namespace WPFConfigUpdater
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
+                    listener.Close();
                 }
                 finally
                 {
                     listener.Close();
                     Console.WriteLine("Done listening for UDP broadcast");
                 }
+                listener.Close();
             }
         }
     }

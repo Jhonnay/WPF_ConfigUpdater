@@ -1,7 +1,5 @@
 Feature Wish: 
 * rearange collumns via dragging
-* Cancel Button should work for refreshing MS Informations too. 
-* Adding "Language" collumn and open Config with this Setting - Christian Worlitchck 
 * Application Settings Dialog --> make beautiful
 * Make UI more colorful 
 * Light Mode / Darkmode
@@ -17,11 +15,15 @@ Feature Wish:
 * Update Multiple MS at once
 
 Known Issues: 
- 
 * UDP Listener not startet successfully. Probably fixed already.
-* Update process / Loading out of MS can get stuck --> add aditional wait condition (cause can be not reachable MS/ username/Password wrong)
-* No check if Backgroundworker is already running for "connect Config" Button;
 
+
+V0.9.4
+* Improved Update Handling: Update not retried command was not successful
+* Fixed UDP Client not properly closed when Update process is aborted. Following Updates do not work. 
+* Update process / Loading out of MS can get stuck --> add aditional wait condition (cause can be not reachable MS/ username/Password wrong)
+* Fixed UDP Listener could not be started if the previous UDP Listener was not closed. 
+* Fixed No check if Backgroundworker is already running for "connect Config" Button --> added Dialog
 
 
 V0.9.3

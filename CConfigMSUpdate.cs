@@ -157,9 +157,15 @@ namespace WPFConfigUpdater
                 config.sendCommand(localhost, 7770, msg); //Connect with MS
                 Thread.Sleep(7000);
 
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine("Starting UDP Listener");
+                    udpL.StartListener();
+                }catch(System.Net.Sockets.SocketException e)
+                {
+                    System.Diagnostics.Debug.WriteLine("Failed to start UDP Listener");
+                }
                 
-                System.Diagnostics.Debug.WriteLine("Starting UDP Listener");
-                udpL.StartListener();
 
 
 
@@ -178,7 +184,7 @@ namespace WPFConfigUpdater
                     else
                     {
                         MessageBox.Show("Update Process was cancelled!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                        udpL.StopListener();
                     }
                     
                     return null;
@@ -192,7 +198,7 @@ namespace WPFConfigUpdater
             return udpL.VersionsMiniservers;
         }
 
-        private static int performMiniserverUpdate(Config config, UDPListener udpL, BackgroundWorker backgroundWorker)
+        private int performMiniserverUpdate(Config config, UDPListener udpL, BackgroundWorker backgroundWorker)
         {
             int updateCycleState = 0;
             int counterCyclesTime = 0; //After 17 Minutes, stop update Progress in this application and show Messsage Box and DO NOT KILL CONFIG!
@@ -226,9 +232,12 @@ namespace WPFConfigUpdater
                             fails++;
                             if(fails == 5)
                             {
-                                updateCycleState = 0;
+                                System.Diagnostics.Debug.WriteLine("Loading from Miniserver again after 5 fails");
                                 fails = 0;
-                                config.LoadFromMiniserver();
+                                string msg = "C," + msIP + "," + user + "," + pw;
+                                msg = msg.Replace(":", ".");
+                                System.Diagnostics.Debug.WriteLine("Connecting to MS with: " + msIP + "," + user + "," + pw);
+                                config.sendCommand(localhost, 7770, msg); //Connect with MS
                             }
                             Thread.Sleep(5000);
 
@@ -243,6 +252,14 @@ namespace WPFConfigUpdater
                             config.Update();
                             updateCycleState++;
                             Thread.Sleep(10000); //extra time until the update flag is set 
+
+                            if(udpL.AutoStatus.m_bUpdating != 1)
+                            {
+                                System.Diagnostics.Debug.WriteLine("Miniserver not updating after 10s. Update command will be sent again!");
+                                updateCycleState --;                            }
+                        }else
+                        {
+                            updateCycleState--;
                         }
                         break;
 
@@ -431,10 +448,18 @@ namespace WPFConfigUpdater
             System.Diagnostics.Debug.WriteLine("Current Config Version: " + udpL.VersionConfig);
             System.Diagnostics.Debug.WriteLine("Current MS-Firmware-Versions: ");
 
-            foreach (String vers in udpL.VersionsMiniservers)
+            try
             {
-                System.Diagnostics.Debug.Write(vers + ", ");
+                foreach (String vers in udpL.VersionsMiniservers)
+                {
+                    System.Diagnostics.Debug.Write(vers + ", ");
+                }
             }
+            catch (InvalidOperationException ex )
+            {
+                System.Diagnostics.Debug.WriteLine($"SocketException: {ex.Message}");
+            }
+            
         }
 
     }

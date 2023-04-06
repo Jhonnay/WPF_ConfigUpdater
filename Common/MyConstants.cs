@@ -99,7 +99,7 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_ConnecConfig_Button_Canceled = "Connecting to Config canceled and Config terminated";
             public static readonly string MessageBox_Button_Refresh_canceled = "Refresh canceled!";
             public static readonly string MessageBox_Select_Config_VersionNumber_not_found = "Please check your selected Config! No file version found with the provided path!\nPath will not be used!";
-            
+            public static readonly string MessageBox_Backgroundworker_Connect_Config_already_running = "There is already a Connect Config Task running! \nPlease try again later. "; 
 
             /* WebServices */
             public static readonly string WebService_Success_Code = "200";
