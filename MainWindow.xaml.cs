@@ -25,6 +25,7 @@ using WPFConfigUpdater.Common;
 using System.Reflection;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using System.Web;
 
 //CTRL + M plus CTRL + O  - Collapse All
 //TODO: Version number  13.2.11.11 is displayed in Version Collumn as 13.2.1111
@@ -37,7 +38,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.9.4";
+        public string stringApplicationVersion = "V 0.9.5";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -1197,11 +1198,13 @@ namespace WPFConfigUpdater
             Process cmd = new Process();
             cmd.StartInfo.FileName = "cmd.exe";
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            cmd.StartInfo.Arguments = "/c start " + link;
+            cmd.StartInfo.Arguments = "/c start \"\" " + link;
             cmd.StartInfo.CreateNoWindow = true;
 
             cmd.Start();
         }
+
+        
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
@@ -1640,55 +1643,62 @@ namespace WPFConfigUpdater
             string link, returnCode;
             CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
 
-            Task.Run(() =>
+            if (currentlySelectedMiniserver.MSStatus != MyConstants.Strings.Listview_MS_Status_AutoUpdate)
             {
-                // WPF commands to be executed in separate thread
-                if (currentlySelectedMiniserver.MSConfiguration == MyConstants.Strings.Listview_Refresh_MS_Configuration_Standalone)
+                Task.Run(() =>
                 {
-                    if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                    // WPF commands to be executed in separate thread
+                    if (currentlySelectedMiniserver.MSConfiguration == MyConstants.Strings.Listview_Refresh_MS_Configuration_Standalone)
                     {
+                        if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                        {
 
-                        returnCode = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
-                        //updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                            returnCode = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
+                            //updatelevel = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                        }
+                        else
+                        {
+                            returnCode = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
+                            //updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                        }
+
+                        if (returnCode.IndexOf("\"") > 0)
+                        {
+                            returnCode = returnCode.Remove(returnCode.IndexOf("\""));
+                        }
+
+                        if (returnCode == MyConstants.Strings.WebService_Success_Code) //WebService Successful
+                        {
+                            MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                            miniserverList[index].MSStatus = MyConstants.Strings.Listview_MS_Status_AutoUpdate;
+                        }
+                        else
+                        {
+                            MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+
                     }
                     else
                     {
-                        returnCode = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
-                        //updatelevel = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/cfg/updatelevel", "value");
+                        MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Possible, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
 
-                    if (returnCode.IndexOf("\"") > 0)
+                    // Update UI elements on main UI thread
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
-                        returnCode = returnCode.Remove(returnCode.IndexOf("\""));
-                    }
-
-                    if (returnCode == MyConstants.Strings.WebService_Success_Code) //WebService Successful
-                    {
-                        MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                        miniserverList[index].MSStatus = MyConstants.Strings.Listview_MS_Status_AutoUpdate;
-                    }
-                    else
-                    {
-                        MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Startet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Not_Possible, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-
-                // Update UI elements on main UI thread
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    // Update UI elements
-                    // ...
+                        // Update UI elements
+                        // ...
+                    });
                 });
-            });
 
-            
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_Already_running, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
 
-        }
+
+            }
 
         private void MenuItem_Open_Loxone_App(object sender, RoutedEventArgs e)
         {
@@ -1839,7 +1849,153 @@ namespace WPFConfigUpdater
             }
         }
 
-        
+        private void ContextMenu_LoxoneApp_Connect_MS(object sender, RoutedEventArgs e)
+        {
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+            //MenuItem_Loxone_App_Kill_Instances(sender,e);
+            string link = "loxone://ms?host=192.168.178.62&usr=admin&pwd=SlavaDomnului2021!";
+
+
+
+
+            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            {
+                link = "loxone://ms?host=" + currentlySelectedMiniserver.LocalIPAdress +
+                    "&usr=" + currentlySelectedMiniserver.adminUser +
+                    "&pwd=" + currentlySelectedMiniserver.adminPassWord;
+
+            }
+            else
+            {
+                link = "loxone://ms?mac=" + currentlySelectedMiniserver.serialNumer +
+                    "&usr=" + currentlySelectedMiniserver.adminUser +
+                    "&pwd=" + currentlySelectedMiniserver.adminPassWord; 
+            }
+
+
+
+            //OpenLinkinDefaultBrowser(HttpUtility.UrlEncode(link));
+            OpenLinkinDefaultBrowser(link);
+        }
+
+        private void Application_Help_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Application_Help_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Window webbrowserWindow = new Window();
+            webbrowserWindow.Title = "Documentation (BETA)";
+            //webbrowserWindow.Padding = new Thickness(10);
+
+            WebBrowser webBrowser = new WebBrowser();
+            webBrowser.Source = new Uri(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources\\Documentation.html"));
+            webbrowserWindow.Width = 1000;
+            webbrowserWindow.Height = 800;
+            webbrowserWindow.Padding= new Thickness(10);
+
+            webbrowserWindow.Content = webBrowser;
+            webbrowserWindow.Show();
+
+            //webBrowser.ContextMenu.IsEnabled = false;
+        }
+
+        private void ContextMenu_Autoupdate_selected(object sender, RoutedEventArgs e)
+        {
+            string returnCode;
+           
+
+            List<CMiniserver> list = listView_Miniserver.SelectedItems.Cast<CMiniserver>().ToList();
+
+            bool not_standalone = false;
+            bool already_autoupdate = false;
+
+            if(listView_Miniserver.SelectedItems.Count <= 0)
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_selected_ERROR_nothing_selected, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            foreach(CMiniserver miniserver in list)
+            {
+                if(miniserver.MSStatus == MyConstants.Strings.Listview_MS_Status_AutoUpdate)
+                {
+                    already_autoupdate = true;
+                }
+                if(miniserver.MSConfiguration == MyConstants.Strings.Listview_Refresh_MS_Configuration_ClientGateway)
+                {
+                    not_standalone = true;
+                }
+            }
+
+            if(not_standalone)
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_seleceted_Not_Possible, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if(already_autoupdate)
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_selected_Already_running, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            Task.Run(() =>
+            {
+                List<string> unsuccessful_autoupdate_SNR = new List<string>();
+
+                foreach (CMiniserver miniserver in list)
+                {
+                    if (miniserver.LocalIPAdress != "" && miniserver.LocalIPAdress != null)
+                    {
+
+                        returnCode = WebService.sendCommandRest_Version_Local_Gen1(miniserver.LocalIPAdress, miniserver.adminUser, miniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
+                        
+                    }
+                    else
+                    {
+                        returnCode = WebService.sendCommandRest_Version_Remote_Cloud(miniserver.serialNumer, miniserver.adminUser, miniserver.adminPassWord, @"/dev/sys/autoupdate", "Code");
+                        
+                    }
+
+                    if (returnCode.IndexOf("\"") > 0)
+                    {
+                        returnCode = returnCode.Remove(returnCode.IndexOf("\""));
+                    }
+
+                    if (returnCode == MyConstants.Strings.WebService_Success_Code)
+                    {
+                        miniserverList[miniserverList.IndexOf(miniserver)].MSStatus = MyConstants.Strings.Listview_MS_Status_AutoUpdate;
+                        }
+                    else
+                    {
+                        unsuccessful_autoupdate_SNR.Add(miniserver.serialNumer);
+                    }
+
+                }
+
+                if(unsuccessful_autoupdate_SNR.Count>0)
+                {
+                    string message = MyConstants.Strings.MessageBox_AutoUpdate_selected_Error_which_could_not_update + "\n";
+                    foreach(string str in unsuccessful_autoupdate_SNR)
+                    {
+                        message = message + str + "\n";
+                    }
+
+                    MessageBox.Show(message, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                // Update UI elements on main UI thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    // Update UI elements
+                    // ...
+                });
+            });
+        }
+
+
     }
     
 }

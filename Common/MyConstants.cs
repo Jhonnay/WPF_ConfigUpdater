@@ -86,6 +86,7 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_UpdateLevelSet_Successfully = "Updatelevel was successfully set to: ";
             public static readonly string MessageBox_UpdateLevelSet_Error = "Updatelevel is still: ";
             public static readonly string MessageBox_AutoUpdate_Not_Possible = "AutoUpdate not possible for " + Listview_Refresh_MS_Configuration_ClientGateway;
+            public static readonly string MessageBox_AutoUpdate_seleceted_Not_Possible = MessageBox_AutoUpdate_Not_Possible + "\n\nPlease select only standalone Miniserver.";
             public static readonly string MessageBox_AutoUpdate_Startet = "Autoupdate started! \nPlease be patient. \nUI will not be updated on finish!";
             public static readonly string MessageBox_AutoUpdate_Not_Startet = "Autoupdate not started! WebService Error!";
             public static readonly string MessageBox_UpdateButton_AutoUpdate_Block = "Updates aborted! Please Select Miniserver that do not auto update.";
@@ -100,8 +101,11 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_Button_Refresh_canceled = "Refresh canceled!";
             public static readonly string MessageBox_ConfigExe_Not_Valid = "Please select a real Config EXE! \nPath will not be used!";
             public static readonly string MessageBox_Backgroundworker_Connect_Config_already_running = "There is already a Connect Config Task running! \nPlease try again later. ";
-            public static readonly string MessageBox_Miniserver_Json_not_valid = "Please select a valid Miniserver Json Configuration!"; 
-
+            public static readonly string MessageBox_Miniserver_Json_not_valid = "Please select a valid Miniserver Json Configuration!";
+            public static readonly string MessageBox_AutoUpdate_Already_running = "AutoUpdate already running.\nPlease wait until Update is done.";
+            public static readonly string MessageBox_AutoUpdate_selected_Already_running = MessageBox_AutoUpdate_Already_running + "\n\nPlease select only Miniserver that do not Autoupdate.";
+            public static readonly string MessageBox_AutoUpdate_selected_ERROR_nothing_selected = "Please select Miniservers";
+            public static readonly string MessageBox_AutoUpdate_selected_Error_which_could_not_update = "These Miniserver could not start AutoUpdate: "; 
             /* WebServices */
             public static readonly string WebService_Success_Code = "200";
 

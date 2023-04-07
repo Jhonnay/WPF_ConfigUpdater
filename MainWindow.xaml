@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFConfigUpdater"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Miniserver Updater (c) Musat V0.9.4" Height="500" Width="1000">
+        Title="Miniserver Updater (c) Musat V0.9.5" Height="500" Width="1000">
     <Window.Resources>
         <local:UriConverter x:Key="UriConverter" />
         <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>
@@ -21,6 +21,7 @@
         <CommandBinding  x:Name="Application_Save" Command="ApplicationCommands.Save" CanExecute="Application_Save_CanExecute" Executed="Application_Save_Executed" />
         <CommandBinding  x:Name="Application_Open" Command="ApplicationCommands.Open" CanExecute="Application_Open_CanExecute" Executed="Application_Open_Executed" />
         <CommandBinding  x:Name="Application_New" Command="ApplicationCommands.New" CanExecute="Application_New_CanExecute" Executed="Application_New_Executed" />
+        <CommandBinding  x:Name="Application_Help" Command="ApplicationCommands.Help" CanExecute="Application_Help_CanExecute" Executed="Application_Help_Executed" />
     </Window.CommandBindings>
 
     <DockPanel>
@@ -52,8 +53,8 @@
                 <MenuItem Header="Kill App 💣" Click="MenuItem_Loxone_App_Kill_Instances" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_Version" Click="MenuItem_Programm_Version_Click"/>
-                <MenuItem Header="_Help" />
+                <MenuItem Header="_Version" Click="MenuItem_Programm_Version_Click" />
+                <MenuItem Header="_Help / Documentation" Command="ApplicationCommands.Help" />
                 <MenuItem Header="_Changelog" Click="MenuItem_Changelog_Click"/>
             </MenuItem>
         </Menu>
@@ -138,6 +139,7 @@
                                                 <MenuItem Header="FTP" Click="ContextMenu_FTP" />
                                                 <MenuItem Header="LPH" Click="ContextMenu_LPH" />
                                                 <MenuItem Header="CrashLog Server" Click="ContextMenu_CrashLogServer" />
+                                                <MenuItem Header="Loxone App (BETA)" Click="ContextMenu_LoxoneApp_Connect_MS" />
                                             </ContextMenu>
                                         </TextBlock.ContextMenu>
                                         <Hyperlink  NavigateUri="{Binding serialNumer,Converter={local:UriConverter}}" RequestNavigate="Hyperlink_RequestNavigate"> 
@@ -202,6 +204,7 @@
                                                 <MenuItem Header="Set Alpha" Click="ContextUpdateLevelSetAlpha"/>
                                                 <MenuItem Header="Set Beta" Click="ContextUpdateLevelBeta"/>
                                                 <MenuItem Header="Update" Click="ContextUpdteLevelUpdateToLevel" />
+                                                <MenuItem Header="Update all selected (BETA)" Click="ContextMenu_Autoupdate_selected" />
                                             </ContextMenu>
                                         </TextBlock.ContextMenu>
                                     </TextBlock>

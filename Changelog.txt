@@ -16,6 +16,8 @@ Feature Wish:
 * Fallback to Remote if Local IP is not possible. 
 * CheckBox "Use Local IP"
 * Connect with Loxone App to specific Miniserver
+* Autoupdate for all selected MS
+* Filter function
 
 Known Issues: 
 * UDP Listener not startet successfully. Probably fixed already.
@@ -25,6 +27,13 @@ Known Issues:
 	- check for "\u0000"
 * Double Clicking on Icon top left will close the program					(Jan Posedel)
 * Program can be opened rapidly when ENTER is kept pressed			(Jan Posedel)
+* AutoUpdate can be started again even if MS Status = "Auto Update ..."
+
+
+V0.9.5
+* Added: (BETA) Right Click SNR --> Open in Loxone App (Miniserver has to be aldread added into the App)
+* Added: (BETA) Documentaton with F1
+* Added: Update all selected MS via AutoUpdate
 
 
 V0.9.4
