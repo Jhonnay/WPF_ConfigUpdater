@@ -38,7 +38,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.9.5";
+        public string stringApplicationVersion = "V 0.9.6";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -1296,6 +1296,7 @@ namespace WPFConfigUpdater
             System.Windows.Application.Current.Shutdown();
             
         }
+
 
         private void Application_Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {

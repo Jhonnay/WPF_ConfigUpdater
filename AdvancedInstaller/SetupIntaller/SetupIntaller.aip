@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="20.5" version="20.5" Modules="simple" RootPath="." Language="en" Id="{62006C99-BE56-430B-B309-9DBF944DBDEF}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_ApplicationSettings.png_1" Value="..\..\bin\Release\net6.0-windows\publish\resources"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Changelog.txt_1" Value="..\..\bin\Release\net6.0-windows\publish"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Documentation.html_1" Value="..\..\bin\Release\net6.0-windows\publish\resources"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_RestSharp.dll_1" Value="..\..\bin\Release\net6.0-windows\publish"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_UpdateIcon.ico_1" Value="..\..\bin\Release\net6.0-windows\publish\resources"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_UserInterface.png_1" Value="..\..\bin\Release\net6.0-windows\publish\resources"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_WPFConfigUpdater.deps.json_1" Value="..\..\bin\Release\net6.0-windows\publish"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_WPFConfigUpdater.dll_2" Value="..\..\bin\Release\net6.0-windows\publish"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_WPFConfigUpdater.exe_1" Value="..\..\bin\Release\net6.0-windows\publish"/>
+    <ROW Property="AI_PROPPATH_DIR_PERBUILD_WPFConfigUpdater.runtimeconfig.json_1" Value="..\..\bin\Release\net6.0-windows\publish"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_ApplicationSettings.png_1" Value="ApplicationSettings.png"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Changelog.txt_1" Value="Changelog.txt"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Documentation.html_1" Value="Documentation.html"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_RestSharp.dll_1" Value="RestSharp.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_UpdateIcon.ico_1" Value="Update Icon.ico"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_UserInterface.png_1" Value="UserInterface.png"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.deps.json_1" Value="WPFConfigUpdater.deps.json"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.dll_2" Value="WPFConfigUpdater.dll"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.exe_1" Value="WPFConfigUpdater.exe"/>
+    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.runtimeconfig.json_1" Value="WPFConfigUpdater.runtimeconfig.json"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPPRODUCTICON" Value="Icon.exe" Type="8"/>
+    <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="Manufacturer" Value="Musat"/>
+    <ROW Property="ProductCode" Value="1033:{DAC6E4DA-87D8-4A8B-99C7-D73522FF850A} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="MiniserverUpdater [|ProductVersion]"/>
+    <ROW Property="ProductVersion" Value="0.9.6"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
+    <ROW Property="UpgradeCode" Value="{E9F5CFDC-AE09-4108-840A-0458290E4C79}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
+    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
+    <ROW Directory="StartMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="STARTM~1|StartMenuFolder" IsPseudoRoot="1"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="WPFConfigUpdater_Dir" Directory_Parent="APPDIR" DefaultDir="WPFCON~1|WPFConfigUpdater"/>
+    <ROW Directory="resources_1_Dir" Directory_Parent="WPFConfigUpdater_Dir" DefaultDir="RESOUR~1|resources"/>
+    <ROW Directory="resources_Dir" Directory_Parent="APPDIR" DefaultDir="RESOUR~1|resources"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="APPDIR" ComponentId="{0F3EE505-F611-4D9F-BD2E-132F482F72FA}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="ApplicationSettings.png" ComponentId="{B936CABD-AB4B-4345-916D-C3BC047B2E61}" Directory_="resources_Dir" Attributes="0" KeyPath="ApplicationSettings.png" Type="0"/>
+    <ROW Component="Changelog.txt" ComponentId="{652DF8C1-2973-4294-A93B-B960FCBF46D6}" Directory_="APPDIR" Attributes="0" KeyPath="Changelog.txt" Type="0"/>
+    <ROW Component="ProductInformation" ComponentId="{432D86DC-EF4D-4D08-91CD-A132062EB09D}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="RestSharp.dll" ComponentId="{6CA85856-6C2E-497D-93E6-26EB3CAD9417}" Directory_="APPDIR" Attributes="0" KeyPath="RestSharp.dll"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{3F1E9869-743A-49C6-BBD4-6A1911CC679D}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="WPFConfigUpdater.dll" ComponentId="{6C264585-60E8-4A98-BF3B-47C4CA968C0A}" Directory_="APPDIR" Attributes="0" KeyPath="WPFConfigUpdater.dll"/>
+    <ROW Component="WPFConfigUpdater.exe" ComponentId="{B684E620-3DFD-46D0-A399-2BDC76AEE64B}" Directory_="APPDIR" Attributes="256" KeyPath="WPFConfigUpdater.exe"/>
+    <ROW Component="WPFConfigUpdater_PublishOutput" ComponentId="{3BD7DD7A-EA67-4036-9EEB-02E5F971C3F0}" Directory_="WPFConfigUpdater_Dir" Attributes="0" KeyPath="Changelog.txt_1" Type="0"/>
+    <ROW Component="WPFConfigUpdater_PublishOutput_resources" ComponentId="{FAA2D46E-E335-4438-88C1-BEB2448B6DB7}" Directory_="resources_1_Dir" Attributes="0" KeyPath="ApplicationSettings.png_1" Type="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="Changelog.txt" Component_="Changelog.txt" FileName="CHANGE~1.TXT|Changelog.txt" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\Changelog.txt" SelfReg="false"/>
+    <ROW File="EmptyProject.Loxone" Component_="Changelog.txt" FileName="EMPTYP~1.LOX|EmptyProject.Loxone" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\EmptyProject.Loxone" SelfReg="false"/>
+    <ROW File="RestSharp.dll" Component_="RestSharp.dll" FileName="RESTSH~1.DLL|RestSharp.dll" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\RestSharp.dll" SelfReg="false"/>
+    <ROW File="WPFConfigUpdater.deps.json" Component_="Changelog.txt" FileName="WPFCON~1.JSO|WPFConfigUpdater.deps.json" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\WPFConfigUpdater.deps.json" SelfReg="false"/>
+    <ROW File="WPFConfigUpdater.dll" Component_="WPFConfigUpdater.dll" FileName="WPFCON~1.DLL|WPFConfigUpdater.dll" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\WPFConfigUpdater.dll" SelfReg="false"/>
+    <ROW File="WPFConfigUpdater.exe" Component_="WPFConfigUpdater.exe" FileName="WPFCON~1.EXE|WPFConfigUpdater.exe" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\WPFConfigUpdater.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="WPFConfigUpdater.pdb" Component_="WPFConfigUpdater.exe" FileName="WPFCON~1.PDB|WPFConfigUpdater.pdb" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\WPFConfigUpdater.pdb" SelfReg="false"/>
+    <ROW File="WPFConfigUpdater.runtimeconfig.json" Component_="Changelog.txt" FileName="WPFCON~2.JSO|WPFConfigUpdater.runtimeconfig.json" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\WPFConfigUpdater.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="ApplicationSettings.png" Component_="ApplicationSettings.png" FileName="APPLIC~1.PNG|ApplicationSettings.png" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\resources\ApplicationSettings.png" SelfReg="false"/>
+    <ROW File="Documentation.html" Component_="ApplicationSettings.png" FileName="DOCUME~1.HTM|Documentation.html" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\resources\Documentation.html" SelfReg="false"/>
+    <ROW File="UpdateIcon.ico" Component_="ApplicationSettings.png" FileName="UPDATE~1.ICO|Update Icon.ico" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\resources\Update Icon.ico" SelfReg="false"/>
+    <ROW File="UserInterface.png" Component_="ApplicationSettings.png" FileName="USERIN~1.PNG|UserInterface.png" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\resources\UserInterface.png" SelfReg="false"/>
+    <ROW File="Changelog.txt_1" Component_="WPFConfigUpdater_PublishOutput" FileName="CHANGE~2.TXT|[|AI_PROPPATH_FILENAME_PERBUILD_Changelog.txt_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Changelog.txt_1&gt;" SelfReg="false"/>
+    <ROW File="RestSharp.dll_1" Component_="WPFConfigUpdater_PublishOutput" FileName="RESTSH~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_RestSharp.dll_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_RestSharp.dll_1&gt;" SelfReg="false"/>
+    <ROW File="WPFConfigUpdater.deps.json_1" Component_="WPFConfigUpdater_PublishOutput" FileName="WPFCON~2.JSO|[|AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.deps.json_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_WPFConfigUpdater.deps.json_1&gt;" SelfReg="false"/>
+    <ROW File="WPFConfigUpdater.dll_2" Component_="WPFConfigUpdater_PublishOutput" FileName="WPFCON~3.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.dll_2]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_WPFConfigUpdater.dll_2&gt;" SelfReg="false"/>
+    <ROW File="WPFConfigUpdater.exe_1" Component_="WPFConfigUpdater_PublishOutput" FileName="WPFCON~2.EXE|[|AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.exe_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_WPFConfigUpdater.exe_1&gt;" SelfReg="false" DigSign="true"/>
+    <ROW File="WPFConfigUpdater.runtimeconfig.json_1" Component_="WPFConfigUpdater_PublishOutput" FileName="WPFCON~3.JSO|[|AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.runtimeconfig.json_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_WPFConfigUpdater.runtimeconfig.json_1&gt;" SelfReg="false"/>
+    <ROW File="ApplicationSettings.png_1" Component_="WPFConfigUpdater_PublishOutput_resources" FileName="APPLIC~2.PNG|[|AI_PROPPATH_FILENAME_PERBUILD_ApplicationSettings.png_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_ApplicationSettings.png_1&gt;" SelfReg="false"/>
+    <ROW File="Documentation.html_1" Component_="WPFConfigUpdater_PublishOutput_resources" FileName="DOCUME~2.HTM|[|AI_PROPPATH_FILENAME_PERBUILD_Documentation.html_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Documentation.html_1&gt;" SelfReg="false"/>
+    <ROW File="UpdateIcon.ico_1" Component_="WPFConfigUpdater_PublishOutput_resources" FileName="UPDATE~2.ICO|[|AI_PROPPATH_FILENAME_PERBUILD_UpdateIcon.ico_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_UpdateIcon.ico_1&gt;" SelfReg="false"/>
+    <ROW File="UserInterface.png_1" Component_="WPFConfigUpdater_PublishOutput_resources" FileName="USERIN~2.PNG|[|AI_PROPPATH_FILENAME_PERBUILD_UserInterface.png_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_UserInterface.png_1&gt;" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.AppPathsComponent">
+    <ROW Name="AI_APPPATH_PERBUILD_ApplicationSettings.png_1" Path="[|AI_PROPPATH_DIR_PERBUILD_ApplicationSettings.png_1]\[|AI_PROPPATH_FILENAME_PERBUILD_ApplicationSettings.png_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Changelog.txt_1" Path="[|AI_PROPPATH_DIR_PERBUILD_Changelog.txt_1]\[|AI_PROPPATH_FILENAME_PERBUILD_Changelog.txt_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_Documentation.html_1" Path="[|AI_PROPPATH_DIR_PERBUILD_Documentation.html_1]\[|AI_PROPPATH_FILENAME_PERBUILD_Documentation.html_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_RestSharp.dll_1" Path="[|AI_PROPPATH_DIR_PERBUILD_RestSharp.dll_1]\[|AI_PROPPATH_FILENAME_PERBUILD_RestSharp.dll_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_UpdateIcon.ico_1" Path="[|AI_PROPPATH_DIR_PERBUILD_UpdateIcon.ico_1]\[|AI_PROPPATH_FILENAME_PERBUILD_UpdateIcon.ico_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_UserInterface.png_1" Path="[|AI_PROPPATH_DIR_PERBUILD_UserInterface.png_1]\[|AI_PROPPATH_FILENAME_PERBUILD_UserInterface.png_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_WPFConfigUpdater.deps.json_1" Path="[|AI_PROPPATH_DIR_PERBUILD_WPFConfigUpdater.deps.json_1]\[|AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.deps.json_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_WPFConfigUpdater.dll_2" Path="[|AI_PROPPATH_DIR_PERBUILD_WPFConfigUpdater.dll_2]\[|AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.dll_2]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_WPFConfigUpdater.exe_1" Path="[|AI_PROPPATH_DIR_PERBUILD_WPFConfigUpdater.exe_1]\[|AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.exe_1]" Type="2" Content="0"/>
+    <ROW Name="AI_APPPATH_PERBUILD_WPFConfigUpdater.runtimeconfig.json_1" Path="[|AI_PROPPATH_DIR_PERBUILD_WPFConfigUpdater.runtimeconfig.json_1]\[|AI_PROPPATH_FILENAME_PERBUILD_WPFConfigUpdater.runtimeconfig.json_1]" Type="2" Content="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
+    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="Release" BuildOrder="1" BuildType="0" PackageFolder="Setup" PackageFileName="MiniserverUpdater_[|ProductVersion]" Languages="en" InstallationType="4" UseLargeSchema="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFilesFolder][ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="Changelog.txt"/>
+    <ROW Feature_="MainFeature" Component_="RestSharp.dll"/>
+    <ROW Feature_="MainFeature" Component_="WPFConfigUpdater.dll"/>
+    <ROW Feature_="MainFeature" Component_="WPFConfigUpdater.exe"/>
+    <ROW Feature_="MainFeature" Component_="ApplicationSettings.png"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+    <ROW Feature_="MainFeature" Component_="WPFConfigUpdater_PublishOutput"/>
+    <ROW Feature_="MainFeature" Component_="WPFConfigUpdater_PublishOutput_resources"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="Icon.exe" SourcePath="..\..\resources\Icon.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="MiniserverUpdater" Directory_="SHORTCUTDIR" Name="MINISE~1|Miniserver Updater" Component_="WPFConfigUpdater.exe" Target="[#WPFConfigUpdater.exe]" Description="Software to maintain an update Miniserver Installations. " Hotkey="0" Icon_="Icon.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="MiniserverUpdater_1" Directory_="DesktopFolder" Name="MINISE~1|Miniserver Updater" Component_="WPFConfigUpdater.exe" Target="[#WPFConfigUpdater.exe]" Description="Software to maintain an update Miniserver Installations. " Hotkey="0" Icon_="Icon.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="MiniserverUpdater_2" Directory_="StartMenuFolder" Name="MINISE~1|Miniserver Updater" Component_="WPFConfigUpdater.exe" Target="[#WPFConfigUpdater.exe]" Description="Software to maintain an update Miniserver Installations. " Hotkey="0" Icon_="Icon.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="255.255.6555.6555" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="255.255.6555.6555" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.VsProjectComponent">
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="Changelog.txt_1"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="RestSharp.dll_1"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="WPFConfigUpdater.deps.json_1"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="WPFConfigUpdater.dll_2"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="WPFConfigUpdater.exe_1"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="WPFConfigUpdater.runtimeconfig.json_1"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="ApplicationSettings.png_1"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="Documentation.html_1"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="UpdateIcon.ico_1"/>
+    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="UserInterface.png_1"/>
+  </COMPONENT>
+</DOCUMENT>

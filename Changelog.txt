@@ -30,6 +30,11 @@ Known Issues:
 * Remove Settings Saved Dialog. 
 
 
+V0.9.6
+TODO: Add Automatic Version Checker and Installer --> check repository
+Fixed: Installer not removing old Version
+	- You can even downgrade to an older version without any problems. 
+
 V0.9.5
 * Added: (BETA) Right Click SNR --> Open in Loxone App (Miniserver has to be already added into the App)
 * Added: (BETA) Documentaton with F1
