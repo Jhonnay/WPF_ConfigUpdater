@@ -14,10 +14,10 @@ Feature Wish:
 * Create Backup 
 * Update Multiple MS at once
 * Fallback to Remote if Local IP is not possible. 
-* CheckBox "Use Local IP"
-* Connect with Loxone App to specific Miniserver
-* Autoupdate for all selected MS
+* CheckBox "Use Local IP""
 * Filter function
+* (Ralph) When connection to config, ms is on the same version, it would be nice to 
+	automatically update the information in the list for that miniserver
 
 Known Issues: 
 * UDP Listener not startet successfully. Probably fixed already.
@@ -27,13 +27,14 @@ Known Issues:
 	- check for "\u0000"
 * Double Clicking on Icon top left will close the program					(Jan Posedel)
 * Program can be opened rapidly when ENTER is kept pressed			(Jan Posedel)
-* AutoUpdate can be started again even if MS Status = "Auto Update ..."
+* Remove Settings Saved Dialog. 
 
 
 V0.9.5
-* Added: (BETA) Right Click SNR --> Open in Loxone App (Miniserver has to be aldread added into the App)
+* Added: (BETA) Right Click SNR --> Open in Loxone App (Miniserver has to be already added into the App)
 * Added: (BETA) Documentaton with F1
-* Added: Update all selected MS via AutoUpdate
+* Added: (BETA) Update all selected MS via AutoUpdate (Christian)
+* Fixed: AutoUpdate can be started again even if the MS Status is already "Auto Updating"
 
 
 V0.9.4

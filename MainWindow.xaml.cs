@@ -1890,7 +1890,7 @@ namespace WPFConfigUpdater
             //webbrowserWindow.Padding = new Thickness(10);
 
             WebBrowser webBrowser = new WebBrowser();
-            webBrowser.Source = new Uri(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources\\Documentation.html"));
+            webBrowser.Source = new Uri(System.IO.Path.Combine(Directory.GetCurrentDirectory(), "resources\\Documentation.html"));
             webbrowserWindow.Width = 1000;
             webbrowserWindow.Height = 800;
             webbrowserWindow.Padding= new Thickness(10);
@@ -1940,6 +1940,10 @@ namespace WPFConfigUpdater
                 MessageBox.Show(MyConstants.Strings.MessageBox_AutoUpdate_selected_Already_running, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
+
+
+
+
 
             Task.Run(() =>
             {
@@ -1994,6 +1998,8 @@ namespace WPFConfigUpdater
                 });
             });
         }
+
+
 
 
     }

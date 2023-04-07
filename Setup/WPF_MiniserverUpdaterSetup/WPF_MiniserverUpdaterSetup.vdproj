@@ -40,6 +40,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_664767C71F8A4E6182AD637837383047"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7AE0B5506A97472F91AA03FB332E3EBA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,7 +58,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7DE5EAA357884E19B780EE0799BF773D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_81367CD6510C412AACC93C2AC76A30C0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_96F9587F3D4F4A1388BBB75FD08F49C9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -64,6 +82,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9F0304CB5C3E4B3DB76C8864D113EF41"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9F6BA9912F2D4076A4D767E5336315BE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A9D8409EE44C49DE81E22E3ECA075439"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -71,6 +101,12 @@
         "Entry"
         {
         "MsmKey" = "8:_AB7AD9FAFE7B42A981F0B0C69A912271"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DF1A5B675D6F41078E8B2A2FEBB7ED9E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -282,6 +318,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_664767C71F8A4E6182AD637837383047"
+            {
+            "SourcePath" = "8:..\\..\\resources\\Documentation.html"
+            "TargetName" = "8:Documentation.html"
+            "Tag" = "8:"
+            "Folder" = "8:_F10DBF9296E34E02BB6AAA7004417AC2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7AE0B5506A97472F91AA03FB332E3EBA"
             {
             "SourcePath" = "8:..\\..\\bin\\Release\\net6.0-windows\\WPFConfigUpdater.deps.json"
@@ -322,12 +378,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7DE5EAA357884E19B780EE0799BF773D"
+            {
+            "SourcePath" = "8:..\\..\\resources\\ApplicationSettings.png"
+            "TargetName" = "8:ApplicationSettings.png"
+            "Tag" = "8:"
+            "Folder" = "8:_F10DBF9296E34E02BB6AAA7004417AC2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_81367CD6510C412AACC93C2AC76A30C0"
             {
             "SourcePath" = "8:..\\..\\bin\\Release\\net6.0-windows\\WPFConfigUpdater.runtimeconfig.json"
             "TargetName" = "8:WPFConfigUpdater.runtimeconfig.json"
             "Tag" = "8:"
             "Folder" = "8:_0A8F99193E6A4E1F8D31DFAC6DBD33BC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_96F9587F3D4F4A1388BBB75FD08F49C9"
+            {
+            "SourcePath" = "8:..\\..\\resources\\UserInterface.png"
+            "TargetName" = "8:UserInterface.png"
+            "Tag" = "8:"
+            "Folder" = "8:_F10DBF9296E34E02BB6AAA7004417AC2"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -371,6 +467,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9F0304CB5C3E4B3DB76C8864D113EF41"
+            {
+            "SourcePath" = "8:..\\..\\resources\\ApplicationSettings.png"
+            "TargetName" = "8:ApplicationSettings.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0A8F99193E6A4E1F8D31DFAC6DBD33BC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9F6BA9912F2D4076A4D767E5336315BE"
+            {
+            "SourcePath" = "8:..\\..\\resources\\Documentation.html"
+            "TargetName" = "8:Documentation.html"
+            "Tag" = "8:"
+            "Folder" = "8:_0A8F99193E6A4E1F8D31DFAC6DBD33BC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A9D8409EE44C49DE81E22E3ECA075439"
@@ -424,6 +560,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DF1A5B675D6F41078E8B2A2FEBB7ED9E"
+            {
+            "SourcePath" = "8:..\\..\\resources\\UserInterface.png"
+            "TargetName" = "8:UserInterface.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0A8F99193E6A4E1F8D31DFAC6DBD33BC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FC668F6AD2E44EFDBC1269174446F72C"
             {
             "SourcePath" = "8:..\\..\\Changelog.txt"
@@ -460,6 +616,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F10DBF9296E34E02BB6AAA7004417AC2"
+                    {
+                    "Name" = "8:resources"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_7CB87BC3F6104CA6A669A5A5C14317FA"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_83B97F0AD260475C9B95900F5322C210"
@@ -511,19 +678,19 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MiniserverUpdater"
-        "ProductCode" = "8:{B125A42D-DEE8-43BD-B5F6-4826BFBBF4CA}"
-        "PackageCode" = "8:{64E2DEA4-F6F8-401B-BCE4-EEA8ABE60E45}"
+        "ProductCode" = "8:{E9E17DA4-3AEE-4FC3-81AE-66E7DF25A01A}"
+        "PackageCode" = "8:{2E50EB97-0725-4E37-A7B1-8DB6FCB45445}"
         "UpgradeCode" = "8:{23C04396-AC73-4B3D-9247-14A44141235A}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.9.4"
+        "ProductVersion" = "8:0.9.5"
         "Manufacturer" = "8:Musat"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Miniserver Updater Setup V0.9.4"
+        "Title" = "8:Miniserver Updater Setup V0.9.5"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Benjamin Musat"
         "Keywords" = "8:"
