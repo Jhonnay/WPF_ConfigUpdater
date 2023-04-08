@@ -9,7 +9,6 @@
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_Changelog.txt_1" Value="..\..\bin\Release\net6.0-windows\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_Documentation.html_1" Value="..\..\bin\Release\net6.0-windows\publish\resources"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_Newtonsoft.Json.dll" Value="..\..\bin\Release\net6.0-windows\publish"/>
-    <ROW Property="AI_PROPPATH_DIR_PERBUILD_Octokit.dll" Value="..\..\bin\Release\net6.0-windows\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_RestSharp.dll_1" Value="..\..\bin\Release\net6.0-windows\publish"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_UpdateIcon.ico_1" Value="..\..\bin\Release\net6.0-windows\publish\resources"/>
     <ROW Property="AI_PROPPATH_DIR_PERBUILD_UserInterface.png_1" Value="..\..\bin\Release\net6.0-windows\publish\resources"/>
@@ -21,7 +20,6 @@
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Changelog.txt_1" Value="Changelog.txt"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Documentation.html_1" Value="Documentation.html"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Newtonsoft.Json.dll" Value="Newtonsoft.Json.dll"/>
-    <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_Octokit.dll" Value="Octokit.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_RestSharp.dll_1" Value="RestSharp.dll"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_UpdateIcon.ico_1" Value="Update Icon.ico"/>
     <ROW Property="AI_PROPPATH_FILENAME_PERBUILD_UserInterface.png_1" Value="UserInterface.png"/>
@@ -100,7 +98,6 @@
     <ROW File="UpdateIcon.ico_1" Component_="WPFConfigUpdater_PublishOutput_resources" FileName="UPDATE~2.ICO|[|AI_PROPPATH_FILENAME_PERBUILD_UpdateIcon.ico_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_UpdateIcon.ico_1&gt;" SelfReg="false"/>
     <ROW File="UserInterface.png_1" Component_="WPFConfigUpdater_PublishOutput_resources" FileName="USERIN~2.PNG|[|AI_PROPPATH_FILENAME_PERBUILD_UserInterface.png_1]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_UserInterface.png_1&gt;" SelfReg="false"/>
     <ROW File="Newtonsoft.Json.dll" Component_="WPFConfigUpdater_PublishOutput" FileName="NEWTON~2.DLL|[|AI_PROPPATH_FILENAME_PERBUILD_Newtonsoft.Json.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Newtonsoft.Json.dll&gt;" SelfReg="false"/>
-    <ROW File="Octokit.dll" Component_="WPFConfigUpdater_PublishOutput" FileName="[|AI_PROPPATH_FILENAME_PERBUILD_Octokit.dll]" Attributes="0" SourcePath="&lt;AI_APPPATH_PERBUILD_Octokit.dll&gt;" SelfReg="false"/>
     <ROW File="Newtonsoft.Json.dll_1" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\..\bin\Release\net6.0-windows\Newtonsoft.Json.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AppPathsComponent">
@@ -108,7 +105,6 @@
     <ROW Name="AI_APPPATH_PERBUILD_Changelog.txt_1" Path="[|AI_PROPPATH_DIR_PERBUILD_Changelog.txt_1]\[|AI_PROPPATH_FILENAME_PERBUILD_Changelog.txt_1]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_Documentation.html_1" Path="[|AI_PROPPATH_DIR_PERBUILD_Documentation.html_1]\[|AI_PROPPATH_FILENAME_PERBUILD_Documentation.html_1]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_Newtonsoft.Json.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Newtonsoft.Json.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Newtonsoft.Json.dll]" Type="2" Content="0"/>
-    <ROW Name="AI_APPPATH_PERBUILD_Octokit.dll" Path="[|AI_PROPPATH_DIR_PERBUILD_Octokit.dll]\[|AI_PROPPATH_FILENAME_PERBUILD_Octokit.dll]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_RestSharp.dll_1" Path="[|AI_PROPPATH_DIR_PERBUILD_RestSharp.dll_1]\[|AI_PROPPATH_FILENAME_PERBUILD_RestSharp.dll_1]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_UpdateIcon.ico_1" Path="[|AI_PROPPATH_DIR_PERBUILD_UpdateIcon.ico_1]\[|AI_PROPPATH_FILENAME_PERBUILD_UpdateIcon.ico_1]" Type="2" Content="0"/>
     <ROW Name="AI_APPPATH_PERBUILD_UserInterface.png_1" Path="[|AI_PROPPATH_DIR_PERBUILD_UserInterface.png_1]\[|AI_PROPPATH_FILENAME_PERBUILD_UserInterface.png_1]" Type="2" Content="0"/>
@@ -256,6 +252,5 @@
     <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="UpdateIcon.ico_1"/>
     <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="UserInterface.png_1"/>
     <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="Newtonsoft.Json.dll"/>
-    <ROW ProjectId="{c4c07744-ea04-48b7-bbf2-749f7fc4d3eb}" ProjectName="WPFConfigUpdater" OutputGroup="PublishOutput" OutputFile="Octokit.dll"/>
   </COMPONENT>
 </DOCUMENT>
