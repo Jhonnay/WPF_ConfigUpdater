@@ -2107,6 +2107,7 @@ namespace WPFConfigUpdater
                 return true;
             }
 
+
             return false;
         }
     }
