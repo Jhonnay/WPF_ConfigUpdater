@@ -30,6 +30,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.IO.Compression;
+using System.Net;
+using System.Diagnostics.Eventing.Reader;
+using System.Printing;
+
+
 
 
 //CTRL + M plus CTRL + O  - Collapse All
@@ -43,7 +48,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "0.9.3";
+        public string stringApplicationVersion = "0.9.6";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -56,6 +61,9 @@ namespace WPFConfigUpdater
         private SortAdorner listViewSortAdorner = null;
         private List<CMiniserver> selected_Miniserver_befor_refresh;
         private List<string> languageList = null;
+        string token = @"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";
+        string url_github_Latest = @"https://api.github.com/repos/Jhonnay/WPF_ConfigUpdater/releases/latest";
+        string UpdateVersion = null;
 
         public List<string> LanguageList { get => languageList; set => languageList = value; }
 
@@ -2005,17 +2013,50 @@ namespace WPFConfigUpdater
             });
         }
 
-        private async void Help_Check_for_Updates(object sender, RoutedEventArgs e)
+        public async void Help_Check_for_Updates(object sender, RoutedEventArgs e)
         {
-            bool boolll = await check_Update_needed();
+            bool updatesAvailable = await check_Update_needed();
             {
-                string downloadPath = @"C:\Downloads\test\myapp.zip";
-                string installPath = @"C:\Downloads\test\myapp";
-                await InstallLatestRelease("Jhonnay", "WPF_ConfigUpdater", downloadPath, installPath, "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");
+                if(updatesAvailable)
+                {
+                    string message = "Theres is a newer Version available! Do you want to download and install?" + "\nCurrent Version: " + stringApplicationVersion + "\nAvailable Version: " + UpdateVersion;
+                    if (MessageBox.Show(message, "Install Update?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        //do no stuff
+                        string downloadPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads\MiniserverUpdater.msi";
+                        await InstallLatestRelease(url_github_Latest, downloadPath, token);
+                    }
+                    
+
+                }else
+                {
+                    MessageBox.Show("No new updates available. ", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+            }
+            
+
+        }
+
+        public async void Help_Check_for_Updates_On_Startup()
+        {
+            bool updatesAvailable = await check_Update_needed();
+            {
+                if (updatesAvailable)
+                {
+                    string message = "Theres is a newer Version available! Do you want to download and install?" + "\nCurrent Version: " + stringApplicationVersion + "\nAvailable Version: " + UpdateVersion;
+                    if (MessageBox.Show(message, "Install Update?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        //do no stuff
+                        string downloadPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads\MiniserverUpdater.msi";
+                        await InstallLatestRelease(url_github_Latest, downloadPath, token);
+                    }
+                }
             }
         }
 
-        public static async Task InstallLatestRelease(string username, string repository, string downloadPath, string installPath, string personalAccessToken = null)
+
+        public static async Task InstallLatestRelease(string url, string downloadPath, string personalAccessToken)
         {
             try
             {
@@ -2032,43 +2073,32 @@ namespace WPFConfigUpdater
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", personalAccessToken);
                     }
 
-                    // Construct the URL to the latest release of the repository
-                    string url = $"https://api.github.com/repos/{username}/{repository}/releases/latest";
-
                     // Send a GET request to the URL and deserialize the response
                     HttpResponseMessage response = await client.GetAsync(url);
                     string responseBody = await response.Content.ReadAsStringAsync();
                     dynamic release = JsonConvert.DeserializeObject(responseBody);
 
-
-                    // Get the download URL for the latest release asset
-                    string downloadUrl = release.body;
-                    downloadUrl = downloadUrl.Substring(downloadUrl.IndexOf('(') + 1);
-                    downloadUrl = downloadUrl.Remove(downloadUrl.IndexOf(")"));
-                    downloadUrl = release.zipball_url;
+                    var assests = release.assets;
+                    string downloadUrl = release.assets[0].browser_download_url;
 
                     // Download the asset to the specified path
+
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", personalAccessToken);
                     using (HttpResponseMessage downloadResponse = await client.GetAsync(downloadUrl))
                     using (Stream downloadStream = await downloadResponse.Content.ReadAsStreamAsync())
                     using (FileStream fileStream = new FileStream(downloadPath, FileMode.Create))
                     {
-                        await downloadStream.CopyToAsync(fileStream);
+                        using (Stream stream = await client.GetStreamAsync(downloadUrl))
+                        {
+                            await stream.CopyToAsync(fileStream);
+                        }
                     }
 
-                    // Extract the contents of the zip file to the specified directory
-                    ZipFile.ExtractToDirectory(downloadPath, installPath);
 
-                    // Find the installer executable in the extracted contents and run it
-                    string[] installerExePaths = Directory.GetFiles(installPath, "*.exe", SearchOption.AllDirectories);
-                    if (installerExePaths.Length > 0)
-                    {
-                        Process.Start(installerExePaths[0]);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Could not find installer executable in downloaded release.");
-                    }
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.FileName = downloadPath;
+                    startInfo.UseShellExecute = true;
+                    Process.Start(startInfo);
                 }
             }
             catch (HttpRequestException ex)
@@ -2077,35 +2107,51 @@ namespace WPFConfigUpdater
             }
             catch (IOException ex)
             {
-                Console.WriteLine($"Error extracting contents of downloaded release: {ex.Message}");
+                Console.WriteLine($"error extracting contents of downloaded release: {ex.Message}");
             }
+
+
+
+
+
         }
 
-        private  async Task<bool> check_Update_needed()
+        public  async Task<bool> check_Update_needed()
         {
             HttpClient client = new HttpClient();
 
-            string token = @"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";
-            string url = @"https://api.github.com/repos/Jhonnay/WPF_ConfigUpdater/releases/latest";
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; AcmeInc/1.0)");
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            HttpResponseMessage response = await client.GetAsync(url);
-
-            string responseBody = await response.Content.ReadAsStringAsync();
-            dynamic release = JsonConvert.DeserializeObject(responseBody);
-
-            string latestVersion = release.tag_name;
-            latestVersion = latestVersion.Replace("v", "");
-            latestVersion = latestVersion.Remove(latestVersion.IndexOf("-"));
-            Version currentVersion = new Version(stringApplicationVersion); // Replace with your current version
-            Version latestVersionObj = new Version(latestVersion);
-
-            if (latestVersionObj.CompareTo(currentVersion) > 0)
+            try
             {
-                return true;
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; AcmeInc/1.0)");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+                HttpResponseMessage response = await client.GetAsync(url_github_Latest);
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+                dynamic release = JsonConvert.DeserializeObject(responseBody);
+
+                //gets latest release Tag in format "v0.x.x-alpha" and compares. 
+                string latestVersion = release.tag_name;
+                latestVersion = latestVersion.Replace("v", "");
+                latestVersion = latestVersion.Remove(latestVersion.IndexOf("-"));
+                Version currentVersion = new Version(stringApplicationVersion); // Replace with your current version
+                Version latestVersionObj = new Version(latestVersion);
+
+                if (latestVersionObj.CompareTo(currentVersion) > 0)
+                {
+                    UpdateVersion = latestVersion;
+                    return true;
+                }
             }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error downloading latest release: {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"error extracting contents of downloaded release: {ex.Message}");
+            }
+
 
 
             return false;

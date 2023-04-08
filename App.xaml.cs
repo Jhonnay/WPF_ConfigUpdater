@@ -22,7 +22,7 @@ namespace WPFConfigUpdater
     public partial class App : Application
     {
 
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private  async void  Application_Startup(object sender, StartupEventArgs e)
         {
             MainWindow window = new MainWindow();
 
@@ -104,8 +104,20 @@ namespace WPFConfigUpdater
 
             }
             window.listView_Miniserver.SelectionMode = SelectionMode.Multiple;
-           
+            
+
             window.Show();
+
+            window.Help_Check_for_Updates_On_Startup();
+
+            //bool updatesAvailable = await window.check_Update_needed();
+            //{
+            //    if (updatesAvailable)
+            //    {
+            //        MessageBox.Show("Update available!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            //    }
+            //}
+
         }
 
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
