@@ -26,6 +26,11 @@ using System.Reflection;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Web;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
+using System.IO.Compression;
+
 
 //CTRL + M plus CTRL + O  - Collapse All
 //TODO: Version number  13.2.11.11 is displayed in Version Collumn as 13.2.1111
@@ -38,7 +43,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "V 0.9.6";
+        public string stringApplicationVersion = "0.9.3";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -1234,7 +1239,7 @@ namespace WPFConfigUpdater
             if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings))
             {
                 string strJson = File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + MyConstants.Strings.Path_ApplicationSettings);
-                ApplicationSettings settings = JsonSerializer.Deserialize<ApplicationSettings>(strJson);
+                ApplicationSettings settings = System.Text.Json.JsonSerializer.Deserialize<ApplicationSettings>(strJson);
                 dialog= new ApplicationSettingsDialog(settings);
             }
             else
@@ -1305,7 +1310,7 @@ namespace WPFConfigUpdater
 
         private void Application_Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            string jsonString = JsonSerializer.Serialize(miniserverList, new JsonSerializerOptions { WriteIndented = true });
+            string jsonString = System.Text.Json.JsonSerializer.Serialize(miniserverList, new JsonSerializerOptions { WriteIndented = true });
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "JSON file (*.json)|*.json";
 
@@ -1351,7 +1356,7 @@ namespace WPFConfigUpdater
                 String jsonString = File.ReadAllText(openFileDialog.FileName);
                 try
                 {
-                    ObservableCollection<CMiniserver> miniservers = JsonSerializer.Deserialize<ObservableCollection<CMiniserver>>(jsonString);
+                    ObservableCollection<CMiniserver> miniservers = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<CMiniserver>>(jsonString);
 
                     if (miniservers != null && miniservers.Count != 0)
                     {
@@ -2000,9 +2005,109 @@ namespace WPFConfigUpdater
             });
         }
 
+        private async void Help_Check_for_Updates(object sender, RoutedEventArgs e)
+        {
+            bool boolll = await check_Update_needed();
+            {
+                string downloadPath = @"C:\Downloads\test\myapp.zip";
+                string installPath = @"C:\Downloads\test\myapp";
+                await InstallLatestRelease("Jhonnay", "WPF_ConfigUpdater", downloadPath, installPath, "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");
+            }
+        }
 
+        public static async Task InstallLatestRelease(string username, string repository, string downloadPath, string installPath, string personalAccessToken = null)
+        {
+            try
+            {
+                // Create an HttpClient instance
+                using (HttpClient client = new HttpClient())
+                {
+                    // Set the user agent and accept header
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; AcmeInc/1.0)");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
 
+                    // Set the authorization header if a personal access token is provided
+                    if (!string.IsNullOrEmpty(personalAccessToken))
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", personalAccessToken);
+                    }
 
+                    // Construct the URL to the latest release of the repository
+                    string url = $"https://api.github.com/repos/{username}/{repository}/releases/latest";
+
+                    // Send a GET request to the URL and deserialize the response
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    dynamic release = JsonConvert.DeserializeObject(responseBody);
+
+                    // Get the download URL for the latest release asset
+                    string downloadUrl = release.body;
+                    downloadUrl = downloadUrl.Substring(downloadUrl.IndexOf('(') + 1);
+                    downloadUrl = downloadUrl.Remove(downloadUrl.IndexOf(")"));
+                    downloadUrl = release.zipball_url;
+
+                    // Download the asset to the specified path
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", personalAccessToken);
+                    using (HttpResponseMessage downloadResponse = await client.GetAsync(downloadUrl))
+                    using (Stream downloadStream = await downloadResponse.Content.ReadAsStreamAsync())
+                    using (FileStream fileStream = new FileStream(downloadPath, FileMode.Create))
+                    {
+                        await downloadStream.CopyToAsync(fileStream);
+                    }
+
+                    // Extract the contents of the zip file to the specified directory
+                    ZipFile.ExtractToDirectory(downloadPath, installPath);
+
+                    // Find the installer executable in the extracted contents and run it
+                    string[] installerExePaths = Directory.GetFiles(installPath, "*.exe", SearchOption.AllDirectories);
+                    if (installerExePaths.Length > 0)
+                    {
+                        Process.Start(installerExePaths[0]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Could not find installer executable in downloaded release.");
+                    }
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error downloading latest release: {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error extracting contents of downloaded release: {ex.Message}");
+            }
+        }
+
+        private  async Task<bool> check_Update_needed()
+        {
+            HttpClient client = new HttpClient();
+
+            string token = @"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";
+            string url = @"https://api.github.com/repos/Jhonnay/WPF_ConfigUpdater/releases/latest";
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; AcmeInc/1.0)");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+            HttpResponseMessage response = await client.GetAsync(url);
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+            dynamic release = JsonConvert.DeserializeObject(responseBody);
+
+            string latestVersion = release.tag_name;
+            latestVersion = latestVersion.Replace("v", "");
+            latestVersion = latestVersion.Remove(latestVersion.IndexOf("-"));
+            Version currentVersion = new Version(stringApplicationVersion); // Replace with your current version
+            Version latestVersionObj = new Version(latestVersion);
+
+            if (latestVersionObj.CompareTo(currentVersion) > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
     
 }

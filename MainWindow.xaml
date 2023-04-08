@@ -56,6 +56,7 @@
                 <MenuItem Header="_Version" Click="MenuItem_Programm_Version_Click" />
                 <MenuItem Header="_Help / Documentation" Command="ApplicationCommands.Help" />
                 <MenuItem Header="_Changelog" Click="MenuItem_Changelog_Click"/>
+                <MenuItem Header="Check for Updates" Click="Help_Check_for_Updates"/>
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
