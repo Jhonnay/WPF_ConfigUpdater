@@ -61,7 +61,7 @@ namespace WPFConfigUpdater
         private SortAdorner listViewSortAdorner = null;
         private List<CMiniserver> selected_Miniserver_befor_refresh;
         private List<string> languageList = null;
-        string token = @"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";
+        string token = @"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";
         string url_github_Latest = @"https://api.github.com/repos/Jhonnay/WPF_ConfigUpdater/releases/latest";
         string UpdateVersion = null;
 
@@ -2144,6 +2144,10 @@ namespace WPFConfigUpdater
                 }
             }
             catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error downloading latest release: {ex.Message}");
+            }
+            catch(NullReferenceException ex)
             {
                 Console.WriteLine($"Error downloading latest release: {ex.Message}");
             }
