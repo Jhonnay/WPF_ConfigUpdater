@@ -31,9 +31,11 @@ Known Issues:
 
 
 V0.9.6
-TODO: Add Automatic Version Checker and Installer --> check repository
+Added: Add Automatic Version Checker and Dialog
+Added: Check new updates under help section
 Fixed: Installer not removing old Version
 	- You can even downgrade to an older version without any problems. 
+	- Advanced Installer is now used
 
 V0.9.5
 * Added: (BETA) Right Click SNR --> Open in Loxone App (Miniserver has to be already added into the App)
