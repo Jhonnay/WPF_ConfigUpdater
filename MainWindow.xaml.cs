@@ -2040,6 +2040,7 @@ namespace WPFConfigUpdater
                     string responseBody = await response.Content.ReadAsStringAsync();
                     dynamic release = JsonConvert.DeserializeObject(responseBody);
 
+
                     // Get the download URL for the latest release asset
                     string downloadUrl = release.body;
                     downloadUrl = downloadUrl.Substring(downloadUrl.IndexOf('(') + 1);
