@@ -61,7 +61,7 @@ namespace WPFConfigUpdater
         private SortAdorner listViewSortAdorner = null;
         private List<CMiniserver> selected_Miniserver_befor_refresh;
         private List<string> languageList = null;
-        string token = @"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";
+        string token = @"secret";
         string url_github_Latest = @"https://api.github.com/repos/Jhonnay/WPF_ConfigUpdater/releases/latest";
         string UpdateVersion = null;
 
