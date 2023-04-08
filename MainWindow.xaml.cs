@@ -48,7 +48,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "0.9.6";
+        public string stringApplicationVersion = "0.9.3";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -61,7 +61,7 @@ namespace WPFConfigUpdater
         private SortAdorner listViewSortAdorner = null;
         private List<CMiniserver> selected_Miniserver_befor_refresh;
         private List<string> languageList = null;
-        string token = @"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";
+        string token = @"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";
         string url_github_Latest = @"https://api.github.com/repos/Jhonnay/WPF_ConfigUpdater/releases/latest";
         string UpdateVersion = null;
 
@@ -2024,7 +2024,7 @@ namespace WPFConfigUpdater
                     {
                         //do no stuff
                         string downloadPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads\MiniserverUpdater.msi";
-                        await InstallLatestRelease(url_github_Latest, downloadPath, token);
+                        await InstallLatestRelease(url_github_Latest, downloadPath, null);
                     }
                     
 
@@ -2122,7 +2122,7 @@ namespace WPFConfigUpdater
 
             try
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; AcmeInc/1.0)");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
                 HttpResponseMessage response = await client.GetAsync(url_github_Latest);
