@@ -44,6 +44,7 @@ namespace WPFConfigUpdater.Common
             public static readonly string Listview_MS_Status_Edited = "Miniserver modified ⚠";
             public static readonly string Listview_ProjectName_Invalid_JSON = "Invalid JSON";
             public static readonly string Listview_MS_Status_AutoUpdate = "Auto Update...";
+            public static readonly string Listview_MS_Refresh_canceled = "canceled";
 
 
             /* Bottom Status Bar */
@@ -76,6 +77,7 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_Update_Show_all_updatedMS_Versions = "Miniserver Updated to - ";
             public static readonly string MessageBox_Refresh_Information_pulled = " Miniserver Information pulled!";
             public static readonly string MessageBox_Refresh_Context_Copy_SNR_Error = "SNR could not be copied to Clipboard! \nPlease select a Miniserver.";
+            public static readonly string MessageBox_Refresh_Context_Copy_Username_Error = "Username could not be copied to Clipboard! \nPlease select a Miniserver.";
             public static readonly string MessageBox_Changelog_Cannot_be_opened = "Changelog cannot be opened! ";
             public static readonly string MessageBox_Applicationsettings_saved = "Settings saved. ✅";
             public static readonly string MessageBox_Applicationsettings_Not_saved = "Settings were not saved! ⚠";

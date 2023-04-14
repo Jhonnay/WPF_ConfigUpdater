@@ -129,6 +129,7 @@ namespace WPFConfigUpdater
                 {
                     MessageBox.Show(MyConstants.Strings.MessageBox_ConfigExe_Not_Valid
                         , "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+
                 }
 
 
@@ -142,7 +143,7 @@ namespace WPFConfigUpdater
             {
                 
 
-                return textbox_config_path.Text;
+                return settings.StrDefaultConfigPath;
             }
         }
 

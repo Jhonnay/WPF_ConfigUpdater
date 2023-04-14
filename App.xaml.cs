@@ -107,7 +107,7 @@ namespace WPFConfigUpdater
             
 
             window.Show();
-
+            window.ListView_GridView_Autoresize();
             window.Help_Check_for_Updates_On_Startup();
 
             //bool updatesAvailable = await window.check_Update_needed();

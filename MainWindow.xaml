@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFConfigUpdater"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Miniserver Updater (c) Musat V0.9.6" Height="500" Width="1000">
+        Title="Miniserver Updater (c) Musat V0.9.8" Height="500" Width="1000">
     <Window.Resources>
         <local:UriConverter x:Key="UriConverter" />
         <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>
@@ -134,6 +134,7 @@
                                                 <MenuItem Header="Edit Miniserver" Click="Contextmenu_EditMiniserver_click" />
                                                 <MenuItem Header="DefLog" Click="Contextmenu_DefLog_click" />
                                                 <MenuItem Header="Copy SNR" Click="ContextMenu_CopySNR_Click" />
+                                                <MenuItem Header="Copy Username" Click="ContextMenu_Copy_Username" />
                                                 <MenuItem Header="Copy Password" Click="ContextMenu_Copy_Password" />
                                                 <MenuItem Header="Extern Webinterface" Click="ContextMenu_externWI_Click" />
                                                 <MenuItem Header="Local Webinterface" Click="ContextMenu_internWI_Click" />

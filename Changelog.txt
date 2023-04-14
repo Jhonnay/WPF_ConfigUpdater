@@ -27,13 +27,20 @@ Known Issues:
 	- check for "\u0000"
 * Double Clicking on Icon top left will close the program					(Jan Posedel)
 * Program can be opened rapidly when ENTER is kept pressed			(Jan Posedel)
-* Remove Settings Saved Dialog. 
+
+V0.9.8
+* Added: Copy Username
+* Fixed Refreshing: Versionnumber of selected not set to TBD --> remains on previous Version while refreshing
+* Remove "Settings Saved" Dialog
+* Fixed: Settings -  Changing Config Path and saving Settings does not refresh Miniserver Version Colors. 
+* Fixed: Listview not resized after refreshing Miniserver Information. 
+* Fixed: Listview not resized after adding a new Miniserver. 
 
 
 V0.9.6
-Added: Add Automatic Version Checker and Dialog
-Added: Check new updates under help section
-Fixed: Installer not removing old Version
+* Added: Add Automatic Version Checker and Dialog
+* Added: Check new updates under help section
+* Fixed: Installer not removing old Version
 	- You can even downgrade to an older version without any problems. 
 	- Advanced Installer is now used
 

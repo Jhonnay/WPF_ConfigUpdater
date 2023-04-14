@@ -48,7 +48,7 @@ namespace WPFConfigUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string stringApplicationVersion = "0.9.6";
+        public string stringApplicationVersion = "0.9.8";
         public ObservableCollection<CMiniserver> miniserverList = new ObservableCollection<CMiniserver>();
         public int int_selectedItems_before_Refresh = 0;
         private BackgroundWorker worker_MSUpdate = null;
@@ -61,7 +61,7 @@ namespace WPFConfigUpdater
         private SortAdorner listViewSortAdorner = null;
         private List<CMiniserver> selected_Miniserver_befor_refresh;
         private List<string> languageList = null;
-        string token = @"secret";
+        string token = @"";
         string url_github_Latest = @"https://api.github.com/repos/Jhonnay/WPF_ConfigUpdater/releases/latest";
         string UpdateVersion = null;
 
@@ -717,6 +717,8 @@ namespace WPFConfigUpdater
             foreach(CMiniserver ms in listView_Miniserver.SelectedItems)
             {
                 ms.MSStatus = MyConstants.Strings.StartUp_Listview_MS_Version;
+                ms.MSVersion = MyConstants.Strings.StartUp_Listview_MS_Version;
+                ms.VersionColor = "Black";
                 list.Add(ms);
             }
             listView_Miniserver.IsEnabled = false;
@@ -737,7 +739,7 @@ namespace WPFConfigUpdater
 
             foreach (CMiniserver ms in selected_miniservers)
             {
-                if (ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version)
+                if (ms.MSVersion != MyConstants.Strings.StartUp_Listview_MS_Version && ms.MSVersion != MyConstants.Strings.Listview_MS_Refresh_canceled)
                 {
                     string correctedMiniserverVersion = addLeadingZeoresToVersionNumber(ms.MSVersion).Replace(".", "");
                     if (int.Parse(correctedConfigVersion) > int.Parse(correctedMiniserverVersion))
@@ -822,6 +824,13 @@ namespace WPFConfigUpdater
             else
             {
                 textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_Canceled;
+
+                foreach (CMiniserver ms in listView_Miniserver.SelectedItems)
+                {
+                    ms.MSStatus = MyConstants.Strings.Listview_MS_Refresh_canceled;
+                    ms.MSVersion = MyConstants.Strings.Listview_MS_Refresh_canceled;
+                    ms.VersionColor = "Black";
+                }
             }
 
             Task.Run(() =>
@@ -830,9 +839,11 @@ namespace WPFConfigUpdater
                 // Update UI elements on main UI thread
                 Application.Current.Dispatcher.Invoke(() =>
                 {
+                    ListView_GridView_Autoresize();
                     StackPaneButtons.IsEnabled = true;
                     InsertMSButton.IsEnabled = true;
                     listView_Miniserver.IsEnabled = true;
+                    listView_Miniserver.SelectedIndex = -1;
                 });
             });
 
@@ -957,7 +968,9 @@ namespace WPFConfigUpdater
                     if (worker_Refresh_MS_Information.CancellationPending)
                     {
                         e.Cancel = true;
-                        miniserverList[index].MSStatus = "canceled";
+                        miniserverList[index].MSStatus = MyConstants.Strings.Listview_MS_Refresh_canceled;
+                        miniserverList[index].MSVersion = MyConstants.Strings.Listview_MS_Refresh_canceled;
+
                         (sender as BackgroundWorker).ReportProgress(100); 
                         return;
                     }
@@ -1109,6 +1122,7 @@ namespace WPFConfigUpdater
                 result.ConfigLanguage = "5";
                 miniserverList.Add(result);
             }
+            ListView_GridView_Autoresize();
         }
 
         private void Button_CancelUpdate_Click(object sender, RoutedEventArgs e)
@@ -1258,8 +1272,16 @@ namespace WPFConfigUpdater
 
             if (dialog.ShowDialog() == true)
             {
-                MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_saved, "Settings Dialog", MessageBoxButton.OK, MessageBoxImage.Information);
+                //disabled because it was anoying. 
+                //MessageBox.Show(MyConstants.Strings.MessageBox_Applicationsettings_saved, "Settings Dialog", MessageBoxButton.OK, MessageBoxImage.Information);
                 textblock_statusbar_config.Text = dialog.Answer;
+                if(dialog.Answer != "not set")
+                {
+                    FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(dialog.Answer);
+                    List<CMiniserver> list = miniserverList.ToList<CMiniserver>();
+                    colorMiniserverVersions(list, fileVersionInfo);
+                }
+
 
             }
             else
@@ -2159,6 +2181,20 @@ namespace WPFConfigUpdater
 
 
             return false;
+        }
+
+        private void ContextMenu_Copy_Username(object sender, RoutedEventArgs e)
+        {
+            int index = previousMouseOverIndex;
+            if (index != -1)
+            {
+                string username = miniserverList.ElementAt(previousMouseOverIndex).adminUser;
+                Clipboard.SetText(username);
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_Refresh_Context_Copy_Username_Error, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
     
