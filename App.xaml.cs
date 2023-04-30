@@ -103,20 +103,10 @@ namespace WPFConfigUpdater
 
 
             }
-            window.listView_Miniserver.SelectionMode = SelectionMode.Multiple;
-            
-
+            window.listView_Miniserver.SelectionMode = SelectionMode.Multiple; //select multiple lines without pressing STRG or SHIFT
             window.Show();
             window.ListView_GridView_Autoresize();
-            window.Help_Check_for_Updates_On_Startup();
-
-            //bool updatesAvailable = await window.check_Update_needed();
-            //{
-            //    if (updatesAvailable)
-            //    {
-            //        MessageBox.Show("Update available!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            //    }
-            //}
+            window.CheckUpdate_and_install_if_user_wants(false); //check Update once during Startup
 
         }
 

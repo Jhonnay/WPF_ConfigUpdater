@@ -33,6 +33,8 @@ using System.IO.Compression;
 using System.Net;
 using System.Diagnostics.Eventing.Reader;
 using System.Printing;
+using System.Security.Policy;
+using Newtonsoft.Json.Linq;
 
 
 
@@ -64,6 +66,7 @@ namespace WPFConfigUpdater
         string token = @"";
         string url_github_Latest = @"https://api.github.com/repos/Jhonnay/WPF_ConfigUpdater/releases/latest";
         string UpdateVersion = null;
+        public bool UpdateCheck_with_Internet = false;
 
         public List<string> LanguageList { get => languageList; set => languageList = value; }
 
@@ -99,13 +102,17 @@ namespace WPFConfigUpdater
             UpdateButton.IsEnabled = false;
             RemoveMSButton.IsEnabled = false;
 
-            
+            foreach(string language in Config.LanguageList)
+            {
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = language;
+                menuItem_context_StartConfig.Items.Add(menuItem);
+
+            }
+
             //btn_klick_me.AddHandler(FrameworkElement.MouseDownEvent, new MouseButtonEventHandler(Button_MouseUp), true);
             //btn_klick_me.Click += test;
         }
-
-        
-
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -1292,6 +1299,8 @@ namespace WPFConfigUpdater
 
         private void ContentControl_textblock_statusbar_menuItem_Start_Config(object sender, RoutedEventArgs e)
         {
+            MenuItem menuItem = sender as MenuItem;
+            
             if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
             {
                 Config config = new Config();
@@ -1889,29 +1898,37 @@ namespace WPFConfigUpdater
         {
             CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
             //MenuItem_Loxone_App_Kill_Instances(sender,e);
-            string link = "loxone://ms?host=192.168.178.62&usr=admin&pwd=SlavaDomnului2021!";
+            string link;
 
 
 
 
             if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
             {
-                link = "loxone://ms?host=" + currentlySelectedMiniserver.LocalIPAdress +
-                    "&usr=" + currentlySelectedMiniserver.adminUser +
-                    "&pwd=" + currentlySelectedMiniserver.adminPassWord;
+                link = @"loxone://ms?host=" + HttpUtility.UrlEncodeUnicode(currentlySelectedMiniserver.LocalIPAdress) +
+                    "&usr=" + HttpUtility.UrlEncodeUnicode(currentlySelectedMiniserver.adminUser) +
+                    "&pwd=" + HttpUtility.UrlEncodeUnicode(currentlySelectedMiniserver.adminPassWord);
 
             }
             else
             {
-                link = "loxone://ms?mac=" + currentlySelectedMiniserver.serialNumer +
-                    "&usr=" + currentlySelectedMiniserver.adminUser +
-                    "&pwd=" + currentlySelectedMiniserver.adminPassWord; 
+                link = @"loxone://ms?host="  +  HttpUtility.UrlEncodeUnicode( MyConstants.Strings.Link_CloudDNS_simplified) +
+                    HttpUtility.UrlEncodeUnicode(currentlySelectedMiniserver.serialNumer) +
+                    "&usr=" + HttpUtility.UrlEncodeUnicode(currentlySelectedMiniserver.adminUser) +
+                    "&pwd=" + HttpUtility.UrlEncodeUnicode(currentlySelectedMiniserver.adminPassWord); 
             }
 
 
 
-            //OpenLinkinDefaultBrowser(HttpUtility.UrlEncode(link));
+            //OpenLinkinDefaultBrowser(link);
+            //Process myProcess = new Process();
+            //myProcess.StartInfo.UseShellExecute = true;
+            //myProcess.StartInfo.FileName = "cmd";
+            //myProcess.StartInfo.Arguments = "/c start \"\" " + link;
+            //myProcess.Start();
+            //System.Diagnostics.Process.Start(link);
             OpenLinkinDefaultBrowser(link);
+            //Process.Start(link);
         }
 
         private void Application_Help_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -2035,32 +2052,14 @@ namespace WPFConfigUpdater
             });
         }
 
-        public async void Help_Check_for_Updates(object sender, RoutedEventArgs e)
+        public async void MenutItem_Click_Help_Check_for_Updates(object sender, RoutedEventArgs e)
         {
-            bool updatesAvailable = await check_Update_needed();
-            {
-                if(updatesAvailable)
-                {
-                    string message = "Theres is a newer Version available! Do you want to download and install?" + "\nCurrent Version: " + stringApplicationVersion + "\nAvailable Version: " + UpdateVersion;
-                    if (MessageBox.Show(message, "Install Update?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        //do no stuff
-                        string downloadPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads\MiniserverUpdater.msi";
-                        await InstallLatestRelease(url_github_Latest, downloadPath, null);
-                    }
-                    
 
-                }else
-                {
-                    MessageBox.Show("No new updates available. ", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-
-            }
-            
+            CheckUpdate_and_install_if_user_wants(true);
 
         }
 
-        public async void Help_Check_for_Updates_On_Startup()
+        public async void CheckUpdate_and_install_if_user_wants(bool bShow_No_Update_available)
         {
             bool updatesAvailable = await check_Update_needed();
             {
@@ -2069,16 +2068,27 @@ namespace WPFConfigUpdater
                     string message = "Theres is a newer Version available! Do you want to download and install?" + "\nCurrent Version: " + stringApplicationVersion + "\nAvailable Version: " + UpdateVersion;
                     if (MessageBox.Show(message, "Install Update?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        //do no stuff
-                        string downloadPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads\MiniserverUpdater.msi";
-                        await InstallLatestRelease(url_github_Latest, downloadPath, token);
+                        string downloadPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads\MiniserverUpdater.exe";
+                        await Download_and_Install_Latest_Alpha(url_github_Latest, downloadPath, token);
                     }
                 }
+                else if (bShow_No_Update_available)
+                {
+                    if (UpdateCheck_with_Internet)
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_CheckUpdate_no_Update_available, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show(MyConstants.Strings.MessageBox_CheckUpdate_no_Internet, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                    
             }
         }
 
 
-        public static async Task InstallLatestRelease(string url, string downloadPath, string personalAccessToken)
+        public async Task Download_and_Install_Latest_Alpha(string url, string downloadPath, string personalAccessToken)
         {
             try
             {
@@ -2115,8 +2125,6 @@ namespace WPFConfigUpdater
                             await stream.CopyToAsync(fileStream);
                         }
                     }
-
-
                     ProcessStartInfo startInfo = new ProcessStartInfo();
                     startInfo.FileName = downloadPath;
                     startInfo.UseShellExecute = true;
@@ -2126,15 +2134,12 @@ namespace WPFConfigUpdater
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Error downloading latest release: {ex.Message}");
+                
             }
             catch (IOException ex)
             {
                 Console.WriteLine($"error extracting contents of downloaded release: {ex.Message}");
             }
-
-
-
-
 
         }
 
@@ -2151,34 +2156,39 @@ namespace WPFConfigUpdater
 
                 string responseBody = await response.Content.ReadAsStringAsync();
                 dynamic release = JsonConvert.DeserializeObject(responseBody);
+                UpdateCheck_with_Internet = true;
 
                 //gets latest release Tag in format "v0.x.x-alpha" and compares. 
                 string latestVersion = release.tag_name;
-                latestVersion = latestVersion.Replace("v", "");
+                latestVersion = latestVersion.Replace("v", ""); //Argument Null Exception can be caught. 
                 latestVersion = latestVersion.Remove(latestVersion.IndexOf("-"));
                 Version currentVersion = new Version(stringApplicationVersion); // Replace with your current version
                 Version latestVersionObj = new Version(latestVersion);
-
+                
                 if (latestVersionObj.CompareTo(currentVersion) > 0)
                 {
                     UpdateVersion = latestVersion;
+                    
                     return true;
                 }
             }
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Error downloading latest release: {ex.Message}");
+                UpdateCheck_with_Internet = false;
             }
             catch(NullReferenceException ex)
             {
                 Console.WriteLine($"Error downloading latest release: {ex.Message}");
             }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"Error latest Release not published correctly: {ex.Message}");
+            }
             catch (IOException ex)
             {
                 Console.WriteLine($"error extracting contents of downloaded release: {ex.Message}");
             }
-
-
 
             return false;
         }
@@ -2196,8 +2206,30 @@ namespace WPFConfigUpdater
                 MessageBox.Show(MyConstants.Strings.MessageBox_Refresh_Context_Copy_Username_Error, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
+        private void menuItem_context_StartConfig_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            Type objectType = menuItem.GetType();
+            PropertyInfo propertyInfo = objectType.GetProperty("CurrentSelection", BindingFlags.NonPublic | BindingFlags.Instance); // get the property info for the not public property
+            MenuItem submenu = propertyInfo.GetValue(menuItem) as MenuItem;
+            string language_index = LanguageList.IndexOf("ENU").ToString();
+            if (submenu != null)
+            {
+                language_index = LanguageList.IndexOf(submenu.Header.ToString()).ToString();
+            }
+
+            if (textblock_statusbar_config.Text != MyConstants.Strings.Statusbar_TextBlockConfig_No_Config_selected)
+            {
+                Config config = new Config();
+                config.startConfig_Language(textblock_statusbar_config.Text, language_index); 
+            }
+            else
+            {
+                MessageBox.Show(MyConstants.Strings.MessageBox_OpenConfig_No_Config_selected, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
     }
-    
 }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace WPFConfigUpdater.Common
 
             /* Links */
             public static readonly string Link_CloudDNS = "https://dns.loxonecloud.com/";
+            public static readonly string Link_CloudDNS_simplified = "dns.loxonecloud.com/";
             public static readonly string Link_LPH = "https://lph.loxone.com/main.php?snr=";
             public static readonly string Link_CrashLog_Server = "https://gitlab.loxone.com:8443/crashstats/miniservercrashes.php?mac=";
 
@@ -107,7 +109,9 @@ namespace WPFConfigUpdater.Common
             public static readonly string MessageBox_AutoUpdate_Already_running = "AutoUpdate already running.\nPlease wait until Update is done.";
             public static readonly string MessageBox_AutoUpdate_selected_Already_running = MessageBox_AutoUpdate_Already_running + "\n\nPlease select only Miniserver that do not Autoupdate.";
             public static readonly string MessageBox_AutoUpdate_selected_ERROR_nothing_selected = "Please select Miniservers";
-            public static readonly string MessageBox_AutoUpdate_selected_Error_which_could_not_update = "These Miniserver could not start AutoUpdate: "; 
+            public static readonly string MessageBox_AutoUpdate_selected_Error_which_could_not_update = "These Miniserver could not start AutoUpdate: ";
+            public static readonly string MessageBox_CheckUpdate_no_Internet = "Check your internet connection!";
+            public static readonly string MessageBox_CheckUpdate_no_Update_available = "No new updates available. 😕";
             /* WebServices */
             public static readonly string WebService_Success_Code = "200";
 

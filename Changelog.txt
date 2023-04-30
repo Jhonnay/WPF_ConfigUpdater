@@ -1,12 +1,10 @@
 Feature Wish: 
-* rearange collumns via dragging
+* rearange rows via dragging
 * Application Settings Dialog --> make beautiful
 * Make UI more colorful 
 * Light Mode / Darkmode
 * Add color for when Version is higher than selected Config EXE
-* Check if Alpha Update is available via Autoupdate Server
 * Make Textbox of local IP and its collumn autoresize and dragable. 
-* Write Help Documentation
 * Use Password hashing --> ask ralph
 * Open Debug Monitor on Context Menu
 * Windows Autostart Setting
@@ -14,7 +12,7 @@ Feature Wish:
 * Create Backup 
 * Update Multiple MS at once
 * Fallback to Remote if Local IP is not possible. 
-* CheckBox "Use Local IP""
+* CheckBox "Use Local IP"
 * Filter function
 * (Ralph) When connection to config, ms is on the same version, it would be nice to 
 	automatically update the information in the list for that miniserver
@@ -23,10 +21,16 @@ Known Issues:
 * UDP Listener not startet successfully. Probably fixed already.
 * Gridsplitter dragged to top will make all buttons dissapear.				(Jan Posedel)
 * STRG+O Opening another Json file - i.e Application Settings				(Jan Posedel)
-	- check if a validity SNR / Password / admin (Jan Posedel)
+	- check if SNR / Password / admin are valid								(Jan Posedel)
 	- check for "\u0000"
 * Double Clicking on Icon top left will close the program					(Jan Posedel)
-* Program can be opened rapidly when ENTER is kept pressed			(Jan Posedel)
+* Program can be opened rapidly when ENTER is kept pressed					(Jan Posedel)
+
+V0.9.9
+* InnoSetup Installer is now used. 
+* Added: Checking Update - Tell User that no Internet Connection was available
+* Added: Language Submenu added to "Start Config" Context Menu
+* Fixed: Autoresize the window to content size on startup
 
 V0.9.8
 * Added: Copy Username

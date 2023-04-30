@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPFConfigUpdater"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Miniserver Updater (c) Musat V0.9.8" Height="500" Width="1000">
+        Title="Miniserver Updater (c) Musat V0.9.8" MinHeight="500" MinWidth="1000" SizeToContent="WidthAndHeight" >
     <Window.Resources>
         <local:UriConverter x:Key="UriConverter" />
         <sys:String x:Key="str_Window_Resource_Hello">My Window Resource Hello Resource!</sys:String>
@@ -35,18 +35,6 @@
             </MenuItem>
             <MenuItem Header="_Settings" Click="menuItem_Settings">
             </MenuItem>
-            <!-- MenuItem Header="_Tools"> -->
-            <!--    <MenuItem Header="_Refresh Miniserver Version Numbers" Click="MenuItem_MSVersionRefresh_Click" > -->
-            <!--    <MenuItem.Icon> -->
-            <!--        <Image Source="https://cdn-icons-png.flaticon.com/512/126/126502.png"/> -->
-            <!--    </MenuItem.Icon> -->
-            <!-- </MenuItem> -->
-            <!-- <MenuItem Header="_Refresh Config Installations"> -->
-            <!--    <MenuItem.Icon -->
-            <!--        <Image Source="https://cdn-icons-png.flaticon.com/512/189/189687.png"/> -->
-            <!--    </MenuItem.Icon> -->
-            <!--  </MenuItem> -->
-            <!-- </MenuItem> -->
             <MenuItem Header="_Loxone App" >
                 <MenuItem Header="Open App ✈" Click="MenuItem_Open_Loxone_App" />
                 <MenuItem Header="Debug 🖥" Click="MenuItem_Click_Loxone_App_Debug" />
@@ -56,7 +44,7 @@
                 <MenuItem Header="_Version" Click="MenuItem_Programm_Version_Click" />
                 <MenuItem Header="_Help / Documentation" Command="ApplicationCommands.Help" />
                 <MenuItem Header="_Changelog" Click="MenuItem_Changelog_Click"/>
-                <MenuItem Header="Check for Updates" Click="Help_Check_for_Updates"/>
+                <MenuItem Header="Check for Updates" Click="MenutItem_Click_Help_Check_for_Updates"/>
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
@@ -77,7 +65,8 @@
                 <ContentControl MouseDoubleClick="ContentControl_textblock_statusbar_config_MouseDoubleClick">
                     <ContentControl.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="menuItem_context_StartConfig" Header="Start Config ✈" Click="ContentControl_textblock_statusbar_menuItem_Start_Config" />
+                            <MenuItem x:Name="menuItem_context_StartConfig" Header="Start Config ✈" PreviewMouseLeftButtonUp="menuItem_context_StartConfig_PreviewMouseLeftButtonUp" >
+                            </MenuItem>
                             <MenuItem Header="Kill all Configs 💣" Click="ContentControl_textblock_statusbar_menuItem_Kill_Configs" />
                         </ContextMenu>
                     </ContentControl.ContextMenu>
@@ -119,12 +108,12 @@
                     <GridView x:Name="listview_gridview">
                         <GridViewColumn Width="120" DisplayMemberBinding="{Binding MSStatus}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader  Tag="MSStatus" Click="listview_Miniserver_ColumnHeader_Click">Status</GridViewColumnHeader>
+                                <GridViewColumnHeader  Tag="MSStatus" Content="     Status     " Click="listview_Miniserver_ColumnHeader_Click" />
                             </GridViewColumn.Header>
                         </GridViewColumn>
                         <GridViewColumn  Width="Auto" >
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader  Tag="serialNumer" Click="listview_Miniserver_ColumnHeader_Click">Miniserver</GridViewColumnHeader>
+                                <GridViewColumnHeader  Tag="serialNumer" Content="     Minserver     " Click="listview_Miniserver_ColumnHeader_Click" />
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -153,7 +142,7 @@
                         </GridViewColumn>
                         <GridViewColumn Width="150">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader  Tag="MSVersion" Click="listview_Miniserver_ColumnHeader_Click" Content="  Version     " ></GridViewColumnHeader>
+                                <GridViewColumnHeader  Tag="MSVersion" Click="listview_Miniserver_ColumnHeader_Click" Content="     Version     " ></GridViewColumnHeader>
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -168,7 +157,7 @@
                         </GridViewColumn>
                         <GridViewColumn  Width="Auto"  >
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader  Tag="MSProject" Click="listview_Miniserver_ColumnHeader_Click">Project Name</GridViewColumnHeader>
+                                <GridViewColumnHeader  Tag="MSProject" Content="     Project     " Click="listview_Miniserver_ColumnHeader_Click" />
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -183,19 +172,24 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn  Width="Auto" DisplayMemberBinding="{Binding MSConfiguration}" >
+                        <GridViewColumn  Width="Auto" >
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader  Tag="MSConfiguration" Click="listview_Miniserver_ColumnHeader_Click">Configuration</GridViewColumnHeader>
+                                <GridViewColumnHeader  Tag="MSConfiguration" Content="     Configuration     " Click="listview_Miniserver_ColumnHeader_Click" />
                             </GridViewColumn.Header>
                             <GridViewColumn.HeaderContainerStyle>
                                 <Style TargetType="{x:Type GridViewColumnHeader}">
-                                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
                                 </Style>
                             </GridViewColumn.HeaderContainerStyle>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding MSConfiguration}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Width="120" >
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader  Tag="UpdateLevel" Click="listview_Miniserver_ColumnHeader_Click" Content="UpdateLevel    "></GridViewColumnHeader>
+                                <GridViewColumnHeader  Tag="UpdateLevel" Click="listview_Miniserver_ColumnHeader_Click" Content="     UpdateLevel     "></GridViewColumnHeader>
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -212,19 +206,17 @@
                                     </TextBlock>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
-
                         </GridViewColumn>
-
-                        <GridViewColumn Header="Action" Width="Auto" >
+                        <GridViewColumn Header="     Action     " Width="Auto" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Name="listview_button_Open_Config" Content="Connect Config" Click="listview_button_OpenConfig_Click"></Button>
+                                    <Button Name="listview_button_Open_Config" Content="Connect Config" Click="listview_button_OpenConfig_Click" HorizontalAlignment="Stretch" ></Button>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn  Width="Auto" >
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader  Tag="LocalIPAdress" Click="listview_Miniserver_ColumnHeader_Click">Local IP</GridViewColumnHeader>
+                                <GridViewColumnHeader  Tag="LocalIPAdress" Content="     Local IP     " Click="listview_Miniserver_ColumnHeader_Click" />
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -234,7 +226,7 @@
                         </GridViewColumn>
                         <GridViewColumn>
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader  Tag="ConfigLanguage" Click="listview_Miniserver_ColumnHeader_Click" Content="   Language  "/>
+                                <GridViewColumnHeader  Content="   Language  "/>
                             </GridViewColumn.Header>
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -256,7 +248,6 @@
                 <Button x:Name="InsertMSButton" Content="➕" Margin="10,0,0,0" Click="Button_InsertMS_Click"  Height="30" ToolTip="Inserts a new Miniserver into the list" ToolTipService.ShowOnDisabled="True"/>
                 <Button x:Name="CancelUpdateButton" Content="Cancel" Margin="10,0,0,0" Click="Button_CancelUpdate_Click"  Height="30" Padding="5" ToolTipService.ShowOnDisabled="True" ToolTip="Cancels the following processes:&#x0a;- Update Miniserver&#x0a;- Connect Config&#x0a;- Refresh Miniserver Information "/>
                 <CheckBox x:Name="CheckBoxDisableUpdateDialogs" Content="Handsfree Update Mode" Margin="10,0,0,0" Height="Auto" IsChecked="{Binding HandsfreeMode, Mode=TwoWay}"  ToolTipService.ShowOnDisabled="True" ToolTip="Blocking Dialog after each Miniserver Update will be disabled allowing the user to update multiple Miniservers automatically without being present." VerticalAlignment="Center" FontSize="14"/>
-                <!-- <CheckBox x:Name="CheckBoxEnableMultiSelect" Content="Multiselect" Margin="10,0,0,0" Height="30" Click="CheckBoxEnableMultiSelect_Click"/>  -->
             </StackPanel>
         </Grid>
     </DockPanel>
