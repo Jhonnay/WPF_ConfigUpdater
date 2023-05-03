@@ -16,7 +16,6 @@ Feature Wish:
 * Filter function
 * (Ralph) When connection to config, ms is on the same version, it would be nice to 
 	automatically update the information in the list for that miniserver
-* Download all SPS Files stored on Miniserver. 
 
 Known Issues: 
 * UDP Listener not startet successfully. Probably fixed already.
@@ -31,7 +30,9 @@ V0.9.9
 * InnoSetup Installer is now used. 
 * Added: Checking Update - Tell User that no Internet Connection was available
 * Added: Language Submenu added to "Start Config" Context Menu
+* Added: Download all SPS Files stored on Miniserver. 
 * Fixed: Autoresize the window to content size on startup
+
 
 V0.9.8
 * Added: Copy Username

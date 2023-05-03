@@ -2232,68 +2232,120 @@ namespace WPFConfigUpdater
 
         private void ContextMenu_Download_Prog_Folder(object sender, RoutedEventArgs e)
         {
-            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
-            string progList = "";
-
-            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            Task.Run(() =>
             {
-                string link = @"" + currentlySelectedMiniserver.LocalIPAdress + "/dev/fslist/prog";
-
-                Ping myPing = new Ping();
-                PingReply reply = myPing.Send(currentlySelectedMiniserver.LocalIPAdress, 1000);
-                if (reply != null && reply.Status.ToString() != "TimedOut")
+                Application.Current.Dispatcher.Invoke(() => //Update UI
                 {
+                    UpdateButton.IsEnabled = false;
+                    RefreshButton.IsEnabled = false;
+                    RemoveMSButton.IsEnabled = false;
+                    InsertMSButton.IsEnabled = false;
+                    CancelUpdateButton.IsEnabled = false;
+                    listView_Miniserver.IsEnabled = false;
+                    textblock_processStatus.Text = "Downloading /prog files.";
+                    progressbar_ProcessStatus.Value = 1;
+                });
 
-                    progList = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/fslist/prog", "");
-                    string[] files = GetFileNamesOfProgList(progList);
-                    DownloadProgFolder(files, false, currentlySelectedMiniserver);
+                CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+                string progList = "";
+
+                if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+                {
+                    string link = @"" + currentlySelectedMiniserver.LocalIPAdress + "/dev/fslist/prog";
+
+                    Ping myPing = new Ping();
+                    PingReply reply = myPing.Send(currentlySelectedMiniserver.LocalIPAdress, 1000);
+                    if (reply != null && reply.Status.ToString() != "TimedOut")
+                    {
+
+                        progList = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/fslist/prog", "");
+                        string[] files = GetFileNamesOfProgList(progList);
+                        DownloadProgFolder(files, false, currentlySelectedMiniserver);
+                    }
+
                 }
+                else
+                {
+                    progList = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/fslist/prog", "");
+                    string[] files = GetFileNamesOfProgList(progList);
+                    DownloadProgFolder(files, true, currentlySelectedMiniserver); 
+                }
+                
+                Application.Current.Dispatcher.Invoke(() => //Update UI
+                {
+                    UpdateButton.IsEnabled = false;
+                    RefreshButton.IsEnabled = false;
+                    RemoveMSButton.IsEnabled = false;
+                    InsertMSButton.IsEnabled = true;
+                    CancelUpdateButton.IsEnabled = true;
+                    listView_Miniserver.IsEnabled = true;
+                    textblock_processStatus.Text = "Downloading complete! 💪";
+                    progressbar_ProcessStatus.Value = 100;
+                });
+            });
 
-            }
-            else
-            {
-                progList = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/fslist/prog", "");
-                string[] files = GetFileNamesOfProgList(progList);
-                DownloadProgFolder(files, true, currentlySelectedMiniserver);
-            }
-
-            
         }
 
         private void DownloadProgFolder(string[] files, bool useRemote, CMiniserver miniserver)
         {
+            //getCloudRediretLink() should be outside of the foreach to improve performance.
+            string link = null;
+            string path = @"dev/fsget/prog/" ;
+            int i = 1;
+
+            if (!useRemote)
+            {
+                link = @"http://" + miniserver.LocalIPAdress + "/" +path;
+            }
+            else
+            {
+                link = WebService.getCloudRediretLink(miniserver.serialNumer, miniserver.adminUser, miniserver.adminPassWord)
+                    + path;
+            }
             foreach (string file in files)
             {
-                string path = @"dev/fsget/prog/" + file;
                 string downloadPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads\ProgFolder\";
-                string link = null; 
-                if (!useRemote)
-                {
-                     link = @"http://" + miniserver.LocalIPAdress + "/" + path;
-                }
-                else
-                {
-                     link = WebService.getCloudRediretLink(miniserver.serialNumer, miniserver.adminUser, miniserver.adminPassWord)
-                        + path;
-                }
                 using (var webClient = new WebClient())
                 {
-
                     webClient.Credentials = new NetworkCredential(miniserver.adminUser, miniserver.adminPassWord);
                     if (file != null && file != String.Empty)
                     {
-                        byte[] fileData = webClient.DownloadData(link);
-
-                        // Save the file as a zip file
-                        if (!Directory.Exists(downloadPath))
+                        Task.Run(() =>
                         {
-                            Directory.CreateDirectory(downloadPath);
+                            // Update UI elements on main UI thread
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                textblock_processStatus.Text = "Downloading " + i.ToString() + "/" + files.Length.ToString();
+
+                            });
+                        });
+
+                        try
+                        {
+                            byte[] fileData = webClient.DownloadData(link + file);
+                            
+                            if (!Directory.Exists(downloadPath+file))
+                            {
+                                Directory.CreateDirectory(downloadPath); 
+                            }
+                            System.IO.File.WriteAllBytes(downloadPath + file, fileData); //save File with correct file Extension
+                            Task.Run(() =>
+                            {
+
+                                // Update UI elements on main UI thread
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    progressbar_ProcessStatus.Value += 100 / files.Length;
+                                    
+                                });
+                            });
                         }
-                        System.IO.File.WriteAllBytes(downloadPath + file, fileData);
+                        catch (WebException ex) {
+                            MessageBox.Show(ex.Message + "\nOne file could not be downloaded.");
+                        }
                     }
-
                 }
-
+                i++;
             }
         }
 
