@@ -2229,6 +2229,111 @@ namespace WPFConfigUpdater
                 MessageBox.Show(MyConstants.Strings.MessageBox_OpenConfig_No_Config_selected, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
+        private void ContextMenu_Download_Prog_Folder(object sender, RoutedEventArgs e)
+        {
+            CMiniserver currentlySelectedMiniserver = miniserverList.ElementAt(previousMouseOverIndex);
+            string progList = "";
+
+            if (currentlySelectedMiniserver.LocalIPAdress != "" && currentlySelectedMiniserver.LocalIPAdress != null)
+            {
+                string link = @"" + currentlySelectedMiniserver.LocalIPAdress + "/dev/fslist/prog";
+
+                Ping myPing = new Ping();
+                PingReply reply = myPing.Send(currentlySelectedMiniserver.LocalIPAdress, 1000);
+                if (reply != null && reply.Status.ToString() != "TimedOut")
+                {
+
+                    progList = WebService.sendCommandRest_Version_Local_Gen1(currentlySelectedMiniserver.LocalIPAdress, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/fslist/prog", "");
+                    string[] files = GetFileNamesOfProgList(progList);
+                    DownloadProgFolder(files, false, currentlySelectedMiniserver);
+                }
+
+            }
+            else
+            {
+                progList = WebService.sendCommandRest_Version_Remote_Cloud(currentlySelectedMiniserver.serialNumer, currentlySelectedMiniserver.adminUser, currentlySelectedMiniserver.adminPassWord, @"/dev/fslist/prog", "");
+                string[] files = GetFileNamesOfProgList(progList);
+                DownloadProgFolder(files, true, currentlySelectedMiniserver);
+            }
+
+            
+        }
+
+        private void DownloadProgFolder(string[] files, bool useRemote, CMiniserver miniserver)
+        {
+            foreach (string file in files)
+            {
+                string path = @"dev/fsget/prog/" + file;
+                string downloadPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads\ProgFolder\";
+                string link = null; 
+                if (!useRemote)
+                {
+                     link = @"http://" + miniserver.LocalIPAdress + "/" + path;
+                }
+                else
+                {
+                     link = WebService.getCloudRediretLink(miniserver.serialNumer, miniserver.adminUser, miniserver.adminPassWord)
+                        + path;
+                }
+                using (var webClient = new WebClient())
+                {
+
+                    webClient.Credentials = new NetworkCredential(miniserver.adminUser, miniserver.adminPassWord);
+                    if (file != null && file != String.Empty)
+                    {
+                        byte[] fileData = webClient.DownloadData(link);
+
+                        // Save the file as a zip file
+                        if (!Directory.Exists(downloadPath))
+                        {
+                            Directory.CreateDirectory(downloadPath);
+                        }
+                        System.IO.File.WriteAllBytes(downloadPath + file, fileData);
+                    }
+
+                }
+
+            }
+        }
+
+        private string[] GetFileNamesOfProgList(string progList)
+        {
+            string[] lines = progList.Split(
+                                new string[] { "\r\n", "\r", "\n" },
+                            StringSplitOptions.None
+                        );
+            string[] validFiles = new string[lines.Length];
+            for (int i = 2; i < lines.Length; i++)
+            {
+                lines[i] = ExtractFileName(lines[i]);
+                if (lines[i] != null && lines[i] != String.Empty)
+                {
+                    validFiles[i - 2] = lines[i];
+                }
+            }
+            return validFiles;
+        }
+
+        public string ExtractFileName(string inputString)
+        {
+            // Split the input string by spaces to separate the file name from the other parts
+            string[] parts = inputString.Split(' ');
+
+            // Loop through the parts in reverse order to find the last part that ends with ".zip" or ".json"
+            for (int i = parts.Length - 1; i >= 0; i--)
+            {
+                string part = parts[i];
+                if (part.EndsWith(".zip") || part.EndsWith(".json") || part.EndsWith("Loxone") 
+                    || part.EndsWith("LoxCC") || part.EndsWith("bin"))
+                {
+                    return part;
+                }
+            }
+
+            // If no matching part was found, return an empty string
+            return "";
+        }
     }
 }
 

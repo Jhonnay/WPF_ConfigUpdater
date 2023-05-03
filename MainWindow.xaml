@@ -131,6 +131,7 @@
                                                 <MenuItem Header="LPH" Click="ContextMenu_LPH" />
                                                 <MenuItem Header="CrashLog Server" Click="ContextMenu_CrashLogServer" />
                                                 <MenuItem Header="Loxone App (BETA)" Click="ContextMenu_LoxoneApp_Connect_MS" />
+                                                <MenuItem Header="Download Prog Folder (BETA)" Click="ContextMenu_Download_Prog_Folder" />
                                             </ContextMenu>
                                         </TextBlock.ContextMenu>
                                         <Hyperlink  NavigateUri="{Binding serialNumer,Converter={local:UriConverter}}" RequestNavigate="Hyperlink_RequestNavigate"> 

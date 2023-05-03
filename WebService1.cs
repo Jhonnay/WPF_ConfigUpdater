@@ -54,6 +54,35 @@ namespace WPFConfigUpdater
             return ret;
         }
 
+        public static string getCloudRediretLink(string ms_SNR, string user, string password)
+        {
+            string str_cloudLink = null;
+
+            string url = MyConstants.Strings.Link_CloudDNS + ms_SNR;
+            RestClient client = new RestClient(url);
+            client.UseXml();
+            client.Options.FollowRedirects = true;
+            client.Authenticator = new HttpBasicAuthenticator(user, password);
+            var response = client.Execute(new RestRequest());
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                client = new RestClient(response.ResponseUri.AbsoluteUri);
+                client.Authenticator = new HttpBasicAuthenticator(user, password);
+                response = client.Execute(new RestRequest());
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return response.ResponseUri.AbsoluteUri;
+                }
+            }
+            else{
+                return response.ResponseUri.AbsoluteUri;
+            }
+            
+
+
+            return response.ResponseUri.AbsoluteUri; 
+        }
+
         public static string sendCommandRest_Version_Remote_Cloud(string ms_SNR, string user, string password, string command, string interestedValue)
         {
             string receivedData = "error";
@@ -70,6 +99,8 @@ namespace WPFConfigUpdater
                 response = client.Execute(new RestRequest());
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
+                    if (interestedValue == "")
+                        return response.Content.ToString();
                     receivedData = response.Content.ToString();
                     receivedData = receivedData.Substring(receivedData.IndexOf(interestedValue) + interestedValue.Count() + 2);
                     receivedData = receivedData.Remove(8);
@@ -81,6 +112,8 @@ namespace WPFConfigUpdater
                 response = client.Execute(new RestRequest());
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
+                    if (interestedValue == "")
+                        return response.Content.ToString();
                     receivedData = response.Content.ToString();
                     receivedData = receivedData.Substring(receivedData.IndexOf(interestedValue) + interestedValue.Count() + 2);
                     receivedData = receivedData.Remove(8);
@@ -108,6 +141,8 @@ namespace WPFConfigUpdater
                 response = client.Execute(new RestRequest());
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
+                    if (interestedValue == "")
+                        return response.Content.ToString();
                     receivedData = response.Content.ToString();
                     receivedData = receivedData.Substring(receivedData.IndexOf(interestedValue) + interestedValue.Count() + 2);
                     receivedData = receivedData.Remove(8);
@@ -117,6 +152,8 @@ namespace WPFConfigUpdater
             {
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
+                    if (interestedValue == "")
+                        return response.Content.ToString();
                     receivedData = response.Content.ToString();
                     receivedData = receivedData.Substring(receivedData.IndexOf(interestedValue) + interestedValue.Count() + 2);
                     receivedData = receivedData.Remove(8);
