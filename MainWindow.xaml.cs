@@ -35,6 +35,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Printing;
 using System.Security.Policy;
 using Newtonsoft.Json.Linq;
+using System.Windows.Threading;
 
 
 
@@ -688,6 +689,11 @@ namespace WPFConfigUpdater
         
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_RefreshMS_Click(object sender, RoutedEventArgs e)
         {
             if (listViewSortCol != null)
@@ -699,22 +705,17 @@ namespace WPFConfigUpdater
 
             progressbar_ProcessStatus.Value = 0;
             textblock_processStatus.Text = MyConstants.Strings.Statusbar_ProcessStatus_Refresh_inProgress_Text;
-            //StackPaneButtons.IsEnabled = false; //Disables all containing Buttons
             
 
-            Task.Run(() =>
-            {
-
-                // Update UI elements on main UI thread
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    UpdateButton.IsEnabled = false;
-                    RefreshButton.IsEnabled = false;
-                    RemoveMSButton.IsEnabled = false;
-                    InsertMSButton.IsEnabled = false;
-                    CancelUpdateButton.IsEnabled = true;
-                });
-            });
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+            new Action(() => {
+                UpdateButton.IsEnabled = false;
+                RefreshButton.IsEnabled = false;
+                RemoveMSButton.IsEnabled = false;
+                InsertMSButton.IsEnabled = false;
+                CancelUpdateButton.IsEnabled = true;
+                }
+            ));
 
 
 
@@ -1085,10 +1086,14 @@ namespace WPFConfigUpdater
                     // Update UI elements on main UI thread
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        RefreshButton.IsEnabled = true;
-                        UpdateButton.IsEnabled = true;
-                        RemoveMSButton.IsEnabled = true;
-                        InsertMSButton.IsEnabled = true;
+                        if (listView_Miniserver.IsEnabled) //In order to not enable the buttons during REFRESH
+                        {
+                            RefreshButton.IsEnabled = true;
+                            UpdateButton.IsEnabled = true;
+                            RemoveMSButton.IsEnabled = true;
+                            InsertMSButton.IsEnabled = true;
+                        }
+                        
                     });
                 });
             }
@@ -1344,7 +1349,14 @@ namespace WPFConfigUpdater
 
         private void Application_Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (listView_Miniserver.IsEnabled)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
         }
 
         private void Application_Save_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -1371,7 +1383,14 @@ namespace WPFConfigUpdater
 
         private void Application_Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (listView_Miniserver.IsEnabled)
+            {
+                e.CanExecute = true;
+            }else
+            {
+                e.CanExecute = false;
+            }
+            
         }
 
         private void Application_Open_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -1422,7 +1441,14 @@ namespace WPFConfigUpdater
 
         private void Application_New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            if (listView_Miniserver.IsEnabled)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
         }
 
         private void Application_New_Executed(object sender, ExecutedRoutedEventArgs e)

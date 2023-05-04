@@ -25,6 +25,8 @@ Known Issues:
 	- check for "\u0000"
 * Double Clicking on Icon top left will close the program					(Jan Posedel)
 * Program can be opened rapidly when ENTER is kept pressed					(Jan Posedel)
+* While downloading Files you can Press STRG N / O --> should be prevented
+  (when listview disabled, you cannot press STRG O  / N. 
 
 V0.9.9
 * InnoSetup Installer is now used. 
@@ -32,6 +34,8 @@ V0.9.9
 * Added: Language Submenu added to "Start Config" Context Menu
 * Added: Download all SPS Files stored on Miniserver. 
 * Fixed: Autoresize the window to content size on startup
+* Fixed: Buttons were enabled during Miniserver Refresh
+* Fixed: Prevent STRG+O /N /S while listview is disabled (e.g. REFRESH and UPDATE)
 
 
 V0.9.8
